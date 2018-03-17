@@ -1,0 +1,42 @@
+﻿[
+  {
+    "ID": "1",
+    "Content": "Test",
+    "Thread": {
+      "ID": "1" 
+    },
+    "IsOp": "True"
+  },
+  {
+    "ID": "2",
+    "Content": "Content for thread 1 reply 2",
+    "Thread": {
+      "ID": "1"
+    },
+    "IsOp": "False"
+  },
+  {
+    "ID": "3",
+    "Content": "In thread 2",
+    "Thread": {
+       "ID": "2"
+    },
+    "IsOp": "True"
+  },
+  {
+    "ID": "4",
+    "Content": "Content for thread 2 reply 2",
+    "Thread": {
+      "ID": "2"
+    },
+    "IsOp": "False"
+  },
+  {
+    "ID": "5",
+    "Content": "This is the only thread on the second board",
+    "Thread": {
+      "ID": "3"
+    },
+    "IsOp": "True"
+  }
+]
