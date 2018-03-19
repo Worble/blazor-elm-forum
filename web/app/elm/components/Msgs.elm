@@ -13,3 +13,5 @@ type Msg
     | OnLocationChange Location
     | PostInput String
     | SendPost
+    | ThreadInput String
+    | SendThread

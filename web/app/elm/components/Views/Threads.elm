@@ -1,7 +1,8 @@
 module Views.Threads exposing (view)
 
-import Html exposing (Html, a, div, h1, li, text, ul)
-import Html.Attributes exposing (href)
+import Html exposing (Html, a, button, div, h1, input, li, text, ul)
+import Html.Attributes exposing (href, type_, value)
+import Html.Events exposing (onClick, onInput)
 import Models exposing (Model, Thread)
 import Msgs exposing (Msg(..))
 import Routing exposing (postsPath)
@@ -13,6 +14,8 @@ view model =
         [ h1 [] [ text ("Threads in board " ++ model.board.name) ]
         , ul []
             (displayThreads model)
+        , input [ type_ "text ", onInput ThreadInput, value model.threadInput ] []
+        , button [ onClick SendThread ] [ text "Submit" ]
         ]
 
 

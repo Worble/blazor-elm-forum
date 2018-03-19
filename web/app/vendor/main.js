@@ -13931,12 +13931,13 @@ var _user$project$Models$model = function (route) {
 			}
 		},
 		route: route,
-		input: ''
+		messageInput: '',
+		threadInput: ''
 	};
 };
-var _user$project$Models$Model = F5(
-	function (a, b, c, d, e) {
-		return {text: a, boards: b, route: c, board: d, input: e};
+var _user$project$Models$Model = F6(
+	function (a, b, c, d, e, f) {
+		return {text: a, boards: b, route: c, board: d, messageInput: e, threadInput: f};
 	});
 var _user$project$Models$Board = F5(
 	function (a, b, c, d, e) {
@@ -14030,7 +14031,42 @@ var _user$project$Encoders$postEncoder = F2(
 				}
 			});
 	});
+var _user$project$Encoders$threadEncoder = F2(
+	function (message, boardId) {
+		return _elm_lang$core$Json_Encode$object(
+			{
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'boardId',
+					_1: _elm_lang$core$Json_Encode$int(boardId)
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'posts',
+						_1: _elm_lang$core$Json_Encode$list(
+							A2(
+								_elm_lang$core$List$map,
+								function (n) {
+									return A2(_user$project$Encoders$postEncoder, n, 0);
+								},
+								{
+									ctor: '::',
+									_0: message,
+									_1: {ctor: '[]'}
+								}))
+					},
+					_1: {ctor: '[]'}
+				}
+			});
+	});
 
+var _user$project$Msgs$SendThread = {ctor: 'SendThread'};
+var _user$project$Msgs$ThreadInput = function (a) {
+	return {ctor: 'ThreadInput', _0: a};
+};
 var _user$project$Msgs$SendPost = {ctor: 'SendPost'};
 var _user$project$Msgs$PostInput = function (a) {
 	return {ctor: 'PostInput', _0: a};
@@ -14092,7 +14128,7 @@ var _user$project$Commands$sendThread = F2(
 				A2(
 					_elm_lang$core$Basics_ops['++'],
 					_elm_lang$core$Basics$toString(boardId),
-					'/threads/')));
+					'/threads')));
 		var request = A3(
 			_elm_lang$http$Http$post,
 			url,
@@ -14102,7 +14138,7 @@ var _user$project$Commands$sendThread = F2(
 				A2(
 					_elm_lang$core$Json_Encode$encode,
 					0,
-					A2(_user$project$Encoders$postEncoder, post, 0))),
+					A2(_user$project$Encoders$threadEncoder, post, boardId))),
 			_user$project$Decoders$decodeBoard);
 		return A2(_elm_lang$http$Http$send, _user$project$Msgs$GetPostsForThread, request);
 	});
@@ -14291,7 +14327,7 @@ var _user$project$Update$update = F2(
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
-							{boards: _p0._0._0}),
+							{boards: _p0._0._0, route: _user$project$Models$BoardsRoute}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				} else {
@@ -14307,11 +14343,15 @@ var _user$project$Update$update = F2(
 				}
 			case 'GetThreadsForBoard':
 				if (_p0._0.ctor === 'Ok') {
+					var _p1 = _p0._0._0;
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
-							{board: _p0._0._0}),
+							{
+								board: _p1,
+								route: _user$project$Models$ThreadsRoute(_p1.id)
+							}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				} else {
@@ -14327,11 +14367,15 @@ var _user$project$Update$update = F2(
 				}
 			case 'GetPostsForThread':
 				if (_p0._0.ctor === 'Ok') {
+					var _p2 = _p0._0._0;
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
-							{board: _p0._0._0}),
+							{
+								board: _p2,
+								route: A2(_user$project$Models$PostsRoute, _p2.id, _p2.thread.id)
+							}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				} else {
@@ -14359,7 +14403,23 @@ var _user$project$Update$update = F2(
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{input: _p0._0}),
+						{messageInput: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			case 'SendPost':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{messageInput: ''}),
+					_1: A3(_user$project$Commands$sendPost, model.messageInput, model.board.id, model.board.thread.id)
+				};
+			case 'ThreadInput':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{threadInput: _p0._0}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
 			default:
@@ -14367,8 +14427,8 @@ var _user$project$Update$update = F2(
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{input: ''}),
-					_1: A3(_user$project$Commands$sendPost, model.input, model.board.id, model.board.thread.id)
+						{threadInput: ''}),
+					_1: A2(_user$project$Commands$sendThread, model.threadInput, model.board.id)
 				};
 		}
 	});
@@ -14464,14 +14524,14 @@ var _user$project$Views_Posts$view = function (model) {
 							_1: {
 								ctor: '::',
 								_0: _elm_lang$html$Html_Events$onInput(_user$project$Msgs$PostInput),
-								_1: {ctor: '[]'}
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$value(model.messageInput),
+									_1: {ctor: '[]'}
+								}
 							}
 						},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text(model.input),
-							_1: {ctor: '[]'}
-						}),
+						{ctor: '[]'}),
 					_1: {
 						ctor: '::',
 						_0: A2(
@@ -14546,7 +14606,41 @@ var _user$project$Views_Threads$view = function (model) {
 					_elm_lang$html$Html$ul,
 					{ctor: '[]'},
 					_user$project$Views_Threads$displayThreads(model)),
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$input,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$type_('text '),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onInput(_user$project$Msgs$ThreadInput),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$value(model.threadInput),
+									_1: {ctor: '[]'}
+								}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$button,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onClick(_user$project$Msgs$SendThread),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Submit'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}
 			}
 		});
 };
@@ -14601,7 +14695,7 @@ var _user$project$Main$main = A2(
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _user$project$Main$main !== 'undefined') {
-    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"message":"Msgs.Msg","aliases":{"Models.Board":{"type":"{ name : String , shorthandName : String , id : Int , threads : List Models.Thread , thread : Models.Thread }","args":[]},"Navigation.Location":{"type":"{ href : String , host : String , hostname : String , protocol : String , origin : String , port_ : String , pathname : String , search : String , hash : String , username : String , password : String }","args":[]},"Models.Thread":{"type":"{ posts : List Models.Post, id : Int, boardId : Int }","args":[]},"Models.Post":{"type":"{ id : Int, content : String, isOp : Bool, threadId : Int }","args":[]},"Http.Response":{"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }","args":["body"]}},"unions":{"Dict.NColor":{"tags":{"Black":[],"BBlack":[],"Red":[],"NBlack":[]},"args":[]},"Msgs.Msg":{"tags":{"SendPost":[],"GetBoards":["Result.Result Http.Error (List Models.Board)"],"GetThreadsForBoard":["Result.Result Http.Error Models.Board"],"NoOp":[],"OnLocationChange":["Navigation.Location"],"GetPostsForThread":["Result.Result Http.Error Models.Board"],"PostInput":["String"]},"args":[]},"Result.Result":{"tags":{"Err":["error"],"Ok":["value"]},"args":["error","value"]},"Http.Error":{"tags":{"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"],"BadUrl":["String"],"NetworkError":[]},"args":[]},"Dict.LeafColor":{"tags":{"LBlack":[],"LBBlack":[]},"args":[]},"Dict.Dict":{"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]},"args":["k","v"]}}},"versions":{"elm":"0.18.0"}});
+    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Msgs.Msg":{"args":[],"tags":{"OnLocationChange":["Navigation.Location"],"GetPostsForThread":["Result.Result Http.Error Models.Board"],"PostInput":["String"],"SendPost":[],"GetBoards":["Result.Result Http.Error (List Models.Board)"],"GetThreadsForBoard":["Result.Result Http.Error Models.Board"],"SendThread":[],"ThreadInput":["String"],"NoOp":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Models.Thread":{"args":[],"type":"{ posts : List Models.Post, id : Int, boardId : Int }"},"Models.Post":{"args":[],"type":"{ id : Int, content : String, isOp : Bool, threadId : Int }"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Models.Board":{"args":[],"type":"{ name : String , shorthandName : String , id : Int , threads : List Models.Thread , thread : Models.Thread }"},"Navigation.Location":{"args":[],"type":"{ href : String , host : String , hostname : String , protocol : String , origin : String , port_ : String , pathname : String , search : String , hash : String , username : String , password : String }"}},"message":"Msgs.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

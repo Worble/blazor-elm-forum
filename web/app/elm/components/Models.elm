@@ -6,7 +6,8 @@ type alias Model =
     , boards : List Board
     , route : Route
     , board : Board
-    , input : String
+    , messageInput : String
+    , threadInput : String
     }
 
 
@@ -16,7 +17,8 @@ model route =
     , boards = []
     , board = { name = "", shorthandName = "", id = 0, threads = [], thread = { posts = [], id = 0, boardId = 0 } }
     , route = route
-    , input = ""
+    , messageInput = ""
+    , threadInput = ""
     }
 
 

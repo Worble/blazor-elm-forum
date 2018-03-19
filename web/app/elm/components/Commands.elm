@@ -1,7 +1,7 @@
-module Commands exposing (performLocationChange, sendPost)
+module Commands exposing (performLocationChange, sendPost, sendThread)
 
 import Decoders exposing (decodeBoard)
-import Encoders exposing (postEncoder)
+import Encoders exposing (postEncoder, threadEncoder)
 import Http
 import Json.Decode exposing (list)
 import Json.Encode as Encode
@@ -33,12 +33,12 @@ sendThread : String -> Int -> Cmd Msg
 sendThread post boardId =
     let
         url =
-            api ++ "boards/" ++ toString boardId ++ "/threads/"
+            api ++ "boards/" ++ toString boardId ++ "/threads"
 
         request =
             Http.post
                 url
-                (Http.stringBody "application/json" <| Encode.encode 0 <| postEncoder post 0)
+                (Http.stringBody "application/json" <| Encode.encode 0 <| threadEncoder post boardId)
                 decodeBoard
     in
     Http.send GetPostsForThread request
