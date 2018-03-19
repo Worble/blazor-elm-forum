@@ -11,8 +11,9 @@ namespace Data.DTO
     {
         public ThreadDTO(Thread thread):base(thread)
         {
-            //this.Posts = thread.Posts;
+            this.BoardId = thread.BoardId;
         }
         public virtual IEnumerable<PostDTO> Posts { get; set; }
+        public int BoardId {get;set;}
     }
 }

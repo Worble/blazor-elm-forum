@@ -8,7 +8,7 @@ namespace Data.Repositories.Interfaces
 {
     public interface IThreadRepository
     {
-        BoardDTO GetAllForBoard(int boardID);
-        Thread CreateThread(Post openingPost, int boardID);
+        BoardDTO GetAllForBoard(int boardId);
+        Thread CreateThread(Post openingPost, int boardId);
     }
 }

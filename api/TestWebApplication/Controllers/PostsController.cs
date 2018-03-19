@@ -26,11 +26,11 @@ namespace TestWebApplication.Controllers
         }
 
         [HttpPost]
-        public Thread CreatePost(int threadID, [FromBody]Post post)
+        public BoardDTO CreatePost([FromBody]Post post)
         {
-            var thread = _work.PostRepository.CreatePost(post, threadID);
+            var board = _work.PostRepository.CreatePost(post);
             _work.Save();
-            return thread;
+            return board;
         }
     }
 }

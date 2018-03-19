@@ -22,10 +22,10 @@ namespace Data
             builder.Entity<Board>().Property(e => e.ShorthandName).IsRequired();
 
             builder.Entity<Thread>().HasMany(e => e.Posts).WithOne(e => e.Thread);
-            builder.Entity<Thread>().Property(e => e.BoardID).IsRequired();
+            builder.Entity<Thread>().Property(e => e.BoardId).IsRequired();
 
             builder.Entity<Post>().Property(e => e.Content).IsRequired();
-            builder.Entity<Post>().Property(e => e.ThreadID).IsRequired();
+            builder.Entity<Post>().Property(e => e.ThreadId).IsRequired();
         }
         public override int SaveChanges()
         {

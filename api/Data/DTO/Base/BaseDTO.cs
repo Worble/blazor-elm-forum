@@ -9,11 +9,11 @@ namespace Data.DTO
     {
         public BaseDTO(BaseEntity baseEntity)
         {
-            this.ID = baseEntity.ID;
+            this.Id = baseEntity.Id;
             this.CreatedDate = baseEntity.CreatedDate;
             this.EditedDate = baseEntity.EditedDate;
         }
-        public int ID { get; set; }
+        public int Id { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? EditedDate { get; set; }
     }

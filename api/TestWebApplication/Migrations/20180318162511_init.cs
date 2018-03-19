@@ -13,65 +13,71 @@ namespace TestWebApplication.Migrations
                 name: "Boards",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    Name = table.Column<string>(nullable: true),
-                    ShorthandName = table.Column<string>(nullable: true)
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    EditedDate = table.Column<DateTime>(nullable: true),
+                    Name = table.Column<string>(nullable: false),
+                    ShorthandName = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Boards", x => x.ID);
+                    table.PrimaryKey("PK_Boards", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Threads",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    BoardID = table.Column<int>(nullable: true)
+                    BoardId = table.Column<int>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    EditedDate = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Threads", x => x.ID);
+                    table.PrimaryKey("PK_Threads", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Threads_Boards_BoardID",
-                        column: x => x.BoardID,
+                        name: "FK_Threads_Boards_BoardId",
+                        column: x => x.BoardId,
                         principalTable: "Boards",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "Posts",
                 columns: table => new
                 {
-                    ID = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    Content = table.Column<string>(nullable: true),
+                    Content = table.Column<string>(nullable: false),
+                    CreatedDate = table.Column<DateTime>(nullable: false),
+                    EditedDate = table.Column<DateTime>(nullable: true),
                     IsOp = table.Column<bool>(nullable: false),
-                    ThreadID = table.Column<int>(nullable: true)
+                    ThreadId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Posts", x => x.ID);
+                    table.PrimaryKey("PK_Posts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Posts_Threads_ThreadID",
-                        column: x => x.ThreadID,
+                        name: "FK_Posts_Threads_ThreadId",
+                        column: x => x.ThreadId,
                         principalTable: "Threads",
-                        principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Posts_ThreadID",
+                name: "IX_Posts_ThreadId",
                 table: "Posts",
-                column: "ThreadID");
+                column: "ThreadId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Threads_BoardID",
+                name: "IX_Threads_BoardId",
                 table: "Threads",
-                column: "BoardID");
+                column: "BoardId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

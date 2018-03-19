@@ -1,12 +1,12 @@
 module Main exposing (..)
 
-import Html exposing (Html)
+import Commands exposing (performLocationChange)
 import Models exposing (Model, model)
 import Msgs exposing (Msg(..))
 import Navigation exposing (Location)
 import Routing
 import Subscriptions exposing (subscriptions)
-import Update exposing (performLocationChange, update)
+import Update exposing (update)
 import View exposing (view)
 
 

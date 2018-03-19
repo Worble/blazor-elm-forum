@@ -21,6 +21,15 @@
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.2" />
   </ItemGroup>
+    <ItemGroup>
+  <PackageReference Include="Microsoft.EntityFrameworkCore.Design"
+                    Version="2.0.2"
+                    PrivateAssets="All" />
+</ItemGroup>
+<ItemGroup>
+  <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet"
+                          Version="2.0.1" />
+</ItemGroup>
 
   <ItemGroup>
     <None Include="seed\boards.json" />

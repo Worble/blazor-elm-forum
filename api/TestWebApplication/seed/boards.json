@@ -1,11 +1,9 @@
 ﻿[
   {
-    "ID": "1",
     "Name": "Random",
     "ShorthandName": "r"
   },
   {
-    "ID": "2",
     "Name": "Test",
     "ShorthandName": "tst" 
   }

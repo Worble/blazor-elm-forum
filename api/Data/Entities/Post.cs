@@ -10,7 +10,7 @@ namespace Data.Entities
     {
         public string Content { get; set; }
         public virtual Thread Thread { get; set; }
-        public int ThreadID { get; set; }
+        public int ThreadId { get; set; }
         public bool IsOp { get; set; }
     }
 }

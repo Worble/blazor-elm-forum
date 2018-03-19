@@ -11,8 +11,8 @@ using System;
 namespace TestWebApplication.Migrations
 {
     [DbContext(typeof(TestContext))]
-    [Migration("20180316104223_3")]
-    partial class _3
+    [Migration("20180318162511_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -23,7 +23,7 @@ namespace TestWebApplication.Migrations
 
             modelBuilder.Entity("Data.Entities.Board", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<DateTime>("CreatedDate");
@@ -36,14 +36,14 @@ namespace TestWebApplication.Migrations
                     b.Property<string>("ShorthandName")
                         .IsRequired();
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
                     b.ToTable("Boards");
                 });
 
             modelBuilder.Entity("Data.Entities.Post", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Content")
@@ -55,29 +55,29 @@ namespace TestWebApplication.Migrations
 
                     b.Property<bool>("IsOp");
 
-                    b.Property<int>("ThreadID");
+                    b.Property<int>("ThreadId");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
-                    b.HasIndex("ThreadID");
+                    b.HasIndex("ThreadId");
 
                     b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("Data.Entities.Thread", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("BoardID");
+                    b.Property<int>("BoardId");
 
                     b.Property<DateTime>("CreatedDate");
 
                     b.Property<DateTime?>("EditedDate");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
-                    b.HasIndex("BoardID");
+                    b.HasIndex("BoardId");
 
                     b.ToTable("Threads");
                 });
@@ -86,7 +86,7 @@ namespace TestWebApplication.Migrations
                 {
                     b.HasOne("Data.Entities.Thread", "Thread")
                         .WithMany("Posts")
-                        .HasForeignKey("ThreadID")
+                        .HasForeignKey("ThreadId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -94,7 +94,7 @@ namespace TestWebApplication.Migrations
                 {
                     b.HasOne("Data.Entities.Board", "Board")
                         .WithMany("Threads")
-                        .HasForeignKey("BoardID")
+                        .HasForeignKey("BoardId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

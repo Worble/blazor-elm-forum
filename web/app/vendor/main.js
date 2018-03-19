@@ -12786,6 +12786,121 @@ var _elm_lang$html$Html_Attributes$classList = function (list) {
 };
 var _elm_lang$html$Html_Attributes$style = _elm_lang$virtual_dom$VirtualDom$style;
 
+var _elm_lang$html$Html_Events$keyCode = A2(_elm_lang$core$Json_Decode$field, 'keyCode', _elm_lang$core$Json_Decode$int);
+var _elm_lang$html$Html_Events$targetChecked = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'target',
+		_1: {
+			ctor: '::',
+			_0: 'checked',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$bool);
+var _elm_lang$html$Html_Events$targetValue = A2(
+	_elm_lang$core$Json_Decode$at,
+	{
+		ctor: '::',
+		_0: 'target',
+		_1: {
+			ctor: '::',
+			_0: 'value',
+			_1: {ctor: '[]'}
+		}
+	},
+	_elm_lang$core$Json_Decode$string);
+var _elm_lang$html$Html_Events$defaultOptions = _elm_lang$virtual_dom$VirtualDom$defaultOptions;
+var _elm_lang$html$Html_Events$onWithOptions = _elm_lang$virtual_dom$VirtualDom$onWithOptions;
+var _elm_lang$html$Html_Events$on = _elm_lang$virtual_dom$VirtualDom$on;
+var _elm_lang$html$Html_Events$onFocus = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'focus',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onBlur = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'blur',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onSubmitOptions = _elm_lang$core$Native_Utils.update(
+	_elm_lang$html$Html_Events$defaultOptions,
+	{preventDefault: true});
+var _elm_lang$html$Html_Events$onSubmit = function (msg) {
+	return A3(
+		_elm_lang$html$Html_Events$onWithOptions,
+		'submit',
+		_elm_lang$html$Html_Events$onSubmitOptions,
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onCheck = function (tagger) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'change',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetChecked));
+};
+var _elm_lang$html$Html_Events$onInput = function (tagger) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'input',
+		A2(_elm_lang$core$Json_Decode$map, tagger, _elm_lang$html$Html_Events$targetValue));
+};
+var _elm_lang$html$Html_Events$onMouseOut = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseout',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseOver = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseover',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseLeave = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseleave',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseEnter = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseenter',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseUp = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mouseup',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onMouseDown = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'mousedown',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onDoubleClick = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'dblclick',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$onClick = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'click',
+		_elm_lang$core$Json_Decode$succeed(msg));
+};
+var _elm_lang$html$Html_Events$Options = F2(
+	function (a, b) {
+		return {stopPropagation: a, preventDefault: b};
+	});
+
 var _elm_lang$http$Native_Http = function() {
 
 
@@ -13811,27 +13926,29 @@ var _user$project$Models$model = function (route) {
 			threads: {ctor: '[]'},
 			thread: {
 				posts: {ctor: '[]'},
-				id: 0
+				id: 0,
+				boardId: 0
 			}
 		},
-		route: route
+		route: route,
+		input: ''
 	};
 };
-var _user$project$Models$Model = F4(
-	function (a, b, c, d) {
-		return {text: a, boards: b, route: c, board: d};
+var _user$project$Models$Model = F5(
+	function (a, b, c, d, e) {
+		return {text: a, boards: b, route: c, board: d, input: e};
 	});
 var _user$project$Models$Board = F5(
 	function (a, b, c, d, e) {
 		return {name: a, shorthandName: b, id: c, threads: d, thread: e};
 	});
-var _user$project$Models$Thread = F2(
-	function (a, b) {
-		return {posts: a, id: b};
-	});
-var _user$project$Models$Post = F3(
+var _user$project$Models$Thread = F3(
 	function (a, b, c) {
-		return {id: a, content: b, isOp: c};
+		return {posts: a, id: b, boardId: c};
+	});
+var _user$project$Models$Post = F4(
+	function (a, b, c, d) {
+		return {id: a, content: b, isOp: c, threadId: d};
 	});
 var _user$project$Models$NotFoundRoute = {ctor: 'NotFoundRoute'};
 var _user$project$Models$PostsRoute = F2(
@@ -13843,6 +13960,81 @@ var _user$project$Models$ThreadsRoute = function (a) {
 };
 var _user$project$Models$BoardsRoute = {ctor: 'BoardsRoute'};
 
+var _user$project$Decoders$decodePost = A5(
+	_elm_lang$core$Json_Decode$map4,
+	_user$project$Models$Post,
+	A2(_elm_lang$core$Json_Decode$field, 'id', _elm_lang$core$Json_Decode$int),
+	A2(_elm_lang$core$Json_Decode$field, 'content', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'isOp', _elm_lang$core$Json_Decode$bool),
+	A2(_elm_lang$core$Json_Decode$field, 'threadId', _elm_lang$core$Json_Decode$int));
+var _user$project$Decoders$decodeThread = A3(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+	'boardId',
+	_elm_lang$core$Json_Decode$int,
+	A3(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+		'id',
+		_elm_lang$core$Json_Decode$int,
+		A4(
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+			'posts',
+			_elm_lang$core$Json_Decode$list(_user$project$Decoders$decodePost),
+			{ctor: '[]'},
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Models$Thread))));
+var _user$project$Decoders$decodeBoard = A4(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+	'thread',
+	_user$project$Decoders$decodeThread,
+	{
+		posts: {ctor: '[]'},
+		id: 0,
+		boardId: 0
+	},
+	A4(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+		'threads',
+		_elm_lang$core$Json_Decode$list(_user$project$Decoders$decodeThread),
+		{ctor: '[]'},
+		A3(
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+			'id',
+			_elm_lang$core$Json_Decode$int,
+			A3(
+				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+				'shorthandName',
+				_elm_lang$core$Json_Decode$string,
+				A3(
+					_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+					'name',
+					_elm_lang$core$Json_Decode$string,
+					_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Models$Board))))));
+
+var _user$project$Encoders$postEncoder = F2(
+	function (message, threadId) {
+		return _elm_lang$core$Json_Encode$object(
+			{
+				ctor: '::',
+				_0: {
+					ctor: '_Tuple2',
+					_0: 'content',
+					_1: _elm_lang$core$Json_Encode$string(message)
+				},
+				_1: {
+					ctor: '::',
+					_0: {
+						ctor: '_Tuple2',
+						_0: 'threadId',
+						_1: _elm_lang$core$Json_Encode$int(threadId)
+					},
+					_1: {ctor: '[]'}
+				}
+			});
+	});
+
+var _user$project$Msgs$SendPost = {ctor: 'SendPost'};
+var _user$project$Msgs$PostInput = function (a) {
+	return {ctor: 'PostInput', _0: a};
+};
 var _user$project$Msgs$OnLocationChange = function (a) {
 	return {ctor: 'OnLocationChange', _0: a};
 };
@@ -13856,6 +14048,101 @@ var _user$project$Msgs$GetBoards = function (a) {
 	return {ctor: 'GetBoards', _0: a};
 };
 var _user$project$Msgs$NoOp = {ctor: 'NoOp'};
+
+var _user$project$Commands$api = 'http://localhost:5000/api/';
+var _user$project$Commands$sendPost = F3(
+	function (post, boardId, threadId) {
+		var url = A2(
+			_elm_lang$core$Basics_ops['++'],
+			_user$project$Commands$api,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				'boards/',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_elm_lang$core$Basics$toString(boardId),
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'/threads/',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Basics$toString(threadId),
+							'/posts')))));
+		var request = A3(
+			_elm_lang$http$Http$post,
+			url,
+			A2(
+				_elm_lang$http$Http$stringBody,
+				'application/json',
+				A2(
+					_elm_lang$core$Json_Encode$encode,
+					0,
+					A2(_user$project$Encoders$postEncoder, post, threadId))),
+			_user$project$Decoders$decodeBoard);
+		return A2(_elm_lang$http$Http$send, _user$project$Msgs$GetPostsForThread, request);
+	});
+var _user$project$Commands$getBoards = function () {
+	var url = A2(_elm_lang$core$Basics_ops['++'], _user$project$Commands$api, 'boards/');
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$Msgs$GetBoards,
+		A2(
+			_elm_lang$http$Http$get,
+			url,
+			_elm_lang$core$Json_Decode$list(_user$project$Decoders$decodeBoard)));
+}();
+var _user$project$Commands$getThreads = function (boardId) {
+	var url = A2(
+		_elm_lang$core$Basics_ops['++'],
+		_user$project$Commands$api,
+		A2(
+			_elm_lang$core$Basics_ops['++'],
+			'boards/',
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				_elm_lang$core$Basics$toString(boardId),
+				'/threads')));
+	return A2(
+		_elm_lang$http$Http$send,
+		_user$project$Msgs$GetThreadsForBoard,
+		A2(_elm_lang$http$Http$get, url, _user$project$Decoders$decodeBoard));
+};
+var _user$project$Commands$getPosts = F2(
+	function (boardId, threadId) {
+		var url = A2(
+			_elm_lang$core$Basics_ops['++'],
+			_user$project$Commands$api,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				'boards/',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_elm_lang$core$Basics$toString(boardId),
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						'/threads/',
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							_elm_lang$core$Basics$toString(threadId),
+							'/posts')))));
+		return A2(
+			_elm_lang$http$Http$send,
+			_user$project$Msgs$GetPostsForThread,
+			A2(_elm_lang$http$Http$get, url, _user$project$Decoders$decodeBoard));
+	});
+var _user$project$Commands$performLocationChange = function (route) {
+	var _p0 = route;
+	switch (_p0.ctor) {
+		case 'BoardsRoute':
+			return _user$project$Commands$getBoards;
+		case 'ThreadsRoute':
+			return _user$project$Commands$getThreads(_p0._0);
+		case 'PostsRoute':
+			return A2(_user$project$Commands$getPosts, _p0._0, _p0._1);
+		default:
+			return _elm_lang$core$Platform_Cmd$none;
+	}
+};
 
 var _user$project$Routing$postsPath = F2(
 	function (boardId, threadId) {
@@ -13967,118 +14254,19 @@ var _user$project$Subscriptions$subscriptions = function (model) {
 	return _elm_lang$core$Platform_Sub$none;
 };
 
-var _user$project$Update$decodePost = A4(
-	_elm_lang$core$Json_Decode$map3,
-	_user$project$Models$Post,
-	A2(_elm_lang$core$Json_Decode$field, 'id', _elm_lang$core$Json_Decode$int),
-	A2(_elm_lang$core$Json_Decode$field, 'content', _elm_lang$core$Json_Decode$string),
-	A2(_elm_lang$core$Json_Decode$field, 'isOp', _elm_lang$core$Json_Decode$bool));
-var _user$project$Update$decodeThread = A3(
-	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-	'id',
-	_elm_lang$core$Json_Decode$int,
-	A4(
-		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
-		'posts',
-		_elm_lang$core$Json_Decode$list(_user$project$Update$decodePost),
-		{ctor: '[]'},
-		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Models$Thread)));
-var _user$project$Update$decodeBoard = A4(
-	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
-	'thread',
-	_user$project$Update$decodeThread,
-	{
-		posts: {ctor: '[]'},
-		id: 0
-	},
-	A4(
-		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
-		'threads',
-		_elm_lang$core$Json_Decode$list(_user$project$Update$decodeThread),
-		{ctor: '[]'},
-		A3(
-			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-			'id',
-			_elm_lang$core$Json_Decode$int,
-			A3(
-				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-				'shorthandName',
-				_elm_lang$core$Json_Decode$string,
-				A3(
-					_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-					'name',
-					_elm_lang$core$Json_Decode$string,
-					_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Models$Board))))));
-var _user$project$Update$getThreads = function (boardId) {
-	return A2(
-		_elm_lang$http$Http$send,
-		_user$project$Msgs$GetThreadsForBoard,
-		A2(
-			_elm_lang$http$Http$get,
-			A2(
-				_elm_lang$core$Basics_ops['++'],
-				'http://localhost:14190/api/boards/',
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					_elm_lang$core$Basics$toString(boardId),
-					'/threads')),
-			_user$project$Update$decodeBoard));
-};
-var _user$project$Update$getPosts = F2(
-	function (boardId, threadId) {
-		return A2(
-			_elm_lang$http$Http$send,
-			_user$project$Msgs$GetPostsForThread,
-			A2(
-				_elm_lang$http$Http$get,
-				A2(
-					_elm_lang$core$Basics_ops['++'],
-					'http://localhost:14190/api/boards/',
-					A2(
-						_elm_lang$core$Basics_ops['++'],
-						_elm_lang$core$Basics$toString(boardId),
-						A2(
-							_elm_lang$core$Basics_ops['++'],
-							'/threads/',
-							A2(
-								_elm_lang$core$Basics_ops['++'],
-								_elm_lang$core$Basics$toString(threadId),
-								'/posts')))),
-				_user$project$Update$decodeBoard));
-	});
-var _user$project$Update$getBoards = A2(
-	_elm_lang$http$Http$send,
-	_user$project$Msgs$GetBoards,
-	A2(
-		_elm_lang$http$Http$get,
-		'http://localhost:14190/api/boards/',
-		_elm_lang$core$Json_Decode$list(_user$project$Update$decodeBoard)));
-var _user$project$Update$performLocationChange = function (route) {
-	var _p0 = route;
-	switch (_p0.ctor) {
-		case 'BoardsRoute':
-			return _user$project$Update$getBoards;
-		case 'ThreadsRoute':
-			return _user$project$Update$getThreads(_p0._0);
-		case 'PostsRoute':
-			return A2(_user$project$Update$getPosts, _p0._0, _p0._1);
-		default:
-			return _elm_lang$core$Platform_Cmd$none;
-	}
-};
 var _user$project$Update$update = F2(
 	function (msg, model) {
-		var _p1 = msg;
-		switch (_p1.ctor) {
+		var _p0 = msg;
+		switch (_p0.ctor) {
 			case 'NoOp':
 				return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
 			case 'GetBoards':
-				if (_p1._0.ctor === 'Ok') {
+				if (_p0._0.ctor === 'Ok') {
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
-							{boards: _p1._0._0}),
+							{boards: _p0._0._0}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				} else {
@@ -14087,18 +14275,18 @@ var _user$project$Update$update = F2(
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
 							{
-								text: _elm_lang$core$Basics$toString(_p1._0._0)
+								text: _elm_lang$core$Basics$toString(_p0._0._0)
 							}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				}
 			case 'GetThreadsForBoard':
-				if (_p1._0.ctor === 'Ok') {
+				if (_p0._0.ctor === 'Ok') {
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
-							{board: _p1._0._0}),
+							{board: _p0._0._0}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				} else {
@@ -14107,18 +14295,18 @@ var _user$project$Update$update = F2(
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
 							{
-								text: _elm_lang$core$Basics$toString(_p1._0._0)
+								text: _elm_lang$core$Basics$toString(_p0._0._0)
 							}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				}
 			case 'GetPostsForThread':
-				if (_p1._0.ctor === 'Ok') {
+				if (_p0._0.ctor === 'Ok') {
 					return {
 						ctor: '_Tuple2',
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
-							{board: _p1._0._0}),
+							{board: _p0._0._0}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				} else {
@@ -14127,19 +14315,35 @@ var _user$project$Update$update = F2(
 						_0: _elm_lang$core$Native_Utils.update(
 							model,
 							{
-								text: _elm_lang$core$Basics$toString(_p1._0._0)
+								text: _elm_lang$core$Basics$toString(_p0._0._0)
 							}),
 						_1: _elm_lang$core$Platform_Cmd$none
 					};
 				}
-			default:
-				var newRoute = _user$project$Routing$parseLocation(_p1._0);
+			case 'OnLocationChange':
+				var newRoute = _user$project$Routing$parseLocation(_p0._0);
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
 						{route: newRoute}),
-					_1: _user$project$Update$performLocationChange(newRoute)
+					_1: _user$project$Commands$performLocationChange(newRoute)
+				};
+			case 'PostInput':
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{input: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{input: ''}),
+					_1: A3(_user$project$Commands$sendPost, model.input, model.board.id, model.board.thread.id)
 				};
 		}
 	});
@@ -14225,7 +14429,37 @@ var _user$project$Views_Posts$view = function (model) {
 					_elm_lang$html$Html$ul,
 					{ctor: '[]'},
 					A2(_elm_lang$core$List$map, _user$project$Views_Posts$displayPosts, model.board.thread.posts)),
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$input,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$type_('text '),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onInput(_user$project$Msgs$PostInput),
+								_1: {ctor: '[]'}
+							}
+						},
+						{ctor: '[]'}),
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$button,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onClick(_user$project$Msgs$SendPost),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('Submit'),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}
+				}
 			}
 		});
 };
@@ -14327,7 +14561,7 @@ var _user$project$Main$init = function (location) {
 	return {
 		ctor: '_Tuple2',
 		_0: _user$project$Models$model(currentRoute),
-		_1: _user$project$Update$performLocationChange(currentRoute)
+		_1: _user$project$Commands$performLocationChange(currentRoute)
 	};
 };
 var _user$project$Main$main = A2(
@@ -14338,7 +14572,7 @@ var _user$project$Main$main = A2(
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _user$project$Main$main !== 'undefined') {
-    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"message":"Msgs.Msg","aliases":{"Models.Board":{"type":"{ name : String , shorthandName : String , id : Int , threads : List Models.Thread , thread : Models.Thread }","args":[]},"Navigation.Location":{"type":"{ href : String , host : String , hostname : String , protocol : String , origin : String , port_ : String , pathname : String , search : String , hash : String , username : String , password : String }","args":[]},"Models.Thread":{"type":"{ posts : List Models.Post, id : Int }","args":[]},"Models.Post":{"type":"{ id : Int, content : String, isOp : Bool }","args":[]},"Http.Response":{"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }","args":["body"]}},"unions":{"Dict.NColor":{"tags":{"Black":[],"BBlack":[],"Red":[],"NBlack":[]},"args":[]},"Msgs.Msg":{"tags":{"GetBoards":["Result.Result Http.Error (List Models.Board)"],"GetThreadsForBoard":["Result.Result Http.Error Models.Board"],"NoOp":[],"OnLocationChange":["Navigation.Location"],"GetPostsForThread":["Result.Result Http.Error Models.Board"]},"args":[]},"Result.Result":{"tags":{"Err":["error"],"Ok":["value"]},"args":["error","value"]},"Http.Error":{"tags":{"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"],"BadUrl":["String"],"NetworkError":[]},"args":[]},"Dict.LeafColor":{"tags":{"LBlack":[],"LBBlack":[]},"args":[]},"Dict.Dict":{"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]},"args":["k","v"]}}},"versions":{"elm":"0.18.0"}});
+    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Msgs.Msg":{"args":[],"tags":{"OnLocationChange":["Navigation.Location"],"GetPostsForThread":["Result.Result Http.Error Models.Board"],"PostInput":["String"],"SendPost":[],"GetBoards":["Result.Result Http.Error (List Models.Board)"],"GetThreadsForBoard":["Result.Result Http.Error Models.Board"],"NoOp":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Models.Thread":{"args":[],"type":"{ posts : List Models.Post, id : Int, boardId : Int }"},"Models.Post":{"args":[],"type":"{ id : Int, content : String, isOp : Bool, threadId : Int }"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Models.Board":{"args":[],"type":"{ name : String , shorthandName : String , id : Int , threads : List Models.Thread , thread : Models.Thread }"},"Navigation.Location":{"args":[],"type":"{ href : String , host : String , hostname : String , protocol : String , origin : String , port_ : String , pathname : String , search : String , hash : String , username : String , password : String }"}},"message":"Msgs.Msg"},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

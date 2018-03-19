@@ -20,12 +20,25 @@ namespace Data.Repositories
         }
         public BoardDTO GetAllForThread(int boardId, int threadId)
         {
-            //return _context.Boards
-            //    .Select(e => new BoardDTO(e)
-            //    {
-            //        Thread = new ThreadDTO(e.Threads.FirstOrDefault(y => y.ID == threadId))
-            //    })
-            //    .FirstOrDefault(e => e.ID == boardId);
+            return _context.Boards
+                .Select(e => new BoardDTO(e)
+                {
+                    Thread = e.Threads.Select(y => new ThreadDTO(y)
+                        {
+                            Posts = y.Posts.Select(x => new PostDTO(x))
+                        })
+                        .FirstOrDefault(y => y.Id == threadId)
+                })
+                .FirstOrDefault(e => e.Id == boardId);
+
+        }
+        public BoardDTO CreatePost(Post post)
+        {
+            _context.Posts.Add(post);
+            // return _context.Threads
+            //     .Include(e => e.Posts)
+            //     .Include(e => e.Board)
+            //     .FirstOrDefault(e => e.ID == threadID);
 
             return _context.Boards
                 .Select(e => new BoardDTO(e)
@@ -34,19 +47,9 @@ namespace Data.Repositories
                         {
                             Posts = y.Posts.Select(x => new PostDTO(x))
                         })
-                        .FirstOrDefault(y => y.ID == threadId)
+                        .FirstOrDefault(y => y.Id == post.ThreadId)
                 })
-                .FirstOrDefault(e => e.ID == boardId);
-
-        }
-        public Thread CreatePost(Post post, int threadID)
-        {
-            post.ThreadID = threadID;
-            _context.Posts.Add(post);
-            return _context.Threads
-                .Include(e => e.Posts)
-                .Include(e => e.Board)
-                .FirstOrDefault(e => e.ID == threadID);
+                .FirstOrDefault();
         }
     }
 }

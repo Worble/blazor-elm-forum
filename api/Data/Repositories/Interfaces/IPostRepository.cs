@@ -9,6 +9,6 @@ namespace Data.Repositories.Interfaces
     public interface IPostRepository
     {
         BoardDTO GetAllForThread(int boardId, int threadId);
-        Thread CreatePost(Post post, int threadID);
+        BoardDTO CreatePost(Post post);
     }
 }

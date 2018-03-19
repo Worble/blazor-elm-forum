@@ -11,3 +11,5 @@ type Msg
     | GetThreadsForBoard (Result Error Board)
     | GetPostsForThread (Result Error Board)
     | OnLocationChange Location
+    | PostInput String
+    | SendPost

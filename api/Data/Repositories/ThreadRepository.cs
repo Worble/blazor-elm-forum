@@ -30,16 +30,16 @@ namespace Data.Repositories
                                 .Select(x => new PostDTO(x))
                         })
                 })
-                .FirstOrDefault(e => e.ID == boardID);
+                .FirstOrDefault(e => e.Id == boardID);
         }
 
-        public Thread CreateThread(Post openingPost, int boardID)
+        public Thread CreateThread(Post openingPost, int boardId)
         {
             openingPost.IsOp = true;
             var thread = new Thread()
             {
                 Posts = new List<Post>() {openingPost},
-                BoardID = boardID
+                BoardId = boardId
             };
             return _context.Add(thread).Entity;
         }

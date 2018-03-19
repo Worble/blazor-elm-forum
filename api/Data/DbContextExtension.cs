@@ -34,7 +34,7 @@ namespace Data
                     File.ReadAllText("seed" + Path.DirectorySeparatorChar + "boards.json"));
             foreach (var board in boards)
             {
-                if (context.Boards.Find(board.ID) == null)
+                if (context.Boards.Find(board.Id) == null)
                 {
                     context.Boards.Add(board);
                 }
@@ -47,7 +47,7 @@ namespace Data
                     File.ReadAllText("seed" + Path.DirectorySeparatorChar + "threads.json"));
             foreach (var thread in threads)
             {
-                if (context.Threads.Find(thread.ID) == null)
+                if (context.Threads.Find(thread.Id) == null)
                 {
                     context.Threads.Add(thread);
                 }
@@ -60,7 +60,7 @@ namespace Data
                     File.ReadAllText("seed" + Path.DirectorySeparatorChar + "posts.json"));
             foreach (var post in posts)
             {
-                if (context.Posts.Find(post.ID) == null)
+                if (context.Posts.Find(post.Id) == null)
                 {
                     context.Posts.Add(post);
                 }
