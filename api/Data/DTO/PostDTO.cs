@@ -4,10 +4,12 @@ using System.Text;
 using Data.Entities;
 using Newtonsoft.Json;
 
-namespace Data.DTO{
+namespace Data.DTO
+{
     [JsonObject(IsReference = true)]
     public class PostDTO : BaseDTO
     {
+        public PostDTO() { }
         public PostDTO(Post post) : base(post)
         {
             this.Content = post.Content;

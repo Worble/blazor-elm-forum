@@ -33,15 +33,26 @@ namespace Data.Repositories
                 .FirstOrDefault(e => e.Id == boardID);
         }
 
-        public Thread CreateThread(Post openingPost, int boardId)
+        public Thread CreateThread(ThreadDTO thread)
         {
-            openingPost.IsOp = true;
-            var thread = new Thread()
+            var threadToAdd = new Thread()
             {
-                Posts = new List<Post>() {openingPost},
-                BoardId = boardId
+                BoardId = thread.BoardId,
+                Posts = new List<Post>()
+                {
+                    new Post()
+                    {
+                        Content = thread.Posts.FirstOrDefault().Content,
+                        IsOp = true
+                    }
+                }
             };
-            return _context.Add(thread).Entity;
+            // var thread = new Thread ()
+            // {
+            //     Posts = new List<Post> () { openingPost },
+            //     BoardId = boardId
+            // };
+            return _context.Add(threadToAdd).Entity;
         }
     }
 }

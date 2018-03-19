@@ -24,17 +24,22 @@ namespace Data.Repositories
                 .Select(e => new BoardDTO(e)
                 {
                     Thread = e.Threads.Select(y => new ThreadDTO(y)
-                        {
-                            Posts = y.Posts.Select(x => new PostDTO(x))
-                        })
-                        .FirstOrDefault(y => y.Id == threadId)
+                    {
+                        Posts = y.Posts.Select(x => new PostDTO(x))
+                    })
+                       .FirstOrDefault(y => y.Id == threadId)
                 })
                 .FirstOrDefault(e => e.Id == boardId);
 
         }
-        public BoardDTO CreatePost(Post post)
+        public BoardDTO CreatePost(PostDTO post)
         {
-            _context.Posts.Add(post);
+            var postToAdd = new Post()
+            {
+                Content = post.Content,
+                ThreadId = post.ThreadId
+            };
+            _context.Posts.Add(postToAdd);
             // return _context.Threads
             //     .Include(e => e.Posts)
             //     .Include(e => e.Board)
@@ -44,10 +49,10 @@ namespace Data.Repositories
                 .Select(e => new BoardDTO(e)
                 {
                     Thread = e.Threads.Select(y => new ThreadDTO(y)
-                        {
-                            Posts = y.Posts.Select(x => new PostDTO(x))
-                        })
-                        .FirstOrDefault(y => y.Id == post.ThreadId)
+                    {
+                        Posts = y.Posts.Select(x => new PostDTO(x))
+                    })
+                       .FirstOrDefault(y => y.Id == post.ThreadId)
                 })
                 .FirstOrDefault();
         }

@@ -1,8 +1,8 @@
 module Views.Posts exposing (view)
 
-import Html exposing (Html, div, h1, li, text, ul, input, button)
+import Html exposing (Html, button, div, h1, input, li, text, ul)
 import Html.Attributes exposing (type_)
-import Html.Events exposing (onInput, onClick)
+import Html.Events exposing (onClick, onInput)
 import Models exposing (Model, Post)
 import Msgs exposing (Msg(..))
 
@@ -13,7 +13,7 @@ view model =
         [ h1 [] [ text ("Posts in thread " ++ toString model.board.thread.id) ]
         , ul []
             (List.map displayPosts model.board.thread.posts)
-        , input [ type_ "text ", onInput PostInput ] []
+        , input [ type_ "text ", onInput PostInput ] [ text model.input ]
         , button [ onClick SendPost ] [ text "Submit" ]
         ]
 

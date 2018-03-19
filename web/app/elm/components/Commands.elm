@@ -29,6 +29,21 @@ sendPost post boardId threadId =
     Http.send GetPostsForThread request
 
 
+sendThread : String -> Int -> Cmd Msg
+sendThread post boardId =
+    let
+        url =
+            api ++ "boards/" ++ toString boardId ++ "/threads/"
+
+        request =
+            Http.post
+                url
+                (Http.stringBody "application/json" <| Encode.encode 0 <| postEncoder post 0)
+                decodeBoard
+    in
+    Http.send GetPostsForThread request
+
+
 performLocationChange : Route -> Cmd Msg
 performLocationChange route =
     case route of

@@ -21,9 +21,9 @@ namespace TestWebApplication.Controllers
 
         // GET api/values
         [HttpGet]
-        public IEnumerable<BoardDTO> GetAll()
+        public IActionResult GetAll()
         {
-            return _work.BoardRepository.GetAll();
+            return Json(_work.BoardRepository.GetAll());
         }
     }
 }

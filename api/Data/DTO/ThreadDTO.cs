@@ -9,11 +9,12 @@ namespace Data.DTO
     [JsonObject(IsReference = true)]
     public class ThreadDTO : BaseDTO
     {
-        public ThreadDTO(Thread thread):base(thread)
+        public ThreadDTO() { }
+        public ThreadDTO(Thread thread) : base(thread)
         {
             this.BoardId = thread.BoardId;
         }
         public virtual IEnumerable<PostDTO> Posts { get; set; }
-        public int BoardId {get;set;}
+        public int BoardId { get; set; }
     }
 }

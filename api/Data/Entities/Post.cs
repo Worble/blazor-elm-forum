@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Data.DTO;
 using Newtonsoft.Json;
 
 namespace Data.Entities
 {
-    [JsonObject(IsReference = true)]
+    [JsonObject (IsReference = true)]
     public class Post : BaseEntity
     {
         public string Content { get; set; }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Data.DTO;
-using Data.Entities;
 using Data.UnitOfWork;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,17 +19,17 @@ namespace TestWebApplication.Controllers
         }
 
         [HttpGet]
-        public BoardDTO GetAllForThread(int boardID, int threadID)
+        public IActionResult GetAllForThread(int boardId, int threadId)
         {
-            return _work.PostRepository.GetAllForThread(boardID, threadID);
+            return Json(_work.PostRepository.GetAllForThread(boardId, threadId));
         }
 
         [HttpPost]
-        public BoardDTO CreatePost([FromBody]Post post)
+        public IActionResult CreatePost([FromBody]PostDTO post)
         {
             var board = _work.PostRepository.CreatePost(post);
             _work.Save();
-            return board;
+            return Json(board);
         }
     }
 }

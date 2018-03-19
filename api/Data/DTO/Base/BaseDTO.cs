@@ -7,6 +7,7 @@ namespace Data.DTO
 {
     public class BaseDTO
     {
+        public BaseDTO() { }
         public BaseDTO(BaseEntity baseEntity)
         {
             this.Id = baseEntity.Id;

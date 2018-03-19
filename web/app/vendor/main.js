@@ -14081,6 +14081,31 @@ var _user$project$Commands$sendPost = F3(
 			_user$project$Decoders$decodeBoard);
 		return A2(_elm_lang$http$Http$send, _user$project$Msgs$GetPostsForThread, request);
 	});
+var _user$project$Commands$sendThread = F2(
+	function (post, boardId) {
+		var url = A2(
+			_elm_lang$core$Basics_ops['++'],
+			_user$project$Commands$api,
+			A2(
+				_elm_lang$core$Basics_ops['++'],
+				'boards/',
+				A2(
+					_elm_lang$core$Basics_ops['++'],
+					_elm_lang$core$Basics$toString(boardId),
+					'/threads/')));
+		var request = A3(
+			_elm_lang$http$Http$post,
+			url,
+			A2(
+				_elm_lang$http$Http$stringBody,
+				'application/json',
+				A2(
+					_elm_lang$core$Json_Encode$encode,
+					0,
+					A2(_user$project$Encoders$postEncoder, post, 0))),
+			_user$project$Decoders$decodeBoard);
+		return A2(_elm_lang$http$Http$send, _user$project$Msgs$GetPostsForThread, request);
+	});
 var _user$project$Commands$getBoards = function () {
 	var url = A2(_elm_lang$core$Basics_ops['++'], _user$project$Commands$api, 'boards/');
 	return A2(
@@ -14442,7 +14467,11 @@ var _user$project$Views_Posts$view = function (model) {
 								_1: {ctor: '[]'}
 							}
 						},
-						{ctor: '[]'}),
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(model.input),
+							_1: {ctor: '[]'}
+						}),
 					_1: {
 						ctor: '::',
 						_0: A2(
@@ -14572,7 +14601,7 @@ var _user$project$Main$main = A2(
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _user$project$Main$main !== 'undefined') {
-    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"unions":{"Dict.LeafColor":{"args":[],"tags":{"LBBlack":[],"LBlack":[]}},"Dict.Dict":{"args":["k","v"],"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]}},"Dict.NColor":{"args":[],"tags":{"BBlack":[],"Red":[],"NBlack":[],"Black":[]}},"Msgs.Msg":{"args":[],"tags":{"OnLocationChange":["Navigation.Location"],"GetPostsForThread":["Result.Result Http.Error Models.Board"],"PostInput":["String"],"SendPost":[],"GetBoards":["Result.Result Http.Error (List Models.Board)"],"GetThreadsForBoard":["Result.Result Http.Error Models.Board"],"NoOp":[]}},"Http.Error":{"args":[],"tags":{"BadUrl":["String"],"NetworkError":[],"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"]}},"Result.Result":{"args":["error","value"],"tags":{"Ok":["value"],"Err":["error"]}}},"aliases":{"Models.Thread":{"args":[],"type":"{ posts : List Models.Post, id : Int, boardId : Int }"},"Models.Post":{"args":[],"type":"{ id : Int, content : String, isOp : Bool, threadId : Int }"},"Http.Response":{"args":["body"],"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }"},"Models.Board":{"args":[],"type":"{ name : String , shorthandName : String , id : Int , threads : List Models.Thread , thread : Models.Thread }"},"Navigation.Location":{"args":[],"type":"{ href : String , host : String , hostname : String , protocol : String , origin : String , port_ : String , pathname : String , search : String , hash : String , username : String , password : String }"}},"message":"Msgs.Msg"},"versions":{"elm":"0.18.0"}});
+    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"message":"Msgs.Msg","aliases":{"Models.Board":{"type":"{ name : String , shorthandName : String , id : Int , threads : List Models.Thread , thread : Models.Thread }","args":[]},"Navigation.Location":{"type":"{ href : String , host : String , hostname : String , protocol : String , origin : String , port_ : String , pathname : String , search : String , hash : String , username : String , password : String }","args":[]},"Models.Thread":{"type":"{ posts : List Models.Post, id : Int, boardId : Int }","args":[]},"Models.Post":{"type":"{ id : Int, content : String, isOp : Bool, threadId : Int }","args":[]},"Http.Response":{"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }","args":["body"]}},"unions":{"Dict.NColor":{"tags":{"Black":[],"BBlack":[],"Red":[],"NBlack":[]},"args":[]},"Msgs.Msg":{"tags":{"SendPost":[],"GetBoards":["Result.Result Http.Error (List Models.Board)"],"GetThreadsForBoard":["Result.Result Http.Error Models.Board"],"NoOp":[],"OnLocationChange":["Navigation.Location"],"GetPostsForThread":["Result.Result Http.Error Models.Board"],"PostInput":["String"]},"args":[]},"Result.Result":{"tags":{"Err":["error"],"Ok":["value"]},"args":["error","value"]},"Http.Error":{"tags":{"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"],"BadUrl":["String"],"NetworkError":[]},"args":[]},"Dict.LeafColor":{"tags":{"LBlack":[],"LBBlack":[]},"args":[]},"Dict.Dict":{"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]},"args":["k","v"]}}},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])
