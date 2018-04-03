@@ -1,0 +1,24 @@
+﻿@using Store
+@inject Store store
+@implements IDisposable
+@functions{
+    protected override async Task OnInitAsync()
+    {
+        store.ForumStore.OnChange += StateHasChanged;
+        await store.ForumStore.GetAllBoards();
+    }
+
+    public void Dispose()
+    {
+        store.ForumStore.OnChange -= StateHasChanged;
+    }
+}
+
+@if(store.ForumStore.Boards != null)
+{
+    <span>Boards:</span>
+    @foreach (var item in store.ForumStore.Boards)
+    {
+        <a href="boards/@item.id/threads/">@item.name</a> @:|
+    }
+}

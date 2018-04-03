@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using TestWebApplication.Controllers;
 
 namespace TestWebApplication
 {
@@ -28,8 +29,8 @@ namespace TestWebApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<TestContext>(options => 
-                options.UseNpgsql(Configuration.GetConnectionString("TestContext"), 
+            services.AddDbContext<TestContext>(options =>
+                options.UseNpgsql(Configuration.GetConnectionString("TestContext"),
                     b => b.MigrationsAssembly("TestWebApplication"))
             );
             services.AddTransient<IUnitOfWork, UnitOfWork>();
@@ -37,7 +38,7 @@ namespace TestWebApplication
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
-                    builder => 
+                    builder =>
                         builder.AllowAnyOrigin()
                             .AllowAnyMethod()
                             .AllowAnyHeader()
@@ -68,6 +69,9 @@ namespace TestWebApplication
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseStaticFiles();
+
+            app.UseWebSockets();
 
             app.UseMvc();
         }

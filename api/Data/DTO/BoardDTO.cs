@@ -16,6 +16,7 @@ namespace Data.DTO
             Name = board.Name;
             ShorthandName = board.ShorthandName;
         }
+
         public string Name { get; set; }
         public string ShorthandName { get; set; }
         public IEnumerable<ThreadDTO> Threads { get; set; }

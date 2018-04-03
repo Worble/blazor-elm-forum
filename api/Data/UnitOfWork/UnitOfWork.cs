@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Data.Repositories;
 using Data.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Data.UnitOfWork
 {
@@ -29,6 +30,22 @@ namespace Data.UnitOfWork
         {
             _context.SaveChanges();
         }
+
+        public IDbContextTransaction BeginTransaction()
+        {
+            return _context.Database.BeginTransaction();
+        }
+
+        public void CommitTransaction()
+        {
+            _context.Database.CommitTransaction();
+        }
+
+        public void RollbackTransaction()
+        {
+            _context.Database.RollbackTransaction();
+        }
+
         public void Dispose()
         {
             this.Dispose(true);

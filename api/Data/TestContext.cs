@@ -20,11 +20,11 @@ namespace Data
             builder.Entity<Board>().HasMany(e => e.Threads).WithOne(e => e.Board);
             builder.Entity<Board>().Property(e => e.Name).IsRequired();
             builder.Entity<Board>().Property(e => e.ShorthandName).IsRequired();
+            builder.Entity<Board>().HasIndex(e => e.ShorthandName).IsUnique();
 
-            builder.Entity<Thread>().HasMany(e => e.Posts).WithOne(e => e.Thread);
+            builder.Entity<Thread>().HasMany(e => e.Posts).WithOne(e => e.Thread).OnDelete(DeleteBehavior.Cascade);
             builder.Entity<Thread>().Property(e => e.BoardId).IsRequired();
 
-            builder.Entity<Post>().Property(e => e.Content).IsRequired();
             builder.Entity<Post>().Property(e => e.ThreadId).IsRequired();
         }
         public override int SaveChanges()

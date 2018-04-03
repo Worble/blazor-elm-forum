@@ -1,0 +1,19 @@
+﻿@page "/command-line"
+@using Store
+@inject Store store
+@functions{
+    protected override void OnInit()
+    {
+        store.CommandLineStore.OnChange += StateHasChanged;
+    }
+}
+<!--VIEW-->
+<div style="height:100vh;background-color:black;color:white;font-family:Consolas;">
+    <div>
+        #> Test
+    </div>
+    <div style="display:flex;flex-direction:row;white-space:pre;">
+        <span style="display:flex;">#> </span>
+        <input type="text" style="color:white;background-color:black;border:none;display:flex;width: 100%;" />
+    </div>
+</div>

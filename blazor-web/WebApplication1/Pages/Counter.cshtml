@@ -1,0 +1,22 @@
+﻿@page "/counter"
+@using Store
+@inject Store store
+@functions{
+    protected override void OnInit()
+    {
+        store.CounterStore.OnChange += StateHasChanged;
+        base.OnInit();
+    }
+}
+<!--VIEW-->
+<h1>Counter</h1>
+<p>Count per second: @store.CounterStore.Counter.CountPerSecond</p>
+<p>Current count: @store.CounterStore.GetCount()</p>
+
+<button @onclick(store.CounterStore.IncrementCount)>Click me</button>
+<br />
+@foreach (var item in store.CounterStore.Counter.Buildings)
+{
+    <p>@item.Name (Adds @item.AmountPerSecond clicks/second) </p>
+    <p>Owned: @item.AmountOwned <button @onclick(() => store.CounterStore.BuyBuilding(item.Id))>Buy (Cost: @item.Cost)</button></p>
+}

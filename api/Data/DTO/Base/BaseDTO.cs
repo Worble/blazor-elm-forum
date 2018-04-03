@@ -14,6 +14,7 @@ namespace Data.DTO
             this.CreatedDate = baseEntity.CreatedDate;
             this.EditedDate = baseEntity.EditedDate;
         }
+
         public int Id { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? EditedDate { get; set; }

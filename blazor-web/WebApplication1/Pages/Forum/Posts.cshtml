@@ -1,0 +1,124 @@
+﻿@page "/boards/{BoardId}/threads/{ThreadId}/posts/"
+@using Store
+@using Microsoft.AspNetCore.Blazor.Browser.Interop
+@using System.Text
+@inject Store store
+@implements IDisposable
+@functions{
+    protected override void OnInit()
+    {
+        store.ForumStore.OnChange += StateHasChanged;
+    }
+
+    protected override async void OnParametersSet()
+    {
+        await store.ForumStore.GetAllPostsForThread(int.Parse(BoardId), int.Parse(ThreadId));
+        base.OnParametersSet();
+    }
+
+    public string BoardId { get; set; }
+    public string ThreadId { get; set; }
+    public string Content { get; set; }
+    public string Image { get; set; }
+
+    public async void NewPost()
+    {
+        string image = RegisteredFunction.Invoke<string>("readImageText", true);
+        if (!string.IsNullOrWhiteSpace(Content) || !string.IsNullOrWhiteSpace(image))
+        {
+            await store.ForumStore.PostPost(int.Parse(BoardId), int.Parse(ThreadId), Content, image);
+
+            Content = string.Empty;
+            StateHasChanged();
+        }
+    }
+
+    public void ReadFile()
+    {
+        RegisteredFunction.Invoke<bool>("readFile", true);
+    }
+
+    public void Dispose()
+    {
+        store.ForumStore.OnChange -= StateHasChanged;
+    }
+}
+@if (store.ForumStore.Board == null || store.ForumStore.Board.thread == null || store.ForumStore.Board.thread.posts == null || store.ForumStore.Board.thread.id != int.Parse(ThreadId))
+{
+    <Loading />
+}
+else
+{
+    <BoardQuickSelect />
+    <h1>Posts in thread @store.ForumStore.Board.thread.id</h1>
+
+    @foreach (var item in store.ForumStore.Board.thread.posts)
+    {
+    <div style="background-color: lightgrey;border: 1px solid black;padding: 10px;margin:2px;word-wrap:break-word;word-break:break-all;">
+        <div style="border-bottom: solid black 1px;">
+            No. #@item.id made at @item.createdDate
+        </div>
+        <div style="min-height:50px; width:100%;display:table;">
+        @if (!string.IsNullOrWhiteSpace(item.imagePath))
+        {
+            <div style="display:table-cell"><a href="@item.imagePath" target="_blank"><img src="@item.thumbnailPath" style="display:inline-block;max-height:100px;max-width:100px;" /></a></div>
+        }
+        <div style="display:table-cell;width:100%;vertical-align:top;">@item.content </div>
+        </div>
+    </div>
+    }
+    <br />
+    <div>
+        <span>New post: </span><input type="text" @bind(Content) class="form-control"/>
+        <span>Upload image: </span><input id="file-upload" type="file" accept="image/*" @onchange(a => ReadFile()) class="form-control" />
+        <img id="image" alt="Embedded Image" src="" style="max-height:200px;max-width:200px;" />
+        <input id="image-input" type="hidden" />
+        <br />
+        <button class="btn btn-primary" id="submit" type="submit" @onclick(NewPost)>Submit</button>
+    </div>
+    <div>
+        <a href="/boards/@store.ForumStore.Board.id/threads/">Back to threads</a>
+    </div>
+}
+<script>
+    Blazor.registerFunction('readFile', () => {
+        var preview = document.getElementById('image');
+        var input = document.getElementById('image-input');
+        var file = document.getElementById('file-upload').files[0];
+        var button = document.getElementById('submit');
+        var reader = new FileReader();
+
+        function readFile(file) {
+            return new Promise((resolve, reject) => {
+                button.disabled = true;
+                reader.onload = (e) => { //all we actually want to do is resolve the result but this is to simulate an incredibly large file
+                    //setTimeout(() => {
+                        resolve(e.target.result);
+                    //}, 2000);
+                };
+                reader.readAsDataURL(file);
+            })
+        }
+
+        if (file) {
+            readFile(file).then(result => {
+                preview.src = input.value = result;
+                button.disabled = false;
+            });
+        };
+
+        return true;
+    });
+
+    Blazor.registerFunction('readImageText', () => {
+        var input = document.getElementById('image-input');
+        var preview = document.getElementById('image');
+        var file = document.getElementById('file-upload');
+
+        var result = input.value;
+
+        input.value = preview.src = file.value = null;
+
+        return result;
+    });
+</script>

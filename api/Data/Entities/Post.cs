@@ -13,5 +13,7 @@ namespace Data.Entities
         public virtual Thread Thread { get; set; }
         public int ThreadId { get; set; }
         public bool IsOp { get; set; }
+        public string ImagePath { get; set; }
+        public string ThumbnailPath { get; set; }
     }
 }

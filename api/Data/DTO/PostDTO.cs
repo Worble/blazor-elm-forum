@@ -15,9 +15,15 @@ namespace Data.DTO
             this.Content = post.Content;
             this.ThreadId = post.ThreadId;
             this.IsOp = post.IsOp;
+            this.ImagePath = post.ImagePath;
+            this.ThumbnailPath = post.ThumbnailPath;
         }
+
         public string Content { get; set; }
         public int ThreadId { get; set; }
         public bool IsOp { get; set; }
+        public string Image { get; set; }
+        public string ImagePath { get; set; }
+        public string ThumbnailPath { get; set; }
     }
 }

@@ -10,5 +10,6 @@ namespace Data.Repositories.Interfaces
     {
         BoardDTO GetAllForBoard(int boardId);
         Thread CreateThread(ThreadDTO thread);
+        BoardDTO GetAllForBoardByShorthandName(string boardId);
     }
 }

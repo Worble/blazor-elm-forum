@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -23,36 +24,36 @@ namespace Data.Repositories
             return _context.Boards
                 .Select(e => new BoardDTO(e)
                 {
-                    Thread = e.Threads.Select(y => new ThreadDTO(y)
-                    {
-                        Posts = y.Posts.Select(x => new PostDTO(x))
-                    })
-                       .FirstOrDefault(y => y.Id == threadId)
+                    Thread = e.Threads
+                        .Select(y => new ThreadDTO(y)
+                        {
+                            Posts = y.Posts.Select(x => new PostDTO(x))
+                        })
+                        .FirstOrDefault(y => y.Id == threadId)
                 })
                 .FirstOrDefault(e => e.Id == boardId);
-
         }
         public BoardDTO CreatePost(PostDTO post)
         {
             var postToAdd = new Post()
             {
                 Content = post.Content,
-                ThreadId = post.ThreadId
+                ThreadId = post.ThreadId,
+                ImagePath = post.ImagePath,
+                ThumbnailPath = post.ThumbnailPath,
+                IsOp = post.IsOp
             };
             _context.Posts.Add(postToAdd);
-            // return _context.Threads
-            //     .Include(e => e.Posts)
-            //     .Include(e => e.Board)
-            //     .FirstOrDefault(e => e.ID == threadID);
 
             return _context.Boards
                 .Select(e => new BoardDTO(e)
                 {
-                    Thread = e.Threads.Select(y => new ThreadDTO(y)
-                    {
-                        Posts = y.Posts.Select(x => new PostDTO(x))
-                    })
-                       .FirstOrDefault(y => y.Id == post.ThreadId)
+                    Thread = e.Threads
+                        .Select(y => new ThreadDTO(y)
+                        {
+                            Posts = y.Posts.Select(x => new PostDTO(x))
+                        })
+                        .FirstOrDefault(y => y.Id == post.ThreadId)
                 })
                 .FirstOrDefault();
         }

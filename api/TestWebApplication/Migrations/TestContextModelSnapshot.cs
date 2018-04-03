@@ -37,6 +37,9 @@ namespace TestWebApplication.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ShorthandName")
+                        .IsUnique();
+
                     b.ToTable("Boards");
                 });
 
@@ -45,16 +48,19 @@ namespace TestWebApplication.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Content")
-                        .IsRequired();
+                    b.Property<string>("Content");
 
                     b.Property<DateTime>("CreatedDate");
 
                     b.Property<DateTime?>("EditedDate");
 
+                    b.Property<string>("ImagePath");
+
                     b.Property<bool>("IsOp");
 
                     b.Property<int>("ThreadId");
+
+                    b.Property<string>("ThumbnailPath");
 
                     b.HasKey("Id");
 
