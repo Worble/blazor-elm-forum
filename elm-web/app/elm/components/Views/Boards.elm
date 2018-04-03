@@ -9,11 +9,14 @@ import Routing exposing (threadsPath)
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ h1 [] [ text "Boards" ]
-        , ul []
-            (List.map displayBoards model.boards)
-        ]
+    if model.boards == [] then
+        div [] [ text "Please wait..."]
+    else
+        div []
+            [ h1 [] [ text "Boards" ]
+            , ul []
+                (List.map displayBoards model.boards)
+            ]
 
 
 displayBoards : Board -> Html Msg

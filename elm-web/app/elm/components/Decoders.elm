@@ -28,4 +28,12 @@ decodeThread =
 
 decodePost : Decode.Decoder Post
 decodePost =
-    map4 Post (field "id" int) (field "content" string) (field "isOp" bool) (field "threadId" int)
+    --map4 Post (field "id" int) (field "content" string) (field "isOp" bool) (field "threadId" int)
+    decode Post
+        |> required "id" int
+        |> optional "content" string ""
+        |> required "isOp" bool
+        |> required "threadId" int
+        |> optional "image" string ""
+        |> optional "imagePath" string ""
+        |> optional "thumbnailPath" string ""

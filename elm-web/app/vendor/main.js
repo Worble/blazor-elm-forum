@@ -14450,7 +14450,7 @@ var _evancz$url_parser$UrlParser$intParam = function (name) {
 	return A2(_evancz$url_parser$UrlParser$customParam, name, _evancz$url_parser$UrlParser$intParamHelp);
 };
 
-var _user$project$Models$emptyPost = {id: 0, content: '', isOp: false, threadId: 0};
+var _user$project$Models$emptyPost = {id: 0, content: '', isOp: false, threadId: 0, image: '', imagePath: '', thumbnailPath: ''};
 var _user$project$Models$emptyThread = {
 	posts: {ctor: '[]'},
 	post: _user$project$Models$emptyPost,
@@ -14486,9 +14486,9 @@ var _user$project$Models$Thread = F4(
 	function (a, b, c, d) {
 		return {posts: a, post: b, id: c, boardId: d};
 	});
-var _user$project$Models$Post = F4(
-	function (a, b, c, d) {
-		return {id: a, content: b, isOp: c, threadId: d};
+var _user$project$Models$Post = F7(
+	function (a, b, c, d, e, f, g) {
+		return {id: a, content: b, isOp: c, threadId: d, image: e, imagePath: f, thumbnailPath: g};
 	});
 var _user$project$Models$NotFoundRoute = {ctor: 'NotFoundRoute'};
 var _user$project$Models$PostsRoute = F2(
@@ -14500,13 +14500,39 @@ var _user$project$Models$ThreadsRoute = function (a) {
 };
 var _user$project$Models$BoardsRoute = {ctor: 'BoardsRoute'};
 
-var _user$project$Decoders$decodePost = A5(
-	_elm_lang$core$Json_Decode$map4,
-	_user$project$Models$Post,
-	A2(_elm_lang$core$Json_Decode$field, 'id', _elm_lang$core$Json_Decode$int),
-	A2(_elm_lang$core$Json_Decode$field, 'content', _elm_lang$core$Json_Decode$string),
-	A2(_elm_lang$core$Json_Decode$field, 'isOp', _elm_lang$core$Json_Decode$bool),
-	A2(_elm_lang$core$Json_Decode$field, 'threadId', _elm_lang$core$Json_Decode$int));
+var _user$project$Decoders$decodePost = A4(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+	'thumbnailPath',
+	_elm_lang$core$Json_Decode$string,
+	'',
+	A4(
+		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+		'imagePath',
+		_elm_lang$core$Json_Decode$string,
+		'',
+		A4(
+			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+			'image',
+			_elm_lang$core$Json_Decode$string,
+			'',
+			A3(
+				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+				'threadId',
+				_elm_lang$core$Json_Decode$int,
+				A3(
+					_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+					'isOp',
+					_elm_lang$core$Json_Decode$bool,
+					A4(
+						_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+						'content',
+						_elm_lang$core$Json_Decode$string,
+						'',
+						A3(
+							_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+							'id',
+							_elm_lang$core$Json_Decode$int,
+							_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Models$Post))))))));
 var _user$project$Decoders$decodeThread = A3(
 	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
 	'boardId',
@@ -15057,7 +15083,16 @@ var _user$project$Views_Boards$displayBoards = function (board) {
 		});
 };
 var _user$project$Views_Boards$view = function (model) {
-	return A2(
+	return _elm_lang$core$Native_Utils.eq(
+		model.boards,
+		{ctor: '[]'}) ? A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text('Please wait...'),
+			_1: {ctor: '[]'}
+		}) : A2(
 		_elm_lang$html$Html$div,
 		{ctor: '[]'},
 		{
@@ -15134,16 +15169,135 @@ var _user$project$Views_Shared_Navbar$view = function (model) {
 
 var _user$project$Views_Posts$displayPosts = function (post) {
 	return A2(
-		_elm_lang$html$Html$li,
-		{ctor: '[]'},
+		_elm_lang$html$Html$div,
 		{
 			ctor: '::',
-			_0: _elm_lang$html$Html$text(post.content),
+			_0: _elm_lang$html$Html_Attributes$style(
+				{
+					ctor: '::',
+					_0: {ctor: '_Tuple2', _0: 'padding', _1: '10px'},
+					_1: {
+						ctor: '::',
+						_0: {ctor: '_Tuple2', _0: 'margin', _1: '2px'},
+						_1: {
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'word-wrap', _1: 'break-word'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'word-break', _1: 'break-all'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'background-color', _1: 'lightgrey'},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'border', _1: '1px solid black'},
+										_1: {ctor: '[]'}
+									}
+								}
+							}
+						}
+					}
+				}),
 			_1: {ctor: '[]'}
+		},
+		{
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$div,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							'No. #',
+							_elm_lang$core$Basics$toString(post.id))),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: ((!_elm_lang$core$Native_Utils.eq(post.imagePath, '')) && (!_elm_lang$core$Native_Utils.eq(post.thumbnailPath, ''))) ? A2(
+					_elm_lang$html$Html$div,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$style(
+							{
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'display', _1: 'table-cell'},
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$a,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$href(post.imagePath),
+								_1: {
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$target('_blank'),
+									_1: {ctor: '[]'}
+								}
+							},
+							{
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$img,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$src(post.thumbnailPath),
+										_1: {ctor: '[]'}
+									},
+									{ctor: '[]'}),
+								_1: {ctor: '[]'}
+							}),
+						_1: {ctor: '[]'}
+					}) : _elm_lang$html$Html$text(''),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$div,
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$style(
+								{
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'display', _1: 'table-cell'},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'width', _1: '100%'},
+										_1: {
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'vertical-align', _1: 'top'},
+											_1: {ctor: '[]'}
+										}
+									}
+								}),
+							_1: {ctor: '[]'}
+						},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text(post.content),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				}
+			}
 		});
 };
 var _user$project$Views_Posts$view = function (model) {
-	return A2(
+	return _elm_lang$core$Native_Utils.eq(
+		model.board.thread.posts,
+		{ctor: '[]'}) ? A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text('Please wait...'),
+			_1: {ctor: '[]'}
+		}) : A2(
 		_elm_lang$html$Html$div,
 		{ctor: '[]'},
 		{
@@ -15166,47 +15320,69 @@ var _user$project$Views_Posts$view = function (model) {
 				_1: {
 					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$ul,
+						_elm_lang$html$Html$div,
 						{ctor: '[]'},
 						A2(_elm_lang$core$List$map, _user$project$Views_Posts$displayPosts, model.board.thread.posts)),
 					_1: {
 						ctor: '::',
-						_0: _elm_lang$html$Html$text('New Post: '),
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('New Post: '),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$input,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$type_('text '),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onInput(_user$project$Msgs$PostInput),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$value(model.messageInput),
+													_1: {ctor: '[]'}
+												}
+											}
+										},
+										{ctor: '[]'}),
+									_1: {
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$button,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onClick(_user$project$Msgs$SendPost),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Submit'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}
+								}
+							}),
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$input,
+								_elm_lang$html$Html$a,
 								{
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$type_('text '),
-									_1: {
-										ctor: '::',
-										_0: _elm_lang$html$Html_Events$onInput(_user$project$Msgs$PostInput),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$value(model.messageInput),
-											_1: {ctor: '[]'}
-										}
-									}
+									_0: _elm_lang$html$Html_Attributes$href(
+										_user$project$Routing$threadsPath(model.board.id)),
+									_1: {ctor: '[]'}
 								},
-								{ctor: '[]'}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$button,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Events$onClick(
-											A2(_user$project$Msgs$SendMessage, model.board.id, model.board.thread.id)),
-										_1: {ctor: '[]'}
-									},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('Submit'),
-										_1: {ctor: '[]'}
-									}),
-								_1: {ctor: '[]'}
-							}
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Back to threads'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
 						}
 					}
 				}
@@ -15214,35 +15390,195 @@ var _user$project$Views_Posts$view = function (model) {
 		});
 };
 
-var _user$project$Views_Threads$displayThreads = function (model) {
+var _user$project$Views_Threads$displayThreads = function (threadList) {
 	return A2(
 		_elm_lang$core$List$map,
 		function (t) {
 			return A2(
-				_elm_lang$html$Html$li,
-				{ctor: '[]'},
+				_elm_lang$html$Html$div,
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$style(
+						{
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'padding', _1: '10px'},
+							_1: {
+								ctor: '::',
+								_0: {ctor: '_Tuple2', _0: 'margin', _1: '2px'},
+								_1: {
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'word-wrap', _1: 'break-word'},
+									_1: {
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'word-break', _1: 'break-all'},
+										_1: {
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'background-color', _1: 'lightgrey'},
+											_1: {
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: 'border', _1: '1px solid black'},
+												_1: {ctor: '[]'}
+											}
+										}
+									}
+								}
+							}
+						}),
+					_1: {ctor: '[]'}
+				},
 				{
 					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$a,
+						_elm_lang$html$Html$div,
+						{ctor: '[]'},
 						{
 							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$href(
-								A2(_user$project$Routing$postsPath, model.board.id, t.id)),
-							_1: {ctor: '[]'}
-						},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text(t.post.content),
+							_0: _elm_lang$html$Html$text(
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									'No. #',
+									_elm_lang$core$Basics$toString(t.post.id))),
 							_1: {ctor: '[]'}
 						}),
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html_Attributes$style(
+									{
+										ctor: '::',
+										_0: {ctor: '_Tuple2', _0: 'display', _1: 'table'},
+										_1: {
+											ctor: '::',
+											_0: {ctor: '_Tuple2', _0: 'min-height', _1: '50px'},
+											_1: {
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: 'width', _1: '100%'},
+												_1: {ctor: '[]'}
+											}
+										}
+									}),
+								_1: {ctor: '[]'}
+							},
+							{
+								ctor: '::',
+								_0: ((!_elm_lang$core$Native_Utils.eq(t.post.thumbnailPath, '')) && (!_elm_lang$core$Native_Utils.eq(t.post.imagePath, ''))) ? A2(
+									_elm_lang$html$Html$div,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$style(
+											{
+												ctor: '::',
+												_0: {ctor: '_Tuple2', _0: 'display', _1: 'table-cell'},
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: A2(
+											_elm_lang$html$Html$a,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Attributes$href(t.post.imagePath),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$target('_blank'),
+													_1: {ctor: '[]'}
+												}
+											},
+											{
+												ctor: '::',
+												_0: A2(
+													_elm_lang$html$Html$img,
+													{
+														ctor: '::',
+														_0: _elm_lang$html$Html_Attributes$src(t.post.thumbnailPath),
+														_1: {
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$style(
+																{
+																	ctor: '::',
+																	_0: {ctor: '_Tuple2', _0: 'max-height', _1: '100px'},
+																	_1: {
+																		ctor: '::',
+																		_0: {ctor: '_Tuple2', _0: 'max-width', _1: '100px'},
+																		_1: {ctor: '[]'}
+																	}
+																}),
+															_1: {ctor: '[]'}
+														}
+													},
+													{ctor: '[]'}),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
+									}) : _elm_lang$html$Html$text(''),
+								_1: {
+									ctor: '::',
+									_0: A2(
+										_elm_lang$html$Html$div,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$style(
+												{
+													ctor: '::',
+													_0: {ctor: '_Tuple2', _0: 'display', _1: 'table-cell'},
+													_1: {
+														ctor: '::',
+														_0: {ctor: '_Tuple2', _0: 'width', _1: '100%'},
+														_1: {
+															ctor: '::',
+															_0: {ctor: '_Tuple2', _0: 'vertical-align', _1: 'top'},
+															_1: {ctor: '[]'}
+														}
+													}
+												}),
+											_1: {ctor: '[]'}
+										},
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html$text(t.post.content),
+											_1: {ctor: '[]'}
+										}),
+									_1: {ctor: '[]'}
+								}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$a,
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html_Attributes$href(
+										A2(_user$project$Routing$postsPath, t.boardId, t.id)),
+									_1: {ctor: '[]'}
+								},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('View Thread'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}
 				});
 		},
-		model.board.threads);
+		threadList);
 };
 var _user$project$Views_Threads$view = function (model) {
-	return A2(
+	return _elm_lang$core$Native_Utils.eq(
+		model.board.threads,
+		{ctor: '[]'}) ? A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		{
+			ctor: '::',
+			_0: _elm_lang$html$Html$text('Please wait...'),
+			_1: {ctor: '[]'}
+		}) : A2(
 		_elm_lang$html$Html$div,
 		{ctor: '[]'},
 		{
@@ -15262,47 +15598,54 @@ var _user$project$Views_Threads$view = function (model) {
 				_1: {
 					ctor: '::',
 					_0: A2(
-						_elm_lang$html$Html$ul,
+						_elm_lang$html$Html$div,
 						{ctor: '[]'},
-						_user$project$Views_Threads$displayThreads(model)),
+						_user$project$Views_Threads$displayThreads(model.board.threads)),
 					_1: {
 						ctor: '::',
-						_0: _elm_lang$html$Html$text('New Thread: '),
-						_1: {
-							ctor: '::',
-							_0: A2(
-								_elm_lang$html$Html$input,
-								{
+						_0: A2(
+							_elm_lang$html$Html$div,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text('New Thread: '),
+								_1: {
 									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$type_('text '),
+									_0: A2(
+										_elm_lang$html$Html$input,
+										{
+											ctor: '::',
+											_0: _elm_lang$html$Html_Attributes$type_('text '),
+											_1: {
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onInput(_user$project$Msgs$ThreadInput),
+												_1: {
+													ctor: '::',
+													_0: _elm_lang$html$Html_Attributes$value(model.threadInput),
+													_1: {ctor: '[]'}
+												}
+											}
+										},
+										{ctor: '[]'}),
 									_1: {
 										ctor: '::',
-										_0: _elm_lang$html$Html_Events$onInput(_user$project$Msgs$ThreadInput),
-										_1: {
-											ctor: '::',
-											_0: _elm_lang$html$Html_Attributes$value(model.threadInput),
-											_1: {ctor: '[]'}
-										}
+										_0: A2(
+											_elm_lang$html$Html$button,
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html_Events$onClick(_user$project$Msgs$SendThread),
+												_1: {ctor: '[]'}
+											},
+											{
+												ctor: '::',
+												_0: _elm_lang$html$Html$text('Submit'),
+												_1: {ctor: '[]'}
+											}),
+										_1: {ctor: '[]'}
 									}
-								},
-								{ctor: '[]'}),
-							_1: {
-								ctor: '::',
-								_0: A2(
-									_elm_lang$html$Html$button,
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html_Events$onClick(_user$project$Msgs$SendThread),
-										_1: {ctor: '[]'}
-									},
-									{
-										ctor: '::',
-										_0: _elm_lang$html$Html$text('Submit'),
-										_1: {ctor: '[]'}
-									}),
-								_1: {ctor: '[]'}
-							}
-						}
+								}
+							}),
+						_1: {ctor: '[]'}
 					}
 				}
 			}
@@ -15365,7 +15708,7 @@ var _user$project$Main$main = A2(
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _user$project$Main$main !== 'undefined') {
-    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"message":"Msgs.Msg","aliases":{"Models.Board":{"type":"{ name : String , shorthandName : String , id : Int , threads : List Models.Thread , thread : Models.Thread }","args":[]},"Navigation.Location":{"type":"{ href : String , host : String , hostname : String , protocol : String , origin : String , port_ : String , pathname : String , search : String , hash : String , username : String , password : String }","args":[]},"Models.Thread":{"type":"{ posts : List Models.Post , post : Models.Post , id : Int , boardId : Int }","args":[]},"Models.Post":{"type":"{ id : Int, content : String, isOp : Bool, threadId : Int }","args":[]},"Http.Response":{"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }","args":["body"]}},"unions":{"Dict.NColor":{"tags":{"Black":[],"BBlack":[],"Red":[],"NBlack":[]},"args":[]},"Msgs.Msg":{"tags":{"SendPost":[],"GetBoards":["Result.Result Http.Error (List Models.Board)"],"GetThreadsForBoard":["Result.Result Http.Error Models.Board"],"SendThread":[],"ThreadInput":["String"],"NoOp":[],"Echo":["String"],"RedirectPostsForThread":["Result.Result Http.Error Models.Board"],"SendMessage":["Int","Int"],"OnLocationChange":["Navigation.Location"],"GetPostsForThread":["Result.Result Http.Error Models.Board"],"PostInput":["String"]},"args":[]},"Result.Result":{"tags":{"Err":["error"],"Ok":["value"]},"args":["error","value"]},"Http.Error":{"tags":{"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"],"BadUrl":["String"],"NetworkError":[]},"args":[]},"Dict.LeafColor":{"tags":{"LBlack":[],"LBBlack":[]},"args":[]},"Dict.Dict":{"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]},"args":["k","v"]}}},"versions":{"elm":"0.18.0"}});
+    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"message":"Msgs.Msg","aliases":{"Models.Board":{"type":"{ name : String , shorthandName : String , id : Int , threads : List Models.Thread , thread : Models.Thread }","args":[]},"Navigation.Location":{"type":"{ href : String , host : String , hostname : String , protocol : String , origin : String , port_ : String , pathname : String , search : String , hash : String , username : String , password : String }","args":[]},"Models.Thread":{"type":"{ posts : List Models.Post , post : Models.Post , id : Int , boardId : Int }","args":[]},"Models.Post":{"type":"{ id : Int , content : String , isOp : Bool , threadId : Int , image : String , imagePath : String , thumbnailPath : String }","args":[]},"Http.Response":{"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }","args":["body"]}},"unions":{"Dict.NColor":{"tags":{"Black":[],"BBlack":[],"Red":[],"NBlack":[]},"args":[]},"Msgs.Msg":{"tags":{"SendPost":[],"GetBoards":["Result.Result Http.Error (List Models.Board)"],"GetThreadsForBoard":["Result.Result Http.Error Models.Board"],"SendThread":[],"ThreadInput":["String"],"NoOp":[],"Echo":["String"],"RedirectPostsForThread":["Result.Result Http.Error Models.Board"],"SendMessage":["Int","Int"],"OnLocationChange":["Navigation.Location"],"GetPostsForThread":["Result.Result Http.Error Models.Board"],"PostInput":["String"]},"args":[]},"Result.Result":{"tags":{"Err":["error"],"Ok":["value"]},"args":["error","value"]},"Http.Error":{"tags":{"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"],"BadUrl":["String"],"NetworkError":[]},"args":[]},"Dict.LeafColor":{"tags":{"LBlack":[],"LBBlack":[]},"args":[]},"Dict.Dict":{"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]},"args":["k","v"]}}},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])

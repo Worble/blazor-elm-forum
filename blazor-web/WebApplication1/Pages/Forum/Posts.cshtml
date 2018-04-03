@@ -59,7 +59,7 @@ else
             No. #@item.id made at @item.createdDate
         </div>
         <div style="min-height:50px; width:100%;display:table;">
-        @if (!string.IsNullOrWhiteSpace(item.imagePath))
+        @if (!string.IsNullOrWhiteSpace(item.imagePath) && !string.IsNullOrWhiteSpace(item.thumbnailPath))
         {
             <div style="display:table-cell"><a href="@item.imagePath" target="_blank"><img src="@item.thumbnailPath" style="display:inline-block;max-height:100px;max-width:100px;" /></a></div>
         }

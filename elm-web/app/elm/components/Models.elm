@@ -25,7 +25,7 @@ emptyThread =
 
 emptyPost : Post
 emptyPost =
-    { id = 0, content = "", isOp = False, threadId = 0 }
+    { id = 0, content = "", isOp = False, threadId = 0, image = "", imagePath = "", thumbnailPath = "" }
 
 
 --MODELS
@@ -63,6 +63,9 @@ type alias Post =
     , content : String
     , isOp : Bool
     , threadId : Int
+    , image : String
+    , imagePath : String
+    , thumbnailPath : String
     }
 
 
