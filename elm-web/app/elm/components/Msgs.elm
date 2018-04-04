@@ -1,9 +1,9 @@
 module Msgs exposing (..)
 
+import FileReader exposing (FileContentDataUrl, NativeFile)
 import Http exposing (Error)
 import Models exposing (Board, Post, Thread)
 import Navigation exposing (Location)
-import FileReader exposing (NativeFile, FileContentDataUrl)
 
 
 type Msg

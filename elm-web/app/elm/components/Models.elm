@@ -2,6 +2,7 @@ module Models exposing (..)
 
 import FileReader exposing (NativeFile)
 
+
 --INITIAL MODELS
 
 

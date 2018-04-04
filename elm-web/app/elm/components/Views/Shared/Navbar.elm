@@ -18,6 +18,7 @@ view model =
 
 displayBoards : Board -> Html Msg
 displayBoards board =
-    span [] 
-    [ a [ href (threadsPath board.id) ] [ text board.name ]
-    , text " | " ]
+    span []
+        [ a [ href (threadsPath board.id) ] [ text board.name ]
+        , text " | "
+        ]

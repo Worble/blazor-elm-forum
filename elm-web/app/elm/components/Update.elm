@@ -45,10 +45,10 @@ update msg model =
             ( { model | messageInput = string }, Cmd.none )
 
         SendPost ->
-            ( { model | messageInput = "", readFile = "" }, sendPost model.readFile model.messageInput model.board.id model.board.thread.id )
+            ( { model | messageInput = "", readFile = "", file = Nothing }, sendPost model.readFile model.messageInput model.board.id model.board.thread.id )
 
         SendThread ->
-            ( { model | messageInput = "", readFile = "" }, sendThread model.readFile model.messageInput model.board.id )
+            ( { model | messageInput = "", readFile = "", file = Nothing }, sendThread model.readFile model.messageInput model.board.id )
 
         RedirectPostsForThread (Ok board) ->
             ( { model | board = board }, newUrl (postsPath board.id board.thread.id) )

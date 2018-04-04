@@ -23,5 +23,5 @@ view model =
 
             Models.NotFoundRoute ->
                 div []
-                    [ text ("404 - Not Found: " ++ model.text) ]
+                    [ text ("Error: " ++ model.text) ]
         ]

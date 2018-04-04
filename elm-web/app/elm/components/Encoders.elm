@@ -2,6 +2,7 @@ module Encoders exposing (postEncoder, threadEncoder)
 
 import Json.Encode as Encode
 
+
 postEncoder : String -> String -> Int -> Encode.Value
 postEncoder data message threadId =
     Encode.object

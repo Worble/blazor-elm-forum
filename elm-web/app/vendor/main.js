@@ -15484,7 +15484,7 @@ var _user$project$Update$update = F2(
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{messageInput: '', readFile: ''}),
+						{messageInput: '', readFile: '', file: _elm_lang$core$Maybe$Nothing}),
 					_1: A4(_user$project$Commands$sendPost, model.readFile, model.messageInput, model.board.id, model.board.thread.id)
 				};
 			case 'SendThread':
@@ -15492,7 +15492,7 @@ var _user$project$Update$update = F2(
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{messageInput: '', readFile: ''}),
+						{messageInput: '', readFile: '', file: _elm_lang$core$Maybe$Nothing}),
 					_1: A3(_user$project$Commands$sendThread, model.readFile, model.messageInput, model.board.id)
 				};
 			case 'RedirectPostsForThread':
@@ -15949,7 +15949,19 @@ var _user$project$Views_Posts$view = function (model) {
 																	_1: {
 																		ctor: '::',
 																		_0: _elm_lang$html$Html_Attributes$accept('image/*'),
-																		_1: {ctor: '[]'}
+																		_1: {
+																			ctor: '::',
+																			_0: _elm_lang$html$Html_Attributes$value(
+																				function () {
+																					var _p0 = model.file;
+																					if (_p0.ctor === 'Just') {
+																						return _p0._0.name;
+																					} else {
+																						return '';
+																					}
+																				}()),
+																			_1: {ctor: '[]'}
+																		}
 																	}
 																}
 															}
@@ -16383,7 +16395,7 @@ var _user$project$View$view = function (model) {
 							{
 								ctor: '::',
 								_0: _elm_lang$html$Html$text(
-									A2(_elm_lang$core$Basics_ops['++'], '404 - Not Found: ', model.text)),
+									A2(_elm_lang$core$Basics_ops['++'], 'Error: ', model.text)),
 								_1: {ctor: '[]'}
 							});
 				}

@@ -2,7 +2,7 @@ module Decoders exposing (decodeBoard)
 
 import Json.Decode as Decode exposing (Decoder, bool, field, int, list, map4, string)
 import Json.Decode.Pipeline exposing (decode, hardcoded, optional, required)
-import Models exposing (Board, Post, Thread, emptyThread, emptyPost)
+import Models exposing (Board, Post, Thread, emptyPost, emptyThread)
 
 
 decodeBoard : Decode.Decoder Board

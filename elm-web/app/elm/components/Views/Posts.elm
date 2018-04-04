@@ -1,14 +1,14 @@
 module Views.Posts exposing (view)
 
-import Html exposing (Html, a, button, div, h1, img, input, li, text, ul, br)
-import Html.Attributes exposing (href, src, style, target, type_, value, multiple, accept)
+import FileReader
+import Html exposing (Html, a, br, button, div, h1, img, input, li, text, ul)
+import Html.Attributes exposing (accept, href, multiple, src, style, target, type_, value)
 import Html.Events exposing (onClick, onInput)
 import Models exposing (Model, Post)
 import Msgs exposing (Msg(..))
 import Routing exposing (threadsPath)
 import Views.Shared.GetDate exposing (getDate)
 import Views.Shared.Navbar exposing (view)
-import FileReader
 
 
 view : Model -> Html Msg
@@ -27,25 +27,34 @@ view model =
                 [ text "New Post: "
                 , input [ type_ "text ", onInput PostInput, value model.messageInput ]
                     []
-                , button [ onClick SendPost ] [ text "Submit" ] 
-                , div [] 
+                , button [ onClick SendPost ] [ text "Submit" ]
+                , div []
                     [ input
                         [ type_ "file"
                         , FileReader.onFileChange UploadFile
                         , multiple False
                         , accept "image/*"
+                        , value
+                            (case model.file of
+                                Just file ->
+                                    file.name
+
+                                Nothing ->
+                                    ""
+                            )
                         ]
                         []
                     ]
-                , if model.readFile /= "" then 
-                    div [] 
-                        [ img 
+                , if model.readFile /= "" then
+                    div []
+                        [ img
                             [ src model.readFile
-                            , style 
-                                [ ("max-height", "200px")
-                                , ("max-width","200px")
-                                ] 
-                            ] [] 
+                            , style
+                                [ ( "max-height", "200px" )
+                                , ( "max-width", "200px" )
+                                ]
+                            ]
+                            []
                         ]
                   else
                     text ""

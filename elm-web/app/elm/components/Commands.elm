@@ -1,15 +1,14 @@
-module Commands exposing (getBoards, performLocationChange, sendPost, sendThread, getFileContents)
+module Commands exposing (getBoards, getFileContents, performLocationChange, sendPost, sendThread)
 
 import Decoders exposing (decodeBoard)
 import Encoders exposing (postEncoder, threadEncoder)
+import FileReader exposing (NativeFile)
 import Http
 import Json.Decode as Decode exposing (list, string)
 import Json.Encode as Encode
 import Models exposing (Route)
 import Msgs exposing (Msg(..))
-import FileReader exposing (NativeFile)
 import Task
-
 
 
 api : String
@@ -88,6 +87,7 @@ getPosts boardId threadId =
             api ++ "boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts"
     in
     Http.send GetPostsForThread (Http.get url decodeBoard)
+
 
 getFileContents : NativeFile -> Cmd Msg
 getFileContents nf =

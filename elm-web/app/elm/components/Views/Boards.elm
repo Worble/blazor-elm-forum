@@ -10,7 +10,7 @@ import Routing exposing (threadsPath)
 view : Model -> Html Msg
 view model =
     if model.boards == [] then
-        div [] [ text "Please wait..."]
+        div [] [ text "Please wait..." ]
     else
         div []
             [ h1 [] [ text "Boards" ]
