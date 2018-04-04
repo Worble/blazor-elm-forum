@@ -37,3 +37,4 @@ decodePost =
         |> optional "image" string ""
         |> optional "imagePath" string ""
         |> optional "thumbnailPath" string ""
+        |> required "createdDate" string

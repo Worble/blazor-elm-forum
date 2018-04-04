@@ -1,5 +1,7 @@
 module Models exposing (..)
 
+import FileReader exposing (NativeFile)
+
 --INITIAL MODELS
 
 
@@ -10,7 +12,8 @@ model route =
     , board = emptyBoard
     , route = route
     , messageInput = ""
-    , threadInput = ""
+    , file = Nothing
+    , readFile = ""
     }
 
 
@@ -23,9 +26,11 @@ emptyThread : Thread
 emptyThread =
     { posts = [], post = emptyPost, id = 0, boardId = 0 }
 
+
 emptyPost : Post
 emptyPost =
-    { id = 0, content = "", isOp = False, threadId = 0, image = "", imagePath = "", thumbnailPath = "" }
+    { id = 0, content = "", isOp = False, threadId = 0, image = "", imagePath = "", thumbnailPath = "", createdDate = "" }
+
 
 
 --MODELS
@@ -37,7 +42,8 @@ type alias Model =
     , route : Route
     , board : Board
     , messageInput : String
-    , threadInput : String
+    , file : Maybe NativeFile
+    , readFile : String
     }
 
 
@@ -66,6 +72,7 @@ type alias Post =
     , image : String
     , imagePath : String
     , thumbnailPath : String
+    , createdDate : String
     }
 
 

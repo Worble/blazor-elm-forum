@@ -3,6 +3,7 @@ module Msgs exposing (..)
 import Http exposing (Error)
 import Models exposing (Board, Post, Thread)
 import Navigation exposing (Location)
+import FileReader exposing (NativeFile, FileContentDataUrl)
 
 
 type Msg
@@ -13,8 +14,9 @@ type Msg
     | OnLocationChange Location
     | PostInput String
     | SendPost
-    | ThreadInput String
     | SendThread
     | RedirectPostsForThread (Result Error Board)
     | Echo String
     | SendMessage Int Int
+    | UploadFile (List NativeFile)
+    | OnFileContent (Result FileReader.Error FileContentDataUrl)

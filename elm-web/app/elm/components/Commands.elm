@@ -1,12 +1,15 @@
-module Commands exposing (getBoards, performLocationChange, sendPost, sendThread)
+module Commands exposing (getBoards, performLocationChange, sendPost, sendThread, getFileContents)
 
 import Decoders exposing (decodeBoard)
 import Encoders exposing (postEncoder, threadEncoder)
 import Http
-import Json.Decode exposing (list)
+import Json.Decode as Decode exposing (list, string)
 import Json.Encode as Encode
 import Models exposing (Route)
 import Msgs exposing (Msg(..))
+import FileReader exposing (NativeFile)
+import Task
+
 
 
 api : String
@@ -14,8 +17,8 @@ api =
     "http://localhost:14190/api/"
 
 
-sendPost : String -> Int -> Int -> Cmd Msg
-sendPost post boardId threadId =
+sendPost : String -> String -> Int -> Int -> Cmd Msg
+sendPost data post boardId threadId =
     let
         url =
             api ++ "boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts"
@@ -23,14 +26,14 @@ sendPost post boardId threadId =
         request =
             Http.post
                 url
-                (Http.stringBody "application/json" <| Encode.encode 0 <| postEncoder post threadId)
+                (Http.stringBody "application/json" <| Encode.encode 0 <| postEncoder data post threadId)
                 decodeBoard
     in
     Http.send GetPostsForThread request
 
 
-sendThread : String -> Int -> Cmd Msg
-sendThread post boardId =
+sendThread : String -> String -> Int -> Cmd Msg
+sendThread data post boardId =
     let
         url =
             api ++ "boards/" ++ toString boardId ++ "/threads"
@@ -38,7 +41,7 @@ sendThread post boardId =
         request =
             Http.post
                 url
-                (Http.stringBody "application/json" <| Encode.encode 0 <| threadEncoder post boardId)
+                (Http.stringBody "application/json" <| Encode.encode 0 <| threadEncoder data post boardId)
                 decodeBoard
     in
     Http.send RedirectPostsForThread request
@@ -85,3 +88,8 @@ getPosts boardId threadId =
             api ++ "boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts"
     in
     Http.send GetPostsForThread (Http.get url decodeBoard)
+
+getFileContents : NativeFile -> Cmd Msg
+getFileContents nf =
+    FileReader.readAsDataUrl nf.blob
+        |> Task.attempt OnFileContent

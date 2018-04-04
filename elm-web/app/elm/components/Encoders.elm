@@ -2,17 +2,18 @@ module Encoders exposing (postEncoder, threadEncoder)
 
 import Json.Encode as Encode
 
-postEncoder : String -> Int -> Encode.Value
-postEncoder message threadId =
+postEncoder : String -> String -> Int -> Encode.Value
+postEncoder data message threadId =
     Encode.object
         [ ( "content", Encode.string message )
         , ( "threadId", Encode.int threadId )
+        , ( "image", Encode.string data )
         ]
 
 
-threadEncoder : String -> Int -> Encode.Value
-threadEncoder message boardId =
+threadEncoder : String -> String -> Int -> Encode.Value
+threadEncoder data message boardId =
     Encode.object
         [ ( "boardId", Encode.int boardId )
-        , ( "post", postEncoder message 0 )
+        , ( "post", postEncoder data message 0 )
         ]

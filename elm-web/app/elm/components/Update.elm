@@ -1,6 +1,8 @@
 module Update exposing (update)
 
-import Commands exposing (performLocationChange, sendPost, sendThread)
+import Commands exposing (getFileContents, performLocationChange, sendPost, sendThread)
+import Json.Decode exposing (decodeString, string)
+import Json.Encode exposing (encode)
 import Models exposing (Board, Model, Post, Route(..), Thread)
 import Msgs exposing (Msg(..))
 import Navigation exposing (newUrl)
@@ -37,19 +39,16 @@ update msg model =
                 newRoute =
                     parseLocation location
             in
-            ( { model | route = newRoute }, performLocationChange newRoute )
+            ( { model | route = newRoute, messageInput = "", readFile = "" }, performLocationChange newRoute )
 
         PostInput string ->
             ( { model | messageInput = string }, Cmd.none )
 
         SendPost ->
-            ( { model | messageInput = "" }, sendPost model.messageInput model.board.id model.board.thread.id )
-
-        ThreadInput string ->
-            ( { model | threadInput = string }, Cmd.none )
+            ( { model | messageInput = "", readFile = "" }, sendPost model.readFile model.messageInput model.board.id model.board.thread.id )
 
         SendThread ->
-            ( { model | threadInput = "" }, sendThread model.threadInput model.board.id )
+            ( { model | messageInput = "", readFile = "" }, sendThread model.readFile model.messageInput model.board.id )
 
         RedirectPostsForThread (Ok board) ->
             ( { model | board = board }, newUrl (postsPath board.id board.thread.id) )
@@ -66,3 +65,19 @@ update msg model =
                 ("ws://localhost:14190/api/boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts/ws")
                 model.messageInput
             )
+
+        UploadFile file ->
+            case file of
+                [ f ] ->
+                    ( { model | file = Just f }, getFileContents f )
+
+                _ ->
+                    ( model, Cmd.none )
+
+        OnFileContent res ->
+            case res of
+                Ok content ->
+                    ( { model | readFile = String.dropRight 1 (String.dropLeft 1 (toString content)) }, Cmd.none )
+
+                Err err ->
+                    Debug.crash (toString err)

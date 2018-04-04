@@ -5837,6 +5837,253 @@ var _NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required = F3(
 			decoder);
 	});
 
+var _danyx23$elm_mimetype$MimeType$toString = function (mimeType) {
+	var _p0 = mimeType;
+	switch (_p0.ctor) {
+		case 'Image':
+			var _p1 = _p0._0;
+			switch (_p1.ctor) {
+				case 'Jpeg':
+					return 'image/jpeg';
+				case 'Png':
+					return 'image/png';
+				case 'Gif':
+					return 'image/gif';
+				default:
+					return 'image/other';
+			}
+		case 'Audio':
+			var _p2 = _p0._0;
+			switch (_p2.ctor) {
+				case 'Mp3':
+					return 'audio/mp3';
+				case 'Wav':
+					return 'audio/wav';
+				case 'Ogg':
+					return 'audio/ogg';
+				default:
+					return 'audio/other';
+			}
+		case 'Video':
+			var _p3 = _p0._0;
+			switch (_p3.ctor) {
+				case 'Mp4':
+					return 'video/mp4';
+				case 'Mpeg':
+					return 'video/mpeg';
+				case 'Quicktime':
+					return 'video/quicktime';
+				case 'Avi':
+					return 'video/avi';
+				case 'Webm':
+					return 'video/webm';
+				default:
+					return 'video/other';
+			}
+		case 'Text':
+			var _p4 = _p0._0;
+			switch (_p4.ctor) {
+				case 'PlainText':
+					return 'text/plain';
+				case 'Html':
+					return 'text/html';
+				case 'Css':
+					return 'text/css';
+				case 'Xml':
+					return 'text/xml';
+				case 'Json':
+					return 'application/json';
+				default:
+					return 'text/other';
+			}
+		case 'App':
+			var _p5 = _p0._0;
+			switch (_p5.ctor) {
+				case 'Word':
+					return 'application/msword';
+				case 'WordXml':
+					return 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
+				case 'Excel':
+					return 'application/vnd.ms-excel';
+				case 'ExcelXml':
+					return 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+				case 'PowerPoint':
+					return 'application/vnd.ms-powerpoint';
+				case 'PowerPointXml':
+					return 'application/vnd.openxmlformats-officedocument.presentationml.presentation';
+				case 'Pdf':
+					return 'application/pdf';
+				default:
+					return 'application/other';
+			}
+		default:
+			return 'other/other';
+	}
+};
+var _danyx23$elm_mimetype$MimeType$OtherImage = {ctor: 'OtherImage'};
+var _danyx23$elm_mimetype$MimeType$Gif = {ctor: 'Gif'};
+var _danyx23$elm_mimetype$MimeType$Png = {ctor: 'Png'};
+var _danyx23$elm_mimetype$MimeType$Jpeg = {ctor: 'Jpeg'};
+var _danyx23$elm_mimetype$MimeType$OtherAudio = {ctor: 'OtherAudio'};
+var _danyx23$elm_mimetype$MimeType$Wav = {ctor: 'Wav'};
+var _danyx23$elm_mimetype$MimeType$Ogg = {ctor: 'Ogg'};
+var _danyx23$elm_mimetype$MimeType$Mp3 = {ctor: 'Mp3'};
+var _danyx23$elm_mimetype$MimeType$OtherVideo = {ctor: 'OtherVideo'};
+var _danyx23$elm_mimetype$MimeType$Webm = {ctor: 'Webm'};
+var _danyx23$elm_mimetype$MimeType$Avi = {ctor: 'Avi'};
+var _danyx23$elm_mimetype$MimeType$Quicktime = {ctor: 'Quicktime'};
+var _danyx23$elm_mimetype$MimeType$Mpeg = {ctor: 'Mpeg'};
+var _danyx23$elm_mimetype$MimeType$Mp4 = {ctor: 'Mp4'};
+var _danyx23$elm_mimetype$MimeType$OtherText = {ctor: 'OtherText'};
+var _danyx23$elm_mimetype$MimeType$Json = {ctor: 'Json'};
+var _danyx23$elm_mimetype$MimeType$Xml = {ctor: 'Xml'};
+var _danyx23$elm_mimetype$MimeType$Css = {ctor: 'Css'};
+var _danyx23$elm_mimetype$MimeType$Html = {ctor: 'Html'};
+var _danyx23$elm_mimetype$MimeType$PlainText = {ctor: 'PlainText'};
+var _danyx23$elm_mimetype$MimeType$OtherApp = {ctor: 'OtherApp'};
+var _danyx23$elm_mimetype$MimeType$Pdf = {ctor: 'Pdf'};
+var _danyx23$elm_mimetype$MimeType$PowerPointXml = {ctor: 'PowerPointXml'};
+var _danyx23$elm_mimetype$MimeType$PowerPoint = {ctor: 'PowerPoint'};
+var _danyx23$elm_mimetype$MimeType$ExcelXml = {ctor: 'ExcelXml'};
+var _danyx23$elm_mimetype$MimeType$Excel = {ctor: 'Excel'};
+var _danyx23$elm_mimetype$MimeType$WordXml = {ctor: 'WordXml'};
+var _danyx23$elm_mimetype$MimeType$Word = {ctor: 'Word'};
+var _danyx23$elm_mimetype$MimeType$OtherMimeType = {ctor: 'OtherMimeType'};
+var _danyx23$elm_mimetype$MimeType$App = function (a) {
+	return {ctor: 'App', _0: a};
+};
+var _danyx23$elm_mimetype$MimeType$Text = function (a) {
+	return {ctor: 'Text', _0: a};
+};
+var _danyx23$elm_mimetype$MimeType$Video = function (a) {
+	return {ctor: 'Video', _0: a};
+};
+var _danyx23$elm_mimetype$MimeType$Audio = function (a) {
+	return {ctor: 'Audio', _0: a};
+};
+var _danyx23$elm_mimetype$MimeType$Image = function (a) {
+	return {ctor: 'Image', _0: a};
+};
+var _danyx23$elm_mimetype$MimeType$parseMimeType = function (mimeString) {
+	var _p6 = _elm_lang$core$String$toLower(mimeString);
+	switch (_p6) {
+		case '':
+			return _elm_lang$core$Maybe$Nothing;
+		case 'image/jpeg':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$Image(_danyx23$elm_mimetype$MimeType$Jpeg));
+		case 'image/png':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$Image(_danyx23$elm_mimetype$MimeType$Png));
+		case 'image/gif':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$Image(_danyx23$elm_mimetype$MimeType$Gif));
+		case 'audio/mp3':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$Audio(_danyx23$elm_mimetype$MimeType$Mp3));
+		case 'audio/mpeg':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$Audio(_danyx23$elm_mimetype$MimeType$Mp3));
+		case 'audio/wav':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$Audio(_danyx23$elm_mimetype$MimeType$Wav));
+		case 'audio/ogg':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$Audio(_danyx23$elm_mimetype$MimeType$Ogg));
+		case 'video/mp4':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$Video(_danyx23$elm_mimetype$MimeType$Mp4));
+		case 'video/mpeg':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$Video(_danyx23$elm_mimetype$MimeType$Mpeg));
+		case 'video/quicktime':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$Video(_danyx23$elm_mimetype$MimeType$Quicktime));
+		case 'video/avi':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$Video(_danyx23$elm_mimetype$MimeType$Avi));
+		case 'video/webm':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$Video(_danyx23$elm_mimetype$MimeType$Webm));
+		case 'text/plain':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$Text(_danyx23$elm_mimetype$MimeType$PlainText));
+		case 'text/html':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$Text(_danyx23$elm_mimetype$MimeType$Html));
+		case 'text/css':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$Text(_danyx23$elm_mimetype$MimeType$Css));
+		case 'text/xml':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$Text(_danyx23$elm_mimetype$MimeType$Xml));
+		case 'application/json':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$Text(_danyx23$elm_mimetype$MimeType$Json));
+		case 'application/msword':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$App(_danyx23$elm_mimetype$MimeType$Word));
+		case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$App(_danyx23$elm_mimetype$MimeType$WordXml));
+		case 'application/vnd.ms-excel':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$App(_danyx23$elm_mimetype$MimeType$Excel));
+		case 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$App(_danyx23$elm_mimetype$MimeType$ExcelXml));
+		case 'application/vnd.ms-powerpoint':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$App(_danyx23$elm_mimetype$MimeType$PowerPoint));
+		case 'application/vnd.openxmlformats-officedocument.presentationml.presentation':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$App(_danyx23$elm_mimetype$MimeType$PowerPointXml));
+		case 'application/pdf':
+			return _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$App(_danyx23$elm_mimetype$MimeType$Pdf));
+		default:
+			var _p7 = _p6;
+			return A2(_elm_lang$core$String$startsWith, 'image/', _p7) ? _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$Image(_danyx23$elm_mimetype$MimeType$OtherImage)) : (A2(_elm_lang$core$String$startsWith, 'audio/', _p7) ? _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$Audio(_danyx23$elm_mimetype$MimeType$OtherAudio)) : (A2(_elm_lang$core$String$startsWith, 'video/', _p7) ? _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$Video(_danyx23$elm_mimetype$MimeType$OtherVideo)) : (A2(_elm_lang$core$String$startsWith, 'text/', _p7) ? _elm_lang$core$Maybe$Just(
+				_danyx23$elm_mimetype$MimeType$Text(_danyx23$elm_mimetype$MimeType$OtherText)) : _elm_lang$core$Maybe$Just(_danyx23$elm_mimetype$MimeType$OtherMimeType))));
+	}
+};
+
+//import Result //
+
+var _elm_lang$core$Native_Date = function() {
+
+function fromString(str)
+{
+	var date = new Date(str);
+	return isNaN(date.getTime())
+		? _elm_lang$core$Result$Err('Unable to parse \'' + str + '\' as a date. Dates must be in the ISO 8601 format.')
+		: _elm_lang$core$Result$Ok(date);
+}
+
+var dayTable = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+var monthTable =
+	['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+	 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+
+return {
+	fromString: fromString,
+	year: function(d) { return d.getFullYear(); },
+	month: function(d) { return { ctor: monthTable[d.getMonth()] }; },
+	day: function(d) { return d.getDate(); },
+	hour: function(d) { return d.getHours(); },
+	minute: function(d) { return d.getMinutes(); },
+	second: function(d) { return d.getSeconds(); },
+	millisecond: function(d) { return d.getMilliseconds(); },
+	toTime: function(d) { return d.getTime(); },
+	fromTime: function(t) { return new Date(t); },
+	dayOfWeek: function(d) { return { ctor: dayTable[d.getDay()] }; }
+};
+
+}();
 var _elm_lang$core$Task$onError = _elm_lang$core$Native_Scheduler.onError;
 var _elm_lang$core$Task$andThen = _elm_lang$core$Native_Scheduler.andThen;
 var _elm_lang$core$Task$spawnCmd = F2(
@@ -6248,6 +6495,39 @@ var _elm_lang$core$Time$subMap = F2(
 			});
 	});
 _elm_lang$core$Native_Platform.effectManagers['Time'] = {pkg: 'elm-lang/core', init: _elm_lang$core$Time$init, onEffects: _elm_lang$core$Time$onEffects, onSelfMsg: _elm_lang$core$Time$onSelfMsg, tag: 'sub', subMap: _elm_lang$core$Time$subMap};
+
+var _elm_lang$core$Date$millisecond = _elm_lang$core$Native_Date.millisecond;
+var _elm_lang$core$Date$second = _elm_lang$core$Native_Date.second;
+var _elm_lang$core$Date$minute = _elm_lang$core$Native_Date.minute;
+var _elm_lang$core$Date$hour = _elm_lang$core$Native_Date.hour;
+var _elm_lang$core$Date$dayOfWeek = _elm_lang$core$Native_Date.dayOfWeek;
+var _elm_lang$core$Date$day = _elm_lang$core$Native_Date.day;
+var _elm_lang$core$Date$month = _elm_lang$core$Native_Date.month;
+var _elm_lang$core$Date$year = _elm_lang$core$Native_Date.year;
+var _elm_lang$core$Date$fromTime = _elm_lang$core$Native_Date.fromTime;
+var _elm_lang$core$Date$toTime = _elm_lang$core$Native_Date.toTime;
+var _elm_lang$core$Date$fromString = _elm_lang$core$Native_Date.fromString;
+var _elm_lang$core$Date$now = A2(_elm_lang$core$Task$map, _elm_lang$core$Date$fromTime, _elm_lang$core$Time$now);
+var _elm_lang$core$Date$Date = {ctor: 'Date'};
+var _elm_lang$core$Date$Sun = {ctor: 'Sun'};
+var _elm_lang$core$Date$Sat = {ctor: 'Sat'};
+var _elm_lang$core$Date$Fri = {ctor: 'Fri'};
+var _elm_lang$core$Date$Thu = {ctor: 'Thu'};
+var _elm_lang$core$Date$Wed = {ctor: 'Wed'};
+var _elm_lang$core$Date$Tue = {ctor: 'Tue'};
+var _elm_lang$core$Date$Mon = {ctor: 'Mon'};
+var _elm_lang$core$Date$Dec = {ctor: 'Dec'};
+var _elm_lang$core$Date$Nov = {ctor: 'Nov'};
+var _elm_lang$core$Date$Oct = {ctor: 'Oct'};
+var _elm_lang$core$Date$Sep = {ctor: 'Sep'};
+var _elm_lang$core$Date$Aug = {ctor: 'Aug'};
+var _elm_lang$core$Date$Jul = {ctor: 'Jul'};
+var _elm_lang$core$Date$Jun = {ctor: 'Jun'};
+var _elm_lang$core$Date$May = {ctor: 'May'};
+var _elm_lang$core$Date$Apr = {ctor: 'Apr'};
+var _elm_lang$core$Date$Mar = {ctor: 'Mar'};
+var _elm_lang$core$Date$Feb = {ctor: 'Feb'};
+var _elm_lang$core$Date$Jan = {ctor: 'Jan'};
 
 var _elm_lang$core$Process$kill = _elm_lang$core$Native_Scheduler.kill;
 var _elm_lang$core$Process$sleep = _elm_lang$core$Native_Scheduler.sleep;
@@ -14450,7 +14730,204 @@ var _evancz$url_parser$UrlParser$intParam = function (name) {
 	return A2(_evancz$url_parser$UrlParser$customParam, name, _evancz$url_parser$UrlParser$intParamHelp);
 };
 
-var _user$project$Models$emptyPost = {id: 0, content: '', isOp: false, threadId: 0, image: '', imagePath: '', thumbnailPath: ''};
+// To use the examples, swap the commenting on the next two lines
+
+// var _user$project$Native_FileReader = function() {
+var _simonh1000$file_reader$Native_FileReader = function() {
+
+    var scheduler = _elm_lang$core$Native_Scheduler;
+
+    function useReader(method, fileObjectToRead) {
+        return scheduler.nativeBinding(function(callback){
+
+            /*
+             * Test for existence of FileReader using
+             * if(window.FileReader) { ...
+             * http://caniuse.com/#search=filereader
+             * main gap is IE10 and 11 which do not support readAsBinaryFile
+             * but we do not use this API either as it is deprecated
+             */
+            var reader = new FileReader();
+
+            reader.onload = function(evt) {
+                return callback(scheduler.succeed(evt.target.result));
+            };
+
+            reader.onerror = function() {
+                return callback(scheduler.fail({ctor : 'ReadFail'}));
+            };
+
+            // Error if not passed an objectToRead or if it is not a Blob
+            if (!fileObjectToRead || !(fileObjectToRead instanceof Blob)) {
+                return callback(scheduler.fail({ctor : 'NoValidBlob'}));
+            }
+
+            if (reader[method]) {
+                var result = reader[method](fileObjectToRead);
+                // prevent memory leak by nullifying fileObjectToRead
+                fileObjectToRead = null;
+                return result;
+            } else {
+                return callback(scheduler.fail({ctor : 'ReadFail'}));
+            }
+        });
+    }
+
+    // readAsTextFile : Value -> Task error String
+    var readAsTextFile = function(fileObjectToRead){
+        return useReader("readAsText", fileObjectToRead);
+    };
+
+    // readAsArrayBuffer : Value -> Task error String
+    var readAsArrayBuffer = function(fileObjectToRead){
+        return useReader("readAsArrayBuffer", fileObjectToRead);
+    };
+
+    // readAsDataUrl : Value -> Task error String
+    var readAsDataUrl = function(fileObjectToRead){
+        return useReader("readAsDataURL", fileObjectToRead);
+    };
+
+    var filePart = function(name, blob) {
+        return {
+            _0: name,
+            _1: blob
+        }
+    };
+
+    var rawBody = function (mimeType, blob) {
+        return {
+            ctor: "StringBody",
+            _0: mimeType,
+            _1: blob
+        };
+    };
+
+    return {
+        readAsTextFile : readAsTextFile,
+        readAsArrayBuffer : readAsArrayBuffer,
+        readAsDataUrl: readAsDataUrl,
+        filePart: F2(filePart),
+        rawBody: F2(rawBody)
+    };
+}();
+
+var _simonh1000$file_reader$FileReader$mtypeDecoder = A2(
+	_elm_lang$core$Json_Decode$map,
+	_danyx23$elm_mimetype$MimeType$parseMimeType,
+	A2(_elm_lang$core$Json_Decode$field, 'type', _elm_lang$core$Json_Decode$string));
+var _simonh1000$file_reader$FileReader$fileListDecoder = function (decoder) {
+	var decodeFileValues = function (indexes) {
+		return A3(
+			_elm_lang$core$List$foldr,
+			_elm_lang$core$Json_Decode$map2(
+				F2(
+					function (x, y) {
+						return {ctor: '::', _0: x, _1: y};
+					})),
+			_elm_lang$core$Json_Decode$succeed(
+				{ctor: '[]'}),
+			A2(
+				_elm_lang$core$List$map,
+				function (index) {
+					return A2(
+						_elm_lang$core$Json_Decode$field,
+						_elm_lang$core$Basics$toString(index),
+						decoder);
+				},
+				indexes));
+	};
+	return A2(
+		_elm_lang$core$Json_Decode$andThen,
+		decodeFileValues,
+		A2(
+			_elm_lang$core$Json_Decode$map,
+			function (i) {
+				return A2(_elm_lang$core$List$range, 0, i - 1);
+			},
+			A2(_elm_lang$core$Json_Decode$field, 'length', _elm_lang$core$Json_Decode$int)));
+};
+var _simonh1000$file_reader$FileReader$isTextFile = function (fileRef) {
+	var _p0 = A2(_elm_lang$core$Json_Decode$decodeValue, _simonh1000$file_reader$FileReader$mtypeDecoder, fileRef);
+	_v0_2:
+	do {
+		if (_p0.ctor === 'Ok') {
+			if (_p0._0.ctor === 'Just') {
+				if (_p0._0._0.ctor === 'Text') {
+					return true;
+				} else {
+					break _v0_2;
+				}
+			} else {
+				return true;
+			}
+		} else {
+			break _v0_2;
+		}
+	} while(false);
+	return false;
+};
+var _simonh1000$file_reader$FileReader$prettyPrint = function (err) {
+	var _p1 = err;
+	switch (_p1.ctor) {
+		case 'ReadFail':
+			return 'File reading error';
+		case 'NoValidBlob':
+			return 'Blob was not valid';
+		default:
+			return 'Not a text file';
+	}
+};
+var _simonh1000$file_reader$FileReader$rawBody = F2(
+	function (mimeType, nf) {
+		return A2(_simonh1000$file_reader$Native_FileReader.rawBody, mimeType, nf.blob);
+	});
+var _simonh1000$file_reader$FileReader$filePart = F2(
+	function (name, nf) {
+		return A2(_simonh1000$file_reader$Native_FileReader.filePart, name, nf.blob);
+	});
+var _simonh1000$file_reader$FileReader$readAsDataUrl = function (fileRef) {
+	return _simonh1000$file_reader$Native_FileReader.readAsDataUrl(fileRef);
+};
+var _simonh1000$file_reader$FileReader$readAsArrayBuffer = function (fileRef) {
+	return _simonh1000$file_reader$Native_FileReader.readAsArrayBuffer(fileRef);
+};
+var _simonh1000$file_reader$FileReader$NativeFile = F4(
+	function (a, b, c, d) {
+		return {name: a, size: b, mimeType: c, blob: d};
+	});
+var _simonh1000$file_reader$FileReader$nativeFileDecoder = A5(
+	_elm_lang$core$Json_Decode$map4,
+	_simonh1000$file_reader$FileReader$NativeFile,
+	A2(_elm_lang$core$Json_Decode$field, 'name', _elm_lang$core$Json_Decode$string),
+	A2(_elm_lang$core$Json_Decode$field, 'size', _elm_lang$core$Json_Decode$int),
+	_simonh1000$file_reader$FileReader$mtypeDecoder,
+	_elm_lang$core$Json_Decode$value);
+var _simonh1000$file_reader$FileReader$fileParser = function (fieldName) {
+	return A2(
+		_elm_lang$core$Json_Decode$field,
+		fieldName,
+		A2(
+			_elm_lang$core$Json_Decode$field,
+			'files',
+			_simonh1000$file_reader$FileReader$fileListDecoder(_simonh1000$file_reader$FileReader$nativeFileDecoder)));
+};
+var _simonh1000$file_reader$FileReader$parseSelectedFiles = _simonh1000$file_reader$FileReader$fileParser('target');
+var _simonh1000$file_reader$FileReader$onFileChange = function (msg) {
+	return A2(
+		_elm_lang$html$Html_Events$on,
+		'change',
+		A2(_elm_lang$core$Json_Decode$map, msg, _simonh1000$file_reader$FileReader$parseSelectedFiles));
+};
+var _simonh1000$file_reader$FileReader$parseDroppedFiles = _simonh1000$file_reader$FileReader$fileParser('dataTransfer');
+var _simonh1000$file_reader$FileReader$NotTextFile = {ctor: 'NotTextFile'};
+var _simonh1000$file_reader$FileReader$readAsTextFile = function (fileRef) {
+	return _simonh1000$file_reader$FileReader$isTextFile(fileRef) ? _simonh1000$file_reader$Native_FileReader.readAsTextFile(fileRef) : _elm_lang$core$Task$fail(_simonh1000$file_reader$FileReader$NotTextFile);
+};
+var _simonh1000$file_reader$FileReader$ReadFail = {ctor: 'ReadFail'};
+var _simonh1000$file_reader$FileReader$NoValidBlob = {ctor: 'NoValidBlob'};
+
+var _user$project$Models$emptyPost = {id: 0, content: '', isOp: false, threadId: 0, image: '', imagePath: '', thumbnailPath: '', createdDate: ''};
 var _user$project$Models$emptyThread = {
 	posts: {ctor: '[]'},
 	post: _user$project$Models$emptyPost,
@@ -14471,12 +14948,13 @@ var _user$project$Models$model = function (route) {
 		board: _user$project$Models$emptyBoard,
 		route: route,
 		messageInput: '',
-		threadInput: ''
+		file: _elm_lang$core$Maybe$Nothing,
+		readFile: ''
 	};
 };
-var _user$project$Models$Model = F6(
-	function (a, b, c, d, e, f) {
-		return {text: a, boards: b, route: c, board: d, messageInput: e, threadInput: f};
+var _user$project$Models$Model = F7(
+	function (a, b, c, d, e, f, g) {
+		return {text: a, boards: b, route: c, board: d, messageInput: e, file: f, readFile: g};
 	});
 var _user$project$Models$Board = F5(
 	function (a, b, c, d, e) {
@@ -14486,9 +14964,9 @@ var _user$project$Models$Thread = F4(
 	function (a, b, c, d) {
 		return {posts: a, post: b, id: c, boardId: d};
 	});
-var _user$project$Models$Post = F7(
-	function (a, b, c, d, e, f, g) {
-		return {id: a, content: b, isOp: c, threadId: d, image: e, imagePath: f, thumbnailPath: g};
+var _user$project$Models$Post = F8(
+	function (a, b, c, d, e, f, g, h) {
+		return {id: a, content: b, isOp: c, threadId: d, image: e, imagePath: f, thumbnailPath: g, createdDate: h};
 	});
 var _user$project$Models$NotFoundRoute = {ctor: 'NotFoundRoute'};
 var _user$project$Models$PostsRoute = F2(
@@ -14500,39 +14978,43 @@ var _user$project$Models$ThreadsRoute = function (a) {
 };
 var _user$project$Models$BoardsRoute = {ctor: 'BoardsRoute'};
 
-var _user$project$Decoders$decodePost = A4(
-	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
-	'thumbnailPath',
+var _user$project$Decoders$decodePost = A3(
+	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+	'createdDate',
 	_elm_lang$core$Json_Decode$string,
-	'',
 	A4(
 		_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
-		'imagePath',
+		'thumbnailPath',
 		_elm_lang$core$Json_Decode$string,
 		'',
 		A4(
 			_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
-			'image',
+			'imagePath',
 			_elm_lang$core$Json_Decode$string,
 			'',
-			A3(
-				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-				'threadId',
-				_elm_lang$core$Json_Decode$int,
+			A4(
+				_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+				'image',
+				_elm_lang$core$Json_Decode$string,
+				'',
 				A3(
 					_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-					'isOp',
-					_elm_lang$core$Json_Decode$bool,
-					A4(
-						_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
-						'content',
-						_elm_lang$core$Json_Decode$string,
-						'',
-						A3(
-							_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
-							'id',
-							_elm_lang$core$Json_Decode$int,
-							_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Models$Post))))))));
+					'threadId',
+					_elm_lang$core$Json_Decode$int,
+					A3(
+						_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+						'isOp',
+						_elm_lang$core$Json_Decode$bool,
+						A4(
+							_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$optional,
+							'content',
+							_elm_lang$core$Json_Decode$string,
+							'',
+							A3(
+								_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
+								'id',
+								_elm_lang$core$Json_Decode$int,
+								_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Models$Post)))))))));
 var _user$project$Decoders$decodeThread = A3(
 	_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$required,
 	'boardId',
@@ -14576,8 +15058,8 @@ var _user$project$Decoders$decodeBoard = A4(
 					_elm_lang$core$Json_Decode$string,
 					_NoRedInk$elm_decode_pipeline$Json_Decode_Pipeline$decode(_user$project$Models$Board))))));
 
-var _user$project$Encoders$postEncoder = F2(
-	function (message, threadId) {
+var _user$project$Encoders$postEncoder = F3(
+	function (data, message, threadId) {
 		return _elm_lang$core$Json_Encode$object(
 			{
 				ctor: '::',
@@ -14593,12 +15075,20 @@ var _user$project$Encoders$postEncoder = F2(
 						_0: 'threadId',
 						_1: _elm_lang$core$Json_Encode$int(threadId)
 					},
-					_1: {ctor: '[]'}
+					_1: {
+						ctor: '::',
+						_0: {
+							ctor: '_Tuple2',
+							_0: 'image',
+							_1: _elm_lang$core$Json_Encode$string(data)
+						},
+						_1: {ctor: '[]'}
+					}
 				}
 			});
 	});
-var _user$project$Encoders$threadEncoder = F2(
-	function (message, boardId) {
+var _user$project$Encoders$threadEncoder = F3(
+	function (data, message, boardId) {
 		return _elm_lang$core$Json_Encode$object(
 			{
 				ctor: '::',
@@ -14612,13 +15102,19 @@ var _user$project$Encoders$threadEncoder = F2(
 					_0: {
 						ctor: '_Tuple2',
 						_0: 'post',
-						_1: A2(_user$project$Encoders$postEncoder, message, 0)
+						_1: A3(_user$project$Encoders$postEncoder, data, message, 0)
 					},
 					_1: {ctor: '[]'}
 				}
 			});
 	});
 
+var _user$project$Msgs$OnFileContent = function (a) {
+	return {ctor: 'OnFileContent', _0: a};
+};
+var _user$project$Msgs$UploadFile = function (a) {
+	return {ctor: 'UploadFile', _0: a};
+};
 var _user$project$Msgs$SendMessage = F2(
 	function (a, b) {
 		return {ctor: 'SendMessage', _0: a, _1: b};
@@ -14630,9 +15126,6 @@ var _user$project$Msgs$RedirectPostsForThread = function (a) {
 	return {ctor: 'RedirectPostsForThread', _0: a};
 };
 var _user$project$Msgs$SendThread = {ctor: 'SendThread'};
-var _user$project$Msgs$ThreadInput = function (a) {
-	return {ctor: 'ThreadInput', _0: a};
-};
 var _user$project$Msgs$SendPost = {ctor: 'SendPost'};
 var _user$project$Msgs$PostInput = function (a) {
 	return {ctor: 'PostInput', _0: a};
@@ -14651,9 +15144,15 @@ var _user$project$Msgs$GetBoards = function (a) {
 };
 var _user$project$Msgs$NoOp = {ctor: 'NoOp'};
 
+var _user$project$Commands$getFileContents = function (nf) {
+	return A2(
+		_elm_lang$core$Task$attempt,
+		_user$project$Msgs$OnFileContent,
+		_simonh1000$file_reader$FileReader$readAsDataUrl(nf.blob));
+};
 var _user$project$Commands$api = 'http://localhost:14190/api/';
-var _user$project$Commands$sendPost = F3(
-	function (post, boardId, threadId) {
+var _user$project$Commands$sendPost = F4(
+	function (data, post, boardId, threadId) {
 		var url = A2(
 			_elm_lang$core$Basics_ops['++'],
 			_user$project$Commands$api,
@@ -14679,12 +15178,12 @@ var _user$project$Commands$sendPost = F3(
 				A2(
 					_elm_lang$core$Json_Encode$encode,
 					0,
-					A2(_user$project$Encoders$postEncoder, post, threadId))),
+					A3(_user$project$Encoders$postEncoder, data, post, threadId))),
 			_user$project$Decoders$decodeBoard);
 		return A2(_elm_lang$http$Http$send, _user$project$Msgs$GetPostsForThread, request);
 	});
-var _user$project$Commands$sendThread = F2(
-	function (post, boardId) {
+var _user$project$Commands$sendThread = F3(
+	function (data, post, boardId) {
 		var url = A2(
 			_elm_lang$core$Basics_ops['++'],
 			_user$project$Commands$api,
@@ -14704,7 +15203,7 @@ var _user$project$Commands$sendThread = F2(
 				A2(
 					_elm_lang$core$Json_Encode$encode,
 					0,
-					A2(_user$project$Encoders$threadEncoder, post, boardId))),
+					A3(_user$project$Encoders$threadEncoder, data, post, boardId))),
 			_user$project$Decoders$decodeBoard);
 		return A2(_elm_lang$http$Http$send, _user$project$Msgs$RedirectPostsForThread, request);
 	});
@@ -14969,7 +15468,7 @@ var _user$project$Update$update = F2(
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{route: newRoute}),
+						{route: newRoute, messageInput: '', readFile: ''}),
 					_1: _user$project$Commands$performLocationChange(newRoute)
 				};
 			case 'PostInput':
@@ -14985,24 +15484,16 @@ var _user$project$Update$update = F2(
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{messageInput: ''}),
-					_1: A3(_user$project$Commands$sendPost, model.messageInput, model.board.id, model.board.thread.id)
-				};
-			case 'ThreadInput':
-				return {
-					ctor: '_Tuple2',
-					_0: _elm_lang$core$Native_Utils.update(
-						model,
-						{threadInput: _p0._0}),
-					_1: _elm_lang$core$Platform_Cmd$none
+						{messageInput: '', readFile: ''}),
+					_1: A4(_user$project$Commands$sendPost, model.readFile, model.messageInput, model.board.id, model.board.thread.id)
 				};
 			case 'SendThread':
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
 						model,
-						{threadInput: ''}),
-					_1: A2(_user$project$Commands$sendThread, model.threadInput, model.board.id)
+						{messageInput: '', readFile: ''}),
+					_1: A3(_user$project$Commands$sendThread, model.readFile, model.messageInput, model.board.id)
 				};
 			case 'RedirectPostsForThread':
 				if (_p0._0.ctor === 'Ok') {
@@ -15034,7 +15525,7 @@ var _user$project$Update$update = F2(
 						{text: _p0._0}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			default:
+			case 'SendMessage':
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -15057,6 +15548,50 @@ var _user$project$Update$update = F2(
 										'/posts/ws')))),
 						model.messageInput)
 				};
+			case 'UploadFile':
+				var _p2 = _p0._0;
+				if ((_p2.ctor === '::') && (_p2._1.ctor === '[]')) {
+					var _p3 = _p2._0;
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								file: _elm_lang$core$Maybe$Just(_p3)
+							}),
+						_1: _user$project$Commands$getFileContents(_p3)
+					};
+				} else {
+					return {ctor: '_Tuple2', _0: model, _1: _elm_lang$core$Platform_Cmd$none};
+				}
+			default:
+				var _p4 = _p0._0;
+				if (_p4.ctor === 'Ok') {
+					return {
+						ctor: '_Tuple2',
+						_0: _elm_lang$core$Native_Utils.update(
+							model,
+							{
+								readFile: A2(
+									_elm_lang$core$String$dropRight,
+									1,
+									A2(
+										_elm_lang$core$String$dropLeft,
+										1,
+										_elm_lang$core$Basics$toString(_p4._0)))
+							}),
+						_1: _elm_lang$core$Platform_Cmd$none
+					};
+				} else {
+					return _elm_lang$core$Native_Utils.crashCase(
+						'Update',
+						{
+							start: {line: 78, column: 13},
+							end: {line: 83, column: 47}
+						},
+						_p4)(
+						_elm_lang$core$Basics$toString(_p4._0));
+				}
 		}
 	});
 
@@ -15114,6 +15649,21 @@ var _user$project$Views_Boards$view = function (model) {
 				_1: {ctor: '[]'}
 			}
 		});
+};
+
+var _user$project$Views_Shared_GetDate$getDate = function (date) {
+	var _p0 = _elm_lang$core$Date$fromString(date);
+	if (_p0.ctor === 'Ok') {
+		return A2(
+			_elm_lang$core$String$dropRight,
+			1,
+			A2(
+				_elm_lang$core$String$dropLeft,
+				1,
+				_elm_lang$core$Basics$toString(_p0._0)));
+	} else {
+		return '';
+	}
 };
 
 var _user$project$Views_Shared_Navbar$displayBoards = function (board) {
@@ -15204,14 +15754,29 @@ var _user$project$Views_Posts$displayPosts = function (post) {
 			ctor: '::',
 			_0: A2(
 				_elm_lang$html$Html$div,
-				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html_Attributes$style(
+						{
+							ctor: '::',
+							_0: {ctor: '_Tuple2', _0: 'border-bottom', _1: 'solid black 1px'},
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				},
 				{
 					ctor: '::',
 					_0: _elm_lang$html$Html$text(
 						A2(
 							_elm_lang$core$Basics_ops['++'],
 							'No. #',
-							_elm_lang$core$Basics$toString(post.id))),
+							A2(
+								_elm_lang$core$Basics_ops['++'],
+								_elm_lang$core$Basics$toString(post.id),
+								A2(
+									_elm_lang$core$Basics_ops['++'],
+									' made at ',
+									_user$project$Views_Shared_GetDate$getDate(post.createdDate))))),
 					_1: {ctor: '[]'}
 				}),
 			_1: {
@@ -15363,26 +15928,94 @@ var _user$project$Views_Posts$view = function (model) {
 												_0: _elm_lang$html$Html$text('Submit'),
 												_1: {ctor: '[]'}
 											}),
-										_1: {ctor: '[]'}
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$div,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$input,
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$type_('file'),
+															_1: {
+																ctor: '::',
+																_0: _simonh1000$file_reader$FileReader$onFileChange(_user$project$Msgs$UploadFile),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$multiple(false),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$html$Html_Attributes$accept('image/*'),
+																		_1: {ctor: '[]'}
+																	}
+																}
+															}
+														},
+														{ctor: '[]'}),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: (!_elm_lang$core$Native_Utils.eq(model.readFile, '')) ? A2(
+													_elm_lang$html$Html$div,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$img,
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$src(model.readFile),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$style(
+																		{
+																			ctor: '::',
+																			_0: {ctor: '_Tuple2', _0: 'max-height', _1: '200px'},
+																			_1: {
+																				ctor: '::',
+																				_0: {ctor: '_Tuple2', _0: 'max-width', _1: '200px'},
+																				_1: {ctor: '[]'}
+																			}
+																		}),
+																	_1: {ctor: '[]'}
+																}
+															},
+															{ctor: '[]'}),
+														_1: {ctor: '[]'}
+													}) : _elm_lang$html$Html$text(''),
+												_1: {ctor: '[]'}
+											}
+										}
 									}
 								}
 							}),
 						_1: {
 							ctor: '::',
 							_0: A2(
-								_elm_lang$html$Html$a,
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html_Attributes$href(
-										_user$project$Routing$threadsPath(model.board.id)),
-									_1: {ctor: '[]'}
-								},
-								{
-									ctor: '::',
-									_0: _elm_lang$html$Html$text('Back to threads'),
-									_1: {ctor: '[]'}
-								}),
-							_1: {ctor: '[]'}
+								_elm_lang$html$Html$br,
+								{ctor: '[]'},
+								{ctor: '[]'}),
+							_1: {
+								ctor: '::',
+								_0: A2(
+									_elm_lang$html$Html$a,
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html_Attributes$href(
+											_user$project$Routing$threadsPath(model.board.id)),
+										_1: {ctor: '[]'}
+									},
+									{
+										ctor: '::',
+										_0: _elm_lang$html$Html$text('Back to threads'),
+										_1: {ctor: '[]'}
+									}),
+								_1: {ctor: '[]'}
+							}
 						}
 					}
 				}
@@ -15430,14 +16063,29 @@ var _user$project$Views_Threads$displayThreads = function (threadList) {
 					ctor: '::',
 					_0: A2(
 						_elm_lang$html$Html$div,
-						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$style(
+								{
+									ctor: '::',
+									_0: {ctor: '_Tuple2', _0: 'border-bottom', _1: 'solid black 1px'},
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						},
 						{
 							ctor: '::',
 							_0: _elm_lang$html$Html$text(
 								A2(
 									_elm_lang$core$Basics_ops['++'],
 									'No. #',
-									_elm_lang$core$Basics$toString(t.post.id))),
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										_elm_lang$core$Basics$toString(t.post.id),
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											' made at ',
+											_user$project$Views_Shared_GetDate$getDate(t.post.createdDate))))),
 							_1: {ctor: '[]'}
 						}),
 					_1: {
@@ -15618,10 +16266,10 @@ var _user$project$Views_Threads$view = function (model) {
 											_0: _elm_lang$html$Html_Attributes$type_('text '),
 											_1: {
 												ctor: '::',
-												_0: _elm_lang$html$Html_Events$onInput(_user$project$Msgs$ThreadInput),
+												_0: _elm_lang$html$Html_Events$onInput(_user$project$Msgs$PostInput),
 												_1: {
 													ctor: '::',
-													_0: _elm_lang$html$Html_Attributes$value(model.threadInput),
+													_0: _elm_lang$html$Html_Attributes$value(model.messageInput),
 													_1: {ctor: '[]'}
 												}
 											}
@@ -15641,7 +16289,68 @@ var _user$project$Views_Threads$view = function (model) {
 												_0: _elm_lang$html$Html$text('Submit'),
 												_1: {ctor: '[]'}
 											}),
-										_1: {ctor: '[]'}
+										_1: {
+											ctor: '::',
+											_0: A2(
+												_elm_lang$html$Html$div,
+												{ctor: '[]'},
+												{
+													ctor: '::',
+													_0: A2(
+														_elm_lang$html$Html$input,
+														{
+															ctor: '::',
+															_0: _elm_lang$html$Html_Attributes$type_('file'),
+															_1: {
+																ctor: '::',
+																_0: _simonh1000$file_reader$FileReader$onFileChange(_user$project$Msgs$UploadFile),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$multiple(false),
+																	_1: {
+																		ctor: '::',
+																		_0: _elm_lang$html$Html_Attributes$accept('image/*'),
+																		_1: {ctor: '[]'}
+																	}
+																}
+															}
+														},
+														{ctor: '[]'}),
+													_1: {ctor: '[]'}
+												}),
+											_1: {
+												ctor: '::',
+												_0: (!_elm_lang$core$Native_Utils.eq(model.readFile, '')) ? A2(
+													_elm_lang$html$Html$div,
+													{ctor: '[]'},
+													{
+														ctor: '::',
+														_0: A2(
+															_elm_lang$html$Html$img,
+															{
+																ctor: '::',
+																_0: _elm_lang$html$Html_Attributes$src(model.readFile),
+																_1: {
+																	ctor: '::',
+																	_0: _elm_lang$html$Html_Attributes$style(
+																		{
+																			ctor: '::',
+																			_0: {ctor: '_Tuple2', _0: 'max-height', _1: '200px'},
+																			_1: {
+																				ctor: '::',
+																				_0: {ctor: '_Tuple2', _0: 'max-width', _1: '200px'},
+																				_1: {ctor: '[]'}
+																			}
+																		}),
+																	_1: {ctor: '[]'}
+																}
+															},
+															{ctor: '[]'}),
+														_1: {ctor: '[]'}
+													}) : _elm_lang$html$Html$text(''),
+												_1: {ctor: '[]'}
+											}
+										}
 									}
 								}
 							}),
@@ -15708,7 +16417,7 @@ var _user$project$Main$main = A2(
 var Elm = {};
 Elm['Main'] = Elm['Main'] || {};
 if (typeof _user$project$Main$main !== 'undefined') {
-    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"message":"Msgs.Msg","aliases":{"Models.Board":{"type":"{ name : String , shorthandName : String , id : Int , threads : List Models.Thread , thread : Models.Thread }","args":[]},"Navigation.Location":{"type":"{ href : String , host : String , hostname : String , protocol : String , origin : String , port_ : String , pathname : String , search : String , hash : String , username : String , password : String }","args":[]},"Models.Thread":{"type":"{ posts : List Models.Post , post : Models.Post , id : Int , boardId : Int }","args":[]},"Models.Post":{"type":"{ id : Int , content : String , isOp : Bool , threadId : Int , image : String , imagePath : String , thumbnailPath : String }","args":[]},"Http.Response":{"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }","args":["body"]}},"unions":{"Dict.NColor":{"tags":{"Black":[],"BBlack":[],"Red":[],"NBlack":[]},"args":[]},"Msgs.Msg":{"tags":{"SendPost":[],"GetBoards":["Result.Result Http.Error (List Models.Board)"],"GetThreadsForBoard":["Result.Result Http.Error Models.Board"],"SendThread":[],"ThreadInput":["String"],"NoOp":[],"Echo":["String"],"RedirectPostsForThread":["Result.Result Http.Error Models.Board"],"SendMessage":["Int","Int"],"OnLocationChange":["Navigation.Location"],"GetPostsForThread":["Result.Result Http.Error Models.Board"],"PostInput":["String"]},"args":[]},"Result.Result":{"tags":{"Err":["error"],"Ok":["value"]},"args":["error","value"]},"Http.Error":{"tags":{"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"],"BadUrl":["String"],"NetworkError":[]},"args":[]},"Dict.LeafColor":{"tags":{"LBlack":[],"LBBlack":[]},"args":[]},"Dict.Dict":{"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]},"args":["k","v"]}}},"versions":{"elm":"0.18.0"}});
+    _user$project$Main$main(Elm['Main'], 'Main', {"types":{"message":"Msgs.Msg","aliases":{"Json.Decode.Value":{"type":"Json.Encode.Value","args":[]},"FileReader.FileRef":{"type":"Json.Decode.Value","args":[]},"FileReader.NativeFile":{"type":"{ name : String , size : Int , mimeType : Maybe.Maybe MimeType.MimeType , blob : FileReader.FileRef }","args":[]},"Models.Board":{"type":"{ name : String , shorthandName : String , id : Int , threads : List Models.Thread , thread : Models.Thread }","args":[]},"Navigation.Location":{"type":"{ href : String , host : String , hostname : String , protocol : String , origin : String , port_ : String , pathname : String , search : String , hash : String , username : String , password : String }","args":[]},"Models.Thread":{"type":"{ posts : List Models.Post , post : Models.Post , id : Int , boardId : Int }","args":[]},"Models.Post":{"type":"{ id : Int , content : String , isOp : Bool , threadId : Int , image : String , imagePath : String , thumbnailPath : String , createdDate : String }","args":[]},"Http.Response":{"type":"{ url : String , status : { code : Int, message : String } , headers : Dict.Dict String String , body : body }","args":["body"]},"FileReader.FileContentDataUrl":{"type":"Json.Decode.Value","args":[]}},"unions":{"Dict.NColor":{"tags":{"Black":[],"BBlack":[],"Red":[],"NBlack":[]},"args":[]},"Msgs.Msg":{"tags":{"SendPost":[],"GetBoards":["Result.Result Http.Error (List Models.Board)"],"GetThreadsForBoard":["Result.Result Http.Error Models.Board"],"SendThread":[],"UploadFile":["List FileReader.NativeFile"],"OnFileContent":["Result.Result FileReader.Error FileReader.FileContentDataUrl"],"NoOp":[],"Echo":["String"],"RedirectPostsForThread":["Result.Result Http.Error Models.Board"],"SendMessage":["Int","Int"],"OnLocationChange":["Navigation.Location"],"GetPostsForThread":["Result.Result Http.Error Models.Board"],"PostInput":["String"]},"args":[]},"Result.Result":{"tags":{"Err":["error"],"Ok":["value"]},"args":["error","value"]},"Http.Error":{"tags":{"Timeout":[],"BadStatus":["Http.Response String"],"BadPayload":["String","Http.Response String"],"BadUrl":["String"],"NetworkError":[]},"args":[]},"Dict.LeafColor":{"tags":{"LBlack":[],"LBBlack":[]},"args":[]},"MimeType.MimeVideo":{"tags":{"Mpeg":[],"Webm":[],"Quicktime":[],"Mp4":[],"OtherVideo":[],"Avi":[]},"args":[]},"MimeType.MimeApp":{"tags":{"Excel":[],"Pdf":[],"PowerPoint":[],"ExcelXml":[],"Word":[],"WordXml":[],"PowerPointXml":[],"OtherApp":[]},"args":[]},"Json.Encode.Value":{"tags":{"Value":[]},"args":[]},"FileReader.Error":{"tags":{"NoValidBlob":[],"NotTextFile":[],"ReadFail":[]},"args":[]},"MimeType.MimeAudio":{"tags":{"Wav":[],"Ogg":[],"OtherAudio":[],"Mp3":[]},"args":[]},"MimeType.MimeText":{"tags":{"PlainText":[],"Html":[],"Json":[],"Css":[],"Xml":[],"OtherText":[]},"args":[]},"MimeType.MimeType":{"tags":{"OtherMimeType":[],"Audio":["MimeType.MimeAudio"],"Image":["MimeType.MimeImage"],"Text":["MimeType.MimeText"],"App":["MimeType.MimeApp"],"Video":["MimeType.MimeVideo"]},"args":[]},"Maybe.Maybe":{"tags":{"Nothing":[],"Just":["a"]},"args":["a"]},"Dict.Dict":{"tags":{"RBNode_elm_builtin":["Dict.NColor","k","v","Dict.Dict k v","Dict.Dict k v"],"RBEmpty_elm_builtin":["Dict.LeafColor"]},"args":["k","v"]},"MimeType.MimeImage":{"tags":{"Png":[],"Gif":[],"Jpeg":[],"OtherImage":[]},"args":[]}}},"versions":{"elm":"0.18.0"}});
 }
 
 if (typeof define === "function" && define['amd'])
