@@ -38,7 +38,7 @@ namespace TestWebApplication.Controllers
         {
             if (string.IsNullOrWhiteSpace(thread.Post.Content) && string.IsNullOrWhiteSpace(thread.Post.Image))
             {
-                return BadRequest();
+                return BadRequest(new { message = "Empty Post" });
             }
 
             using (_work.BeginTransaction())
@@ -53,7 +53,15 @@ namespace TestWebApplication.Controllers
 
                     if (!string.IsNullOrWhiteSpace(thread.Post.Image))
                     {
-                        thread.Post = ImageHelper.SaveImage(thread.Post, _env, this.Request);
+                        thread.Post.Checksum = ImageHelper.GenerateChecksum(thread.Post);
+                        if (_work.PostRepository.ImageUniqueToThread(thread.Post))
+                        {
+                            thread.Post = ImageHelper.SaveImage(thread.Post, _env, this.Request);
+                        }
+                        else
+                        {
+                            return BadRequest(new { message = "Duplicate Image" });
+                        }
                     }
 
                     _work.PostRepository.CreatePost(thread.Post);
@@ -64,7 +72,7 @@ namespace TestWebApplication.Controllers
                 catch
                 {
                     _work.RollbackTransaction();
-                    return BadRequest();
+                    return BadRequest(new { message = "Image failed to upload" });
                 }
             }
 

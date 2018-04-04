@@ -25,5 +25,6 @@ namespace Data.DTO
         public string Image { get; set; }
         public string ImagePath { get; set; }
         public string ThumbnailPath { get; set; }
+        public string Checksum { get; set; }
     }
 }

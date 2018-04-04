@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Data.DTO;
+using Data.UnitOfWork;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using SixLabors.ImageSharp;
@@ -65,6 +67,19 @@ namespace TestWebApplication
             post.ImagePath = webImagePath;
             post.ThumbnailPath = webThumbnailPath;
             return post;
+        }
+
+        public static string GenerateChecksum(PostDTO post)
+        {
+            var regex = Regex.Match(post.Image, @"data:image/(?<type>.+?);base64,(?<data>.+)");
+            var base64 = regex.Groups["data"].Value;
+            var binData = Convert.FromBase64String(base64);
+
+            using (var md5 = MD5.Create())
+            {
+                var hash = md5.ComputeHash(binData);
+                return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+            }
         }
     }
 }

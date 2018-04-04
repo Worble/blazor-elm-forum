@@ -41,7 +41,8 @@ namespace Data.Repositories
                 ThreadId = post.ThreadId,
                 ImagePath = post.ImagePath,
                 ThumbnailPath = post.ThumbnailPath,
-                IsOp = post.IsOp
+                IsOp = post.IsOp,
+                ImageChecksum = post.Checksum
             };
             _context.Posts.Add(postToAdd);
 
@@ -56,6 +57,21 @@ namespace Data.Repositories
                         .FirstOrDefault(y => y.Id == post.ThreadId)
                 })
                 .FirstOrDefault();
+        }
+
+        public bool ImageUniqueToThread(PostDTO post)
+        {
+            try
+            {
+                return _context.Threads
+                    .Include(e => e.Posts)
+                    .First(e => e.Id == post.ThreadId)
+                    .Posts.All(e => e.ImageChecksum != post.Checksum);
+            }
+            catch (ArgumentNullException)
+            {
+                return false;
+            }
         }
     }
 }

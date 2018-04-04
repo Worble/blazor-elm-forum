@@ -15,5 +15,6 @@ namespace Data.Entities
         public bool IsOp { get; set; }
         public string ImagePath { get; set; }
         public string ThumbnailPath { get; set; }
+        public string ImageChecksum { get; set; }
     }
 }

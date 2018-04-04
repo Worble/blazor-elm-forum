@@ -10,5 +10,6 @@ namespace Data.Repositories.Interfaces
     {
         BoardDTO GetAllForThread(int boardId, int threadId);
         BoardDTO CreatePost(PostDTO post);
+        bool ImageUniqueToThread(PostDTO post);
     }
 }

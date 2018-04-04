@@ -36,18 +36,26 @@ namespace TestWebApplication.Controllers
         {
             if (string.IsNullOrWhiteSpace(post.Content) && string.IsNullOrWhiteSpace(post.Image))
             {
-                return BadRequest();
+                return BadRequest(new { message = "Empty Post" });
             }
 
             if (!string.IsNullOrWhiteSpace(post.Image))
             {
                 try
                 {
-                    post = ImageHelper.SaveImage(post, _env, this.Request);
+                    post.Checksum = ImageHelper.GenerateChecksum(post);
+                    if (_work.PostRepository.ImageUniqueToThread(post))
+                    {
+                        post = ImageHelper.SaveImage(post, _env, this.Request);
+                    }
+                    else
+                    {
+                        return BadRequest(new { message = "Duplicate Image" });
+                    }
                 }
                 catch
                 {
-                    return BadRequest();
+                    return BadRequest(new { message = "Image failed to upload" });
                 }
             }
             post.ThreadId = threadId;
