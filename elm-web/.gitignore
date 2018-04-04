@@ -28,6 +28,9 @@ tmp/
 # Brunch output folder.
 public/
 
+#Elm output folder
+app/vendor
+
 # elm-package generated files
 elm-stuff
 
