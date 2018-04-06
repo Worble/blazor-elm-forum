@@ -7,7 +7,6 @@ import Html.Events exposing (onClick, onInput)
 import Models exposing (Model, Thread)
 import Msgs exposing (Msg(..))
 import Routing exposing (postsPath)
-import Views.Shared.GetDate exposing (getDate)
 import Views.Shared.Navbar exposing (view)
 
 
@@ -69,7 +68,7 @@ displayThreads threadList =
                         [ ( "border-bottom", "solid black 1px" )
                         ]
                     ]
-                    [ text ("No. #" ++ toString t.post.id ++ " made at " ++ getDate t.post.createdDate) ]
+                    [ text ("No. #" ++ toString t.post.id ++ " made at " ++ toString t.post.createdDate) ]
                 , div
                     [ style [ ( "display", "table" ), ( "min-height", "50px" ), ( "width", "100%" ) ]
                     ]

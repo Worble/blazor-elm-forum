@@ -1,10 +1,12 @@
 ﻿[
   {
+    "Id": 1, 
     "Name": "Random",
     "ShorthandName": "r"
   },
   {
+    "Id": 2, 
     "Name": "Test",
-    "ShorthandName": "tst" 
+    "ShorthandName": "tst"
   }
 ]

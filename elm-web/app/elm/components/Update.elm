@@ -1,6 +1,7 @@
 module Update exposing (update)
 
 import Commands exposing (getFileContents, performLocationChange, sendPost, sendPostWebSocket, sendThread)
+import Date.Extra as Date exposing (compare)
 import Decoders exposing (decodeBoard)
 import Json.Decode exposing (decodeString)
 import Models exposing (Board, Model, Post, Route(..), Thread, emptyBoard)
@@ -23,7 +24,16 @@ update msg model =
             ( { model | text = toString e }, Cmd.none )
 
         GetThreadsForBoard (Ok board) ->
-            ( { model | board = board }, Cmd.none )
+            let
+                sortedThreads =
+                    --List.sortWith DateExtra.compare board.threads
+                    List.sortWith (\t1 t2 -> Date.compare t1.editedDate t2.editedDate) board.threads
+                    |> List.reverse
+
+                newBoard =
+                    { board | threads = sortedThreads }
+            in
+            ( { model | board = newBoard }, Cmd.none )
 
         GetThreadsForBoard (Err e) ->
             ( { model | text = toString e }, Cmd.none )

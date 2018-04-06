@@ -1,7 +1,7 @@
 module Models exposing (..)
 
 import FileReader exposing (NativeFile)
-
+import Date exposing (Date)
 
 --INITIAL MODELS
 
@@ -20,17 +20,17 @@ model route =
 
 emptyBoard : Board
 emptyBoard =
-    { name = "", shorthandName = "", id = 0, threads = [], thread = emptyThread }
+    { name = "", shorthandName = "", id = 0, threads = [], thread = emptyThread, createdDate = Date.fromTime 0, editedDate = Date.fromTime 0 }
 
 
 emptyThread : Thread
 emptyThread =
-    { posts = [], post = emptyPost, id = 0, boardId = 0 }
+    { posts = [], post = emptyPost, id = 0, boardId = 0, createdDate = Date.fromTime 0, editedDate = Date.fromTime 0 }
 
 
 emptyPost : Post
 emptyPost =
-    { id = 0, content = "", isOp = False, threadId = 0, image = "", imagePath = "", thumbnailPath = "", createdDate = "" }
+    { id = 0, content = "", isOp = False, threadId = 0, image = "", imagePath = "", thumbnailPath = "", createdDate = Date.fromTime 0, editedDate = Date.fromTime 0 }
 
 
 
@@ -54,6 +54,8 @@ type alias Board =
     , id : Int
     , threads : List Thread
     , thread : Thread
+    , createdDate : Date
+    , editedDate : Date
     }
 
 
@@ -62,6 +64,8 @@ type alias Thread =
     , post : Post
     , id : Int
     , boardId : Int
+    , createdDate : Date
+    , editedDate : Date
     }
 
 
@@ -73,7 +77,8 @@ type alias Post =
     , image : String
     , imagePath : String
     , thumbnailPath : String
-    , createdDate : String
+    , createdDate : Date
+    , editedDate : Date
     }
 
 

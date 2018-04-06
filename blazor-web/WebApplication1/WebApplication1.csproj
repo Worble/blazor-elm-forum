@@ -14,10 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <BlazorGenerate Remove="Pages\CommandLine.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Pages\Forum\Threads.cshtml" />
     <None Include="Pages\Forum\Posts.cshtml" />
     <None Include="Pages\Forum\Boards.cshtml" />

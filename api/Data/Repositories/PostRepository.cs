@@ -46,6 +46,11 @@ namespace Data.Repositories
             };
             _context.Posts.Add(postToAdd);
 
+            var thread = _context.Threads.Find(post.ThreadId);
+            thread.EditedDate = DateTime.Now;
+            _context.Threads.Attach(thread);
+            _context.Entry(thread).State = EntityState.Modified;
+
             var test = _context.Boards
                 .Select(e => new BoardDTO(e)
                 {

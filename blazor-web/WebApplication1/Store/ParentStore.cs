@@ -14,7 +14,6 @@ namespace WebApplication1.Store
         private IUriHelper _uriHelper;
 
         private CounterStore counterStore;
-        private CommandLineStore commandLineStore;
         private ForumStore forumStore;
 
         //event
@@ -38,19 +37,6 @@ namespace WebApplication1.Store
                     //counterStore.OnChange += NotifyStateChanged;
                 }
                 return this.counterStore;
-            }
-        }
-
-        public CommandLineStore CommandLineStore
-        {
-            get
-            {
-                if(commandLineStore == null)
-                {
-                    commandLineStore = new CommandLineStore();
-                    //commandLineStore.OnChange += NotifyStateChanged;
-                }
-                return this.commandLineStore;
             }
         }
 

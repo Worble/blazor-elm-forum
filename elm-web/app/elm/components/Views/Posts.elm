@@ -7,7 +7,6 @@ import Html.Events exposing (onClick, onInput)
 import Models exposing (Model, Post)
 import Msgs exposing (Msg(..))
 import Routing exposing (threadsPath)
-import Views.Shared.GetDate exposing (getDate)
 import Views.Shared.Navbar exposing (view)
 
 
@@ -76,7 +75,7 @@ displayPosts post =
                 [ ( "border-bottom", "solid black 1px" )
                 ]
             ]
-            [ text ("No. #" ++ toString post.id ++ " made at " ++ getDate post.createdDate)
+            [ text ("No. #" ++ toString post.id ++ " made at " ++ toString post.createdDate)
             ]
         , if post.imagePath /= "" && post.thumbnailPath /= "" then
             div

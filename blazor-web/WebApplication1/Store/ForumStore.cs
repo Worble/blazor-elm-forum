@@ -45,6 +45,8 @@ namespace WebApplication1.Store
             {
                 result.thread = Board.thread;
             }
+
+            result.threads = result.threads.OrderByDescending(e => e.editedDate);
             Board = result;
             NotifyStateChanged();
             return;
