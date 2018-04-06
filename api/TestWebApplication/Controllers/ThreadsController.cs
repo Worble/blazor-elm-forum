@@ -51,31 +51,23 @@ namespace TestWebApplication.Controllers
                     thread.Post.ThreadId = returnThread.Id;
                     thread.Post.IsOp = true;
 
-                    if (!string.IsNullOrWhiteSpace(thread.Post.Image))
-                    {
-                        thread.Post.Checksum = ImageHelper.GenerateChecksum(thread.Post);
-                        if (_work.PostRepository.ImageUniqueToThread(thread.Post))
-                        {
-                            thread.Post = ImageHelper.SaveImage(thread.Post, _env, this.Request);
-                        }
-                        else
-                        {
-                            return BadRequest(new { message = "Duplicate Image" });
-                        }
-                    }
-
-                    _work.PostRepository.CreatePost(thread.Post);
+                    var board = PostHelper.CreatePost(_work, _env, this.Request, thread.Post);
                     _work.Save();
                     _work.CommitTransaction();
-                    return RedirectToAction("GetAllForThread", "Posts", new { boardId = returnThread.BoardId, threadId = returnThread.Id });
+
+                    return Json(board);
+                }
+                catch (PostException e)
+                {
+                    _work.RollbackTransaction();
+                    return BadRequest(new {message = e.Message});
                 }
                 catch
                 {
                     _work.RollbackTransaction();
-                    return BadRequest(new { message = "Image failed to upload" });
+                    return BadRequest();
                 }
             }
-
         }
     }
 }

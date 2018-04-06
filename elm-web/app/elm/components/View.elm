@@ -11,7 +11,8 @@ import Views.Threads
 view : Model -> Html Msg
 view model =
     div []
-        [ case model.route of
+        [ text model.text
+        , case model.route of
             Models.BoardsRoute ->
                 Views.Boards.view model
 
@@ -22,6 +23,5 @@ view model =
                 Views.Posts.view model
 
             Models.NotFoundRoute ->
-                div []
-                    [ text ("Error: " ++ model.text) ]
+                text ""
         ]

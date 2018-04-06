@@ -28,20 +28,13 @@ view model =
                 , input [ type_ "text ", onInput PostInput, value model.messageInput ]
                     []
                 , button [ onClick SendPost ] [ text "Submit" ]
+                , button [ onClick SendPostWebSocket ] [ text "Submit via WebSocket" ]
                 , div []
                     [ input
                         [ type_ "file"
                         , FileReader.onFileChange UploadFile
                         , multiple False
                         , accept "image/*"
-                        , value
-                            (case model.file of
-                                Just file ->
-                                    file.name
-
-                                Nothing ->
-                                    ""
-                            )
                         ]
                         []
                     ]

@@ -4,10 +4,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.IO;
 using System.Net.WebSockets;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -18,7 +19,10 @@ namespace TestWebApplication.Controllers
     {
         private readonly IUnitOfWork _work;
         private readonly IHostingEnvironment _env;
+        private Dictionary<string, WebSocket> _webSockets;
 
+        private Dictionary<string, WebSocket> Websockets =>
+            _webSockets ?? (_webSockets = new Dictionary<string, WebSocket>());
         public PostsController(IUnitOfWork work, IHostingEnvironment env)
         {
             _work = work;
@@ -34,91 +38,221 @@ namespace TestWebApplication.Controllers
         [HttpPost]
         public IActionResult CreatePost(int threadId, [FromBody]PostDTO post)
         {
-            if (string.IsNullOrWhiteSpace(post.Content) && string.IsNullOrWhiteSpace(post.Image))
-            {
-                return BadRequest(new { message = "Empty Post" });
-            }
-
-            if (!string.IsNullOrWhiteSpace(post.Image))
-            {
-                try
-                {
-                    post.Checksum = ImageHelper.GenerateChecksum(post);
-                    if (_work.PostRepository.ImageUniqueToThread(post))
-                    {
-                        post = ImageHelper.SaveImage(post, _env, this.Request);
-                    }
-                    else
-                    {
-                        return BadRequest(new { message = "Duplicate Image" });
-                    }
-                }
-                catch
-                {
-                    return BadRequest(new { message = "Image failed to upload" });
-                }
-            }
             post.ThreadId = threadId;
             post.IsOp = false;
-            var board = _work.PostRepository.CreatePost(post);
-            _work.Save();
+
+            BoardDTO board;
+
+            try
+            {
+                board = PostHelper.CreatePost(_work, _env, this.Request, post);
+            }
+            catch(PostException e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
+
             return Json(board);
         }
 
-        [HttpGet("ws")]
-        public async Task<IActionResult> GetAsync(int boardId, int thwreadId)
-        {
-            if (!this.HttpContext.WebSockets.IsWebSocketRequest) return new StatusCodeResult(101);
+        //[HttpGet("ws")]
+        //public async Task<IActionResult> GetAsync(int boardId, int threadId)
+        //{
+        //    if (!this.HttpContext.WebSockets.IsWebSocketRequest) return new StatusCodeResult(400);
 
-            //var webSocket = await this.HttpContext.WebSockets.AcceptWebSocketAsync();
-            //if (webSocket == null || webSocket.State != WebSocketState.Open) return new StatusCodeResult(101);
+        //    var webSocket = await this.HttpContext.WebSockets.AcceptWebSocketAsync();
 
-            //while (!HttpContext.RequestAborted.IsCancellationRequested)
-            //{
-            //    var response = string.Format("Hello! Time {0}", DateTime.Now.ToString(CultureInfo.InvariantCulture));
-            //    var bytes = System.Text.Encoding.UTF8.GetBytes(response);
+        //    //await Test(webSocket);
 
-            //    await webSocket.SendAsync(new ArraySegment<byte>(bytes),
-            //        WebSocketMessageType.Text, true, CancellationToken.None);
+        //    var socketId = Guid.NewGuid().ToString();
+        //    //_work.AddWebsocketToThread(threadId, socketId, webSocket);
 
-            //    var buffer = new byte[1024 * 4];
-            //    WebSocketReceiveResult result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-            //    while (!result.CloseStatus.HasValue)
-            //    {
-            //        await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, result.Count), result.MessageType, result.EndOfMessage, CancellationToken.None);
+        //    Websockets.TryAdd(socketId, webSocket);
+        //    var ct = HttpContext.RequestAborted;
 
-            //        result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-            //    }
-            //    await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
-            //}
+        //    //while (webSocket.State == WebSocketState.Open)
+        //    //{
+        //    //    await Echo(HttpContext.RequestAborted, webSocket, socketId, threadId);
+        //    //}
 
-            var webSocket = await this.HttpContext.WebSockets.AcceptWebSocketAsync();
-            await Echo(HttpContext, webSocket);
+        //    while (true)
+        //    {
+        //        if (ct.IsCancellationRequested)
+        //        {
+        //            break;
+        //        }
 
-            return new StatusCodeResult(101);
-        }
+        //        var response = await ReceiveStringAsync(webSocket, ct);
+        //        if (string.IsNullOrEmpty(response))
+        //        {
+        //            if (webSocket.State != WebSocketState.Open)
+        //            {
+        //                break;
+        //            }
 
-        private async Task Echo(HttpContext context, WebSocket webSocket)
-        {
-            var buffer = new Byte[4096];
-            var buffer2 = new ArraySegment<Byte>(new Byte[4096]);
-            WebSocketReceiveResult result =
-                await webSocket.ReceiveAsync(buffer2, CancellationToken.None);
+        //            continue;
+        //        }
 
-            var request = Encoding.UTF8.GetString(buffer2.Array,
-                buffer2.Offset,
-                buffer2.Count);
-            while (!result.CloseStatus.HasValue)
-            {
-                await webSocket.SendAsync(new ArraySegment<byte>(buffer, 0, result.Count), result.MessageType,
-                    result.EndOfMessage, CancellationToken.None);
+        //        //var post = JsonConvert.DeserializeObject<PostDTO>(response);
+        //        //var board = PostHelper.CreatePost(_work, _env, this.Request, post);
 
-                result = await webSocket.ReceiveAsync(new ArraySegment<byte>(buffer), CancellationToken.None);
-            }
+        //        //var data = JsonConvert.SerializeObject(board, new JsonSerializerSettings
+        //        //{
+        //        //    ContractResolver = new CamelCasePropertyNamesContractResolver()
+        //        //});
 
-            await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
-        }
+        //        var data = response;
 
+        //        //foreach (var socket in _work.GetAllSocketsForThread(threadId))
+        //        foreach(var socket in Websockets)
+        //        {
+        //            if (socket.Value.State != WebSocketState.Open)
+        //            {
+        //                continue;
+        //            }
 
+        //            await SendStringAsync(socket.Value, data, ct);
+        //        }
+        //    }
+
+        //    //_work.RemoveSocketFromThread(threadId, socketId);
+        //    Websockets.Remove(socketId, out var dummy);
+
+        //    await webSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", ct);
+        //    webSocket.Dispose();
+
+        //    return new StatusCodeResult(101);
+        //}
+
+        //private async Task Test(WebSocket webSocket)
+        //{
+        //    var data = Encoding.UTF8.GetBytes("Test");
+        //    var buffer = new ArraySegment<byte>(data);
+
+        //    await webSocket.SendAsync(buffer, WebSocketMessageType.Text,
+        //        true, CancellationToken.None);
+        //}
+
+        //private async Task Echo(CancellationToken ct, WebSocket currentSocket, string socketId, int threadId)
+        //{
+        //    while (true)
+        //    {
+        //        if (ct.IsCancellationRequested)
+        //        {
+        //            break;
+        //        }
+
+        //        var response = await ReceiveStringAsync(currentSocket, ct);
+        //        if (string.IsNullOrEmpty(response))
+        //        {
+        //            if (currentSocket.State != WebSocketState.Open)
+        //            {
+        //                break;
+        //            }
+
+        //            continue;
+        //        }
+
+        //        //var post = JsonConvert.DeserializeObject<PostDTO>(response);
+        //        //var board = PostHelper.CreatePost(_work, _env, this.Request, post);
+
+        //        //var data = JsonConvert.SerializeObject(board, new JsonSerializerSettings
+        //        //{
+        //        //    ContractResolver = new CamelCasePropertyNamesContractResolver()
+        //        //});
+
+        //        var data = response;
+
+        //        foreach (var socket in _work.GetAllSocketsForThread(threadId))
+        //        {
+        //            if (socket.Value.State != WebSocketState.Open)
+        //            {
+        //                continue;
+        //            }
+
+        //            await SendStringAsync(socket.Value, data, ct);
+        //        }
+        //    }
+
+        //    _work.RemoveSocketFromThread(threadId, socketId);
+
+        //    await currentSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Closing", ct);
+        //    currentSocket.Dispose();
+
+        //}
+
+        //private static async Task<string> ReceiveStringAsync(WebSocket socket, CancellationToken ct = default(CancellationToken))
+        //{
+        //    var buffer = new ArraySegment<byte>(new byte[8192]);
+        //    using (var ms = new MemoryStream())
+        //    {
+        //        WebSocketReceiveResult result;
+        //        do
+        //        {
+        //            ct.ThrowIfCancellationRequested();
+
+        //            result = await socket.ReceiveAsync(buffer, ct);
+        //            ms.Write(buffer.Array, buffer.Offset, result.Count);
+        //        }
+        //        while (!result.EndOfMessage);
+
+        //        ms.Seek(0, SeekOrigin.Begin);
+        //        if (result.MessageType != WebSocketMessageType.Text)
+        //        {
+        //            return null;
+        //        }
+
+        //        // Encoding UTF8: https://tools.ietf.org/html/rfc6455#section-5.6
+        //        using (var reader = new StreamReader(ms, Encoding.UTF8))
+        //        {
+        //            return await reader.ReadToEndAsync();
+        //        }
+        //    }
+        //}
+
+        //private static Task SendStringAsync(WebSocket socket, string data, CancellationToken ct = default(CancellationToken))
+        //{
+        //    var buffer = Encoding.UTF8.GetBytes(data);
+        //    var segment = new ArraySegment<byte>(buffer);
+        //    return socket.SendAsync(segment, WebSocketMessageType.Text, true, ct);
+        //}
+
+        //private async Task Echo(WebSocket webSocket)
+        //{
+        //    var buffer = new ArraySegment<Byte>(new Byte[1048576]);
+        //    WebSocketReceiveResult result =
+        //        await webSocket.ReceiveAsync(buffer, CancellationToken.None);
+
+        //    var request = Encoding.UTF8.GetString(buffer.Array,
+        //        buffer.Offset,
+        //        buffer.Count);
+
+        //    var post = JsonConvert.DeserializeObject<PostDTO>(request);
+        //    var board = PostHelper.CreatePost(_work, _env, this.Request, post);
+
+        //    var data = Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(board, new JsonSerializerSettings
+        //        {
+        //            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        //        }));
+        //    buffer = new ArraySegment<byte>(data);
+
+        //    while (!result.CloseStatus.HasValue)
+        //    {
+        //        foreach (var socket in WebSockets)
+        //        {
+        //            if (socket.Value.State != WebSocketState.Open)
+        //            {
+        //                continue;
+        //            }
+
+        //            await socket.Value.SendAsync(buffer, result.MessageType,
+        //                true, CancellationToken.None);
+
+        //            result = await webSocket.ReceiveAsync(buffer, CancellationToken.None);
+        //        }
+        //    }
+
+        //    await webSocket.CloseAsync(result.CloseStatus.Value, result.CloseStatusDescription, CancellationToken.None);
+        //}
     }
 }

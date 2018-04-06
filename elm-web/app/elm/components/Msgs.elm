@@ -20,3 +20,4 @@ type Msg
     | SendMessage Int Int
     | UploadFile (List NativeFile)
     | OnFileContent (Result FileReader.Error FileContentDataUrl)
+    | SendPostWebSocket

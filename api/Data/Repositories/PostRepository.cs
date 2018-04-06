@@ -46,7 +46,7 @@ namespace Data.Repositories
             };
             _context.Posts.Add(postToAdd);
 
-            return _context.Boards
+            var test = _context.Boards
                 .Select(e => new BoardDTO(e)
                 {
                     Thread = e.Threads
@@ -56,7 +56,9 @@ namespace Data.Repositories
                         })
                         .FirstOrDefault(y => y.Id == post.ThreadId)
                 })
-                .FirstOrDefault();
+                .FirstOrDefault(e => e.Thread != null);
+
+            return test;
         }
 
         public bool ImageUniqueToThread(PostDTO post)

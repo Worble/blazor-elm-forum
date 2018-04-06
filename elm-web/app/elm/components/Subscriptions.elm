@@ -8,6 +8,7 @@ import WebSocket exposing (listen)
 subscriptions : Model -> Sub Msg
 subscriptions model =
     if model.board.thread.id > 0 then
-        listen ("ws://localhost:14190/api/boards/" ++ toString model.board.id ++ "/threads/" ++ toString model.board.thread.id ++ "/posts/ws") Echo
+        listen ("ws://localhost:14190/api/boards/" ++ toString model.board.id ++ "/threads/" ++ toString model.board.thread.id ++ "/posts/") Echo
+        --listen "ws://localhost:14190/api/test/postshub" Echo
     else
         Sub.none

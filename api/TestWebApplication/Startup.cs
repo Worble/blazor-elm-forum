@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Data;
+﻿using Data;
 using Data.UnitOfWork;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,9 +7,7 @@ using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using TestWebApplication.Controllers;
+using System;
 
 namespace TestWebApplication
 {
@@ -72,6 +66,7 @@ namespace TestWebApplication
             app.UseStaticFiles();
 
             app.UseWebSockets();
+            app.UseMiddleware<WebSocketMiddleware>();
 
             app.UseMvc();
         }

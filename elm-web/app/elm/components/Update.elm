@@ -1,9 +1,9 @@
 module Update exposing (update)
 
-import Commands exposing (getFileContents, performLocationChange, sendPost, sendThread)
-import Json.Decode exposing (decodeString, string)
-import Json.Encode exposing (encode)
-import Models exposing (Board, Model, Post, Route(..), Thread)
+import Commands exposing (getFileContents, performLocationChange, sendPost, sendPostWebSocket, sendThread)
+import Decoders exposing (decodeBoard)
+import Json.Decode exposing (decodeString)
+import Models exposing (Board, Model, Post, Route(..), Thread, emptyBoard)
 import Msgs exposing (Msg(..))
 import Navigation exposing (newUrl)
 import Routing exposing (errorPath, parseLocation, postsPath)
@@ -20,19 +20,19 @@ update msg model =
             ( { model | boards = boards }, Cmd.none )
 
         GetBoards (Err e) ->
-            ( { model | text = toString e }, newUrl errorPath )
+            ( { model | text = toString e }, Cmd.none )
 
         GetThreadsForBoard (Ok board) ->
             ( { model | board = board }, Cmd.none )
 
         GetThreadsForBoard (Err e) ->
-            ( { model | text = toString e }, newUrl errorPath )
+            ( { model | text = toString e }, Cmd.none )
 
         GetPostsForThread (Ok board) ->
             ( { model | board = board }, Cmd.none )
 
         GetPostsForThread (Err e) ->
-            ( { model | text = toString e }, newUrl errorPath )
+            ( { model | text = toString e }, Cmd.none )
 
         OnLocationChange location ->
             let
@@ -47,6 +47,9 @@ update msg model =
         SendPost ->
             ( { model | messageInput = "", readFile = "", file = Nothing }, sendPost model.readFile model.messageInput model.board.id model.board.thread.id )
 
+        SendPostWebSocket ->
+            ( { model | messageInput = "", readFile = "", file = Nothing }, sendPostWebSocket model.readFile model.messageInput model.board.id model.board.thread.id )
+
         SendThread ->
             ( { model | messageInput = "", readFile = "", file = Nothing }, sendThread model.readFile model.messageInput model.board.id )
 
@@ -56,13 +59,23 @@ update msg model =
         RedirectPostsForThread (Err e) ->
             ( { model | text = toString e }, newUrl errorPath )
 
-        Echo post ->
-            ( { model | text = post }, Cmd.none )
+        Echo board ->
+            let
+                decodedBoard =
+                    case decodeString decodeBoard board of
+                        Ok board ->
+                            board
+
+                        Err _ ->
+                            emptyBoard
+            in
+            ( { model | board = decodedBoard }, Cmd.none )
 
         SendMessage boardId threadId ->
             ( { model | messageInput = "" }
             , WebSocket.send
-                ("ws://localhost:14190/api/boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts/ws")
+                ("ws://localhost:14190/api/boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts/")
+                --"ws://localhost:14190/api/test/postshub"
                 model.messageInput
             )
 
