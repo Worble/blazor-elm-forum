@@ -6,4 +6,4 @@
 * Much code probably should be refactored:
   * Blazor "stores" need some seperation of concerns, probably should split into at least a class that handles api calling and one that handles store updating instead of clumping into one
   * Elm models should probably use Maybes instead defining empty models to fill the blanks
-  * Api despite being two seperate projects are probably too tightly coupled, also the seed method fails if the seed already exists in the database
+  * Api websocket middleware is very specific to current architecture, could do with abstracting into something more generic that then binds to classes that define actual behaviour.
