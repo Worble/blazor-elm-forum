@@ -2,7 +2,8 @@ module Update exposing (update)
 
 import Commands exposing (getFileContents, performLocationChange, sendPost, sendPostWebSocket, sendThread)
 import Date.Extra as Date exposing (compare)
-import Decoders exposing (decodeBoard)
+import Decoders exposing (decodeBoard, returnError)
+import Http exposing (Error)
 import Json.Decode exposing (decodeString)
 import Models exposing (Board, Model, Post, Route(..), Thread, emptyBoard)
 import Msgs exposing (Msg(..))
@@ -21,14 +22,15 @@ update msg model =
             ( { model | boards = boards }, Cmd.none )
 
         GetBoards (Err e) ->
-            ( { model | text = toString e }, Cmd.none )
+            httpError e model
+
 
         GetThreadsForBoard (Ok board) ->
             let
                 sortedThreads =
                     --List.sortWith DateExtra.compare board.threads
                     List.sortWith (\t1 t2 -> Date.compare t1.editedDate t2.editedDate) board.threads
-                    |> List.reverse
+                        |> List.reverse
 
                 newBoard =
                     { board | threads = sortedThreads }
@@ -36,13 +38,15 @@ update msg model =
             ( { model | board = newBoard }, Cmd.none )
 
         GetThreadsForBoard (Err e) ->
-            ( { model | text = toString e }, Cmd.none )
+            httpError e model
+
 
         GetPostsForThread (Ok board) ->
             ( { model | board = board }, Cmd.none )
 
         GetPostsForThread (Err e) ->
-            ( { model | text = toString e }, Cmd.none )
+            httpError e model
+
 
         OnLocationChange location ->
             let
@@ -67,19 +71,19 @@ update msg model =
             ( { model | board = board }, newUrl (postsPath board.id board.thread.id) )
 
         RedirectPostsForThread (Err e) ->
-            ( { model | text = toString e }, newUrl errorPath )
+            httpError e model
 
         Echo board ->
             let
-                decodedBoard =
+                newModel =
                     case decodeString decodeBoard board of
                         Ok board ->
-                            board
+                            { model | board = board }
 
-                        Err _ ->
-                            emptyBoard
+                        Err e ->
+                            { model | error = returnError board }
             in
-            ( { model | board = decodedBoard }, Cmd.none )
+            ( newModel, Cmd.none )
 
         SendMessage boardId threadId ->
             ( { model | messageInput = "" }
@@ -104,3 +108,20 @@ update msg model =
 
                 Err err ->
                     Debug.crash (toString err)
+
+        RemoveError ->
+            ( { model | error = "" }, Cmd.none )
+
+
+httpError : Error -> Model -> ( Model, Cmd Msg )
+httpError e model =
+    let
+        error =
+            case e of
+                Http.BadStatus r ->
+                    returnError r.body
+
+                _ ->
+                    toString e
+    in
+    ( { model | error = error }, Cmd.none )

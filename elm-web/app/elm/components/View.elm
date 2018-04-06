@@ -1,6 +1,8 @@
 module View exposing (view)
 
 import Html exposing (Html, div, li, text, ul)
+import Html.Attributes exposing (style)
+import Html.Events exposing (onClick)
 import Models exposing (Board, Model)
 import Msgs exposing (Msg(..))
 import Views.Boards
@@ -11,7 +13,20 @@ import Views.Threads
 view : Model -> Html Msg
 view model =
     div []
-        [ text model.text
+        [ if model.error /= "" then
+            div
+                [ onClick RemoveError
+                , style
+                    [ ( "background-color", "blanchedalmond" )
+                    , ( "min-height", "50px" )
+                    , ( "text-align", "center" )
+                    , ( "font-size", "24px" )
+                    , ( "cursor", "pointer" )
+                    ]
+                ]
+                [ text ("Error: " ++ model.error) ]
+          else
+            text ""
         , case model.route of
             Models.BoardsRoute ->
                 Views.Boards.view model

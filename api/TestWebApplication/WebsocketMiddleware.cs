@@ -99,12 +99,30 @@ namespace TestWebApplication
                 }
 
                 var post = JsonConvert.DeserializeObject<PostDTO>(response);
-                var board = PostHelper.CreatePost(work, env, context.Request, post);
-
-                var data = JsonConvert.SerializeObject(board, new JsonSerializerSettings
+                string data;
+                try
                 {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                });
+                    var board = PostHelper.CreatePost(work, env, context.Request, post);
+
+                    data = JsonConvert.SerializeObject(board, new JsonSerializerSettings
+                    {
+                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    });
+                }
+                catch (PostException e)
+                {
+                    data = JsonConvert.SerializeObject(new {message = e.Message}, new JsonSerializerSettings
+                    {
+                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    });
+                }
+                catch (Exception)
+                {
+                    data = JsonConvert.SerializeObject(new { message = "An error occurred." }, new JsonSerializerSettings
+                    {
+                        ContractResolver = new CamelCasePropertyNamesContractResolver()
+                    });
+                }
 
                 foreach (var socket in GetAllSocketsForThread(threadId))
                 {

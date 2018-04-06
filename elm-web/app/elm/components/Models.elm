@@ -1,7 +1,8 @@
 module Models exposing (..)
 
-import FileReader exposing (NativeFile)
 import Date exposing (Date)
+import FileReader exposing (NativeFile)
+
 
 --INITIAL MODELS
 
@@ -15,6 +16,7 @@ model route =
     , messageInput = ""
     , file = Nothing
     , readFile = ""
+    , error = ""
     }
 
 
@@ -45,6 +47,7 @@ type alias Model =
     , messageInput : String
     , file : Maybe NativeFile
     , readFile : String
+    , error : String
     }
 
 

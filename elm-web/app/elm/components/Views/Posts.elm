@@ -8,6 +8,7 @@ import Models exposing (Model, Post)
 import Msgs exposing (Msg(..))
 import Routing exposing (threadsPath)
 import Views.Shared.Navbar exposing (view)
+import Date.Extra exposing (toFormattedString)
 
 
 view : Model -> Html Msg
@@ -26,7 +27,7 @@ view model =
                 [ text "New Post: "
                 , input [ type_ "text ", onInput PostInput, value model.messageInput ]
                     []
-                , button [ onClick SendPost ] [ text "Submit" ]
+                , button [ onClick SendPost ] [ text "Submit via Http" ]
                 , button [ onClick SendPostWebSocket ] [ text "Submit via WebSocket" ]
                 , div []
                     [ input
@@ -75,7 +76,7 @@ displayPosts post =
                 [ ( "border-bottom", "solid black 1px" )
                 ]
             ]
-            [ text ("No. #" ++ toString post.id ++ " made at " ++ toString post.createdDate)
+            [ text ("No. #" ++ toString post.id ++ " made at " ++ toFormattedString "EEEE, MMMM d, y 'at' h:mm a" post.createdDate)
             ]
         , if post.imagePath /= "" && post.thumbnailPath /= "" then
             div

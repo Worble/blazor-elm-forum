@@ -21,3 +21,4 @@ type Msg
     | UploadFile (List NativeFile)
     | OnFileContent (Result FileReader.Error FileContentDataUrl)
     | SendPostWebSocket
+    | RemoveError

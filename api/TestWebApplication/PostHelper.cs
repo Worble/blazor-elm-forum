@@ -18,6 +18,11 @@ namespace TestWebApplication
                 throw new PostException("Post was empty");
             }
 
+            if (!work.ThreadRepository.ThreadExists(post.ThreadId))
+            {
+                throw new PostException("Specified thread does not exist");
+            }
+
             if (!string.IsNullOrWhiteSpace(post.Image))
             {
                 try
@@ -31,6 +36,10 @@ namespace TestWebApplication
                     {
                         throw new PostException("Duplicate Image");
                     }
+                }
+                catch (PostException)
+                {
+                    throw;
                 }
                 catch
                 {

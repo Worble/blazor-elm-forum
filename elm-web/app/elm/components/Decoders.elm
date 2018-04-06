@@ -1,7 +1,7 @@
-module Decoders exposing (decodeBoard)
+module Decoders exposing (decodeBoard, returnError)
 
 import Date exposing (Date)
-import Json.Decode as Decode exposing (Decoder, andThen, bool, fail, field, int, list, map4, nullable, string, succeed)
+import Json.Decode as Decode exposing (Decoder, andThen, bool, fail, field, int, list, map4, nullable, string, succeed, decodeString)
 import Json.Decode.Pipeline exposing (decode, hardcoded, optional, required)
 import Models exposing (Board, Post, Thread, emptyPost, emptyThread)
 
@@ -60,3 +60,11 @@ decodeDate =
     in
     string
         |> andThen convert
+
+returnError : String -> String
+returnError error =
+    case decodeString (field "message" string) error of
+        Ok msg ->
+            msg
+        Err e ->
+            error

@@ -1,5 +1,6 @@
 module Views.Threads exposing (view)
 
+import Date.Extra exposing (toFormattedString)
 import FileReader
 import Html exposing (Html, a, button, div, h1, img, input, li, text, ul)
 import Html.Attributes exposing (accept, href, multiple, src, style, target, type_, value)
@@ -68,7 +69,7 @@ displayThreads threadList =
                         [ ( "border-bottom", "solid black 1px" )
                         ]
                     ]
-                    [ text ("No. #" ++ toString t.post.id ++ " made at " ++ toString t.post.createdDate) ]
+                    [ text ("No. #" ++ toString t.post.id ++ " made at " ++ toFormattedString "EEEE, MMMM d, y 'at' h:mm a" t.post.createdDate) ]
                 , div
                     [ style [ ( "display", "table" ), ( "min-height", "50px" ), ( "width", "100%" ) ]
                     ]

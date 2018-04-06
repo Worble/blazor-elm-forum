@@ -36,32 +36,14 @@ namespace Data.Repositories
             var threadToAdd = new Thread()
             {
                 BoardId = thread.BoardId,
-                //Posts = new List<Post>()
-                //{
-                //    new Post()
-                //    {
-                //        Content = thread.Post.Content,
-                //        ImagePath = thread.Post.ImagePath,
-                //        IsOp = true
-                //    }
-                //}
             };
 
             return _context.Add(threadToAdd).Entity;
         }
 
-        public BoardDTO GetAllForBoardByShorthandName(string boardId)
+        public bool ThreadExists(int threadId)
         {
-            return _context.Boards
-                .Select(e => new BoardDTO(e)
-                {
-                    Threads = e.Threads
-                        .Select(y => new ThreadDTO(y)
-                        {
-                            Post = new PostDTO(y.Posts.FirstOrDefault(p => p.IsOp))
-                        })
-                })
-                .FirstOrDefault(e => e.ShorthandName == boardId);
+            return _context.Threads.Find(threadId) != null;
         }
     }
 }

@@ -1,4 +1,4 @@
-module Commands exposing (getBoards, getFileContents, performLocationChange, sendPost, sendThread, sendPostWebSocket)
+module Commands exposing (getBoards, getFileContents, performLocationChange, sendPost, sendPostWebSocket, sendThread)
 
 import Decoders exposing (decodeBoard)
 import Encoders exposing (postEncoder, threadEncoder)
@@ -31,13 +31,14 @@ sendPost data post boardId threadId =
     in
     Http.send GetPostsForThread request
 
+
 sendPostWebSocket : String -> String -> Int -> Int -> Cmd Msg
 sendPostWebSocket data post boardId threadId =
     let
         url =
             "ws://localhost:14190/api/boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts/ws"
-        
-        json = 
+
+        json =
             Encode.encode 0 <| postEncoder data post threadId
     in
     WebSocket.send url json

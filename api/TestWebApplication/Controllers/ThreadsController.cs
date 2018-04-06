@@ -27,18 +27,12 @@ namespace TestWebApplication.Controllers
             return Json(_work.ThreadRepository.GetAllForBoard(boardId));
         }
 
-        //[HttpGet]
-        //public IActionResult GetAllForBoard(string boardId)
-        //{
-        //    return Json(_work.ThreadRepository.GetAllForBoardByShorthandName(boardId));
-        //}
-
         [HttpPost]
         public IActionResult CreateThread([FromBody]ThreadDTO thread)
         {
-            if (string.IsNullOrWhiteSpace(thread.Post.Content) && string.IsNullOrWhiteSpace(thread.Post.Image))
+            if (thread?.Post == null || string.IsNullOrWhiteSpace(thread.Post.Content) && string.IsNullOrWhiteSpace(thread.Post.Image))
             {
-                return BadRequest(new { message = "Empty Post" });
+                return BadRequest(new { message = "Post was empty" });
             }
 
             using (_work.BeginTransaction())
