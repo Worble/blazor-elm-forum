@@ -29,44 +29,44 @@ namespace Data
         public static void EnsureSeeded(this TestContext context)
         {
             //boards
-            var boards =
-                JsonConvert.DeserializeObject<List<Board>>(
-                    File.ReadAllText("seed" + Path.DirectorySeparatorChar + "boards.json"));
-            foreach (var board in boards)
+            if (!context.Boards.Any())
             {
-                if (context.Boards.Find(board.Id) == null)
+                var boards =
+                    JsonConvert.DeserializeObject<List<Board>>(
+                        File.ReadAllText("seed" + Path.DirectorySeparatorChar + "boards.json"));
+                foreach (var board in boards)
                 {
                     context.Boards.Add(board);
                 }
+                context.SaveChanges();
             }
-            context.SaveChanges();
 
             //threads
-            var threads =
-                JsonConvert.DeserializeObject<List<Thread>>(
-                    File.ReadAllText("seed" + Path.DirectorySeparatorChar + "threads.json"));
-            foreach (var thread in threads)
+            if (!context.Threads.Any())
             {
-                if (context.Threads.Find(thread.Id) == null)
+                var threads =
+                    JsonConvert.DeserializeObject<List<Thread>>(
+                        File.ReadAllText("seed" + Path.DirectorySeparatorChar + "threads.json"));
+                foreach (var thread in threads)
                 {
                     context.Threads.Add(thread);
                 }
+                context.SaveChanges();
             }
-            context.SaveChanges();
 
             //posts
-            var posts =
-                JsonConvert.DeserializeObject<List<Post>>(
-                    File.ReadAllText("seed" + Path.DirectorySeparatorChar + "posts.json"));
-            foreach (var post in posts)
+            if (!context.Posts.Any())
             {
-                if (context.Posts.Find(post.Id) == null)
+                var posts =
+                    JsonConvert.DeserializeObject<List<Post>>(
+                        File.ReadAllText("seed" + Path.DirectorySeparatorChar + "posts.json"));
+                foreach (var post in posts)
                 {
+
                     context.Posts.Add(post);
                 }
+                context.SaveChanges();
             }
-            context.SaveChanges();
         }
-
     }
 }

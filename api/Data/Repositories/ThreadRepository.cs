@@ -23,6 +23,7 @@ namespace Data.Repositories
                 .Select(e => new BoardDTO(e)
                 {
                     Threads = e.Threads
+                        .Where(y => !y.Archived)
                         .Select(y => new ThreadDTO(y)
                         {
                             Post = new PostDTO(y.Posts.FirstOrDefault(p => p.IsOp))
@@ -38,12 +39,33 @@ namespace Data.Repositories
                 BoardId = thread.BoardId,
             };
 
-            return _context.Add(threadToAdd).Entity;
+            var entity = _context.Add(threadToAdd).Entity;
+
+            ArchiveOldThreads(thread.BoardId);
+
+            return entity;
+        }
+
+        private void ArchiveOldThreads(int boardId)
+        {
+            var threadsToRemove = _context.Threads
+                .Where(e => e.BoardId == boardId && !e.Archived)
+                .OrderByDescending(e => e.EditedDate ?? e.CreatedDate)
+                .Skip(9);
+
+            foreach (var item in threadsToRemove)
+            {
+                item.Archived = true;
+
+                _context.Threads.Attach(item);
+                _context.Entry(item).State = EntityState.Modified;
+            }
         }
 
         public bool ThreadExists(int threadId)
         {
-            return _context.Threads.Find(threadId) != null;
+            var thread = _context.Threads.Find(threadId);
+            return thread != null && !thread.Archived;
         }
     }
 }

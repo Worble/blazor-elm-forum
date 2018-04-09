@@ -24,29 +24,40 @@ update msg model =
         GetBoards (Err e) ->
             httpError e model
 
-
         GetThreadsForBoard (Ok board) ->
             let
                 sortedThreads =
-                    --List.sortWith DateExtra.compare board.threads
                     List.sortWith (\t1 t2 -> Date.compare t1.editedDate t2.editedDate) board.threads
                         |> List.reverse
 
+                oldBoard = model.board
+
                 newBoard =
-                    { board | threads = sortedThreads }
+                    if board.id == model.board.id then
+                        { oldBoard | threads = sortedThreads }
+                    else
+                        { board | threads = sortedThreads }
             in
             ( { model | board = newBoard }, Cmd.none )
 
         GetThreadsForBoard (Err e) ->
             httpError e model
 
-
         GetPostsForThread (Ok board) ->
-            ( { model | board = board }, Cmd.none )
+            let
+                oldBoard = model.board
+                newThread = board.thread
+
+                newBoard = 
+                    if board.id == model.board.id then
+                        { oldBoard | thread = newThread }
+                    else
+                        board
+            in
+                ( { model | board = newBoard }, Cmd.none )
 
         GetPostsForThread (Err e) ->
             httpError e model
-
 
         OnLocationChange location ->
             let
@@ -54,6 +65,9 @@ update msg model =
                     parseLocation location
             in
             ( { model | route = newRoute, messageInput = "", readFile = "" }, performLocationChange newRoute )
+
+        ChangeLocation path ->
+            ( model, newUrl path )
 
         PostInput string ->
             ( { model | messageInput = string }, Cmd.none )

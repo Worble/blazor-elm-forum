@@ -8,6 +8,7 @@ import Msgs exposing (Msg(..))
 import Views.Boards
 import Views.Posts
 import Views.Threads
+import Views.Shared.Navbar exposing (view)
 
 
 view : Model -> Html Msg
@@ -27,6 +28,7 @@ view model =
                 [ text ("Error: " ++ model.error) ]
           else
             text ""
+        , Views.Shared.Navbar.view model
         , case model.route of
             Models.BoardsRoute ->
                 Views.Boards.view model

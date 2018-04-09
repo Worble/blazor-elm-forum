@@ -22,3 +22,4 @@ type Msg
     | OnFileContent (Result FileReader.Error FileContentDataUrl)
     | SendPostWebSocket
     | RemoveError
+    | ChangeLocation String

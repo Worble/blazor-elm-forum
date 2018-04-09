@@ -58,6 +58,11 @@ namespace WebApplication1.Store
 
             if (result.thread == null)
             {
+                if(Board == null)
+                {
+                    Board = new BoardDTO();
+                }
+                Board.message = result.message;
                 _uriHelper.NavigateTo("/404");
                 return;
             }
@@ -121,6 +126,7 @@ namespace WebApplication1.Store
         public string shorthandName;
         public IEnumerable<ThreadDTO> threads;
         public ThreadDTO thread;
+        public string message;
     }
 
     public class ThreadDTO : BaseDTO

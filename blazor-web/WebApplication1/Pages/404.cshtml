@@ -1,3 +1,6 @@
 ﻿@page "/404"
+@using Store
+@inject Store store
 
-<h1>404 - Not Found</h1>
+<h1>Error: </h1>
+<p>@store.ForumStore.Board.message</p>

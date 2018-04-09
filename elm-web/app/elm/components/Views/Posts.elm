@@ -4,20 +4,31 @@ import FileReader
 import Html exposing (Html, a, br, button, div, h1, img, input, li, text, ul)
 import Html.Attributes exposing (accept, href, multiple, src, style, target, type_, value)
 import Html.Events exposing (onClick, onInput)
-import Models exposing (Model, Post)
+import Models exposing (Model, Post, Route(..))
 import Msgs exposing (Msg(..))
 import Routing exposing (threadsPath)
-import Views.Shared.Navbar exposing (view)
 import Date.Extra exposing (toFormattedString)
+import Views.Shared.OnLinkClick exposing (onLinkClick)
 
 
 view : Model -> Html Msg
 view model =
-    if model.board.thread.posts == [] then
+    if model.route /= PostsRoute model.board.id model.board.thread.id then
         div [] [ text "Please wait..." ]
     else
         div []
-            [ Views.Shared.Navbar.view model
+            [ if model.board.thread.archived then
+                div
+                    [ style
+                        [ ( "background-color", "blanchedalmond" )
+                        , ( "min-height", "50px" )
+                        , ( "text-align", "center" )
+                        , ( "font-size", "24px" )
+                        ]
+                    ]
+                    [ text "Thread Archived: Posting is disabled" ]
+                else
+                    text ""
             , h1 []
                 [ text ("Posts in thread " ++ toString model.board.thread.id)
                 ]
@@ -55,7 +66,12 @@ view model =
                 --button [ onClick (SendMessage model.board.id model.board.thread.id) ] [ text "Submit" ]
                 ]
             , br [] []
-            , a [ href (threadsPath model.board.id) ] [ text "Back to threads" ]
+            , a 
+                [ href (threadsPath model.board.id)
+                , onLinkClick (ChangeLocation (threadsPath model.board.id)) 
+                ] 
+                [ text "Back to threads" 
+                ]
             ]
 
 
@@ -85,7 +101,7 @@ displayPosts post =
                     ]
                 ]
                 [ a
-                    [ href post.imagePath
+                    [ href post.image 
                     , target "_blank"
                     ]
                     [ img
@@ -95,6 +111,13 @@ displayPosts post =
                 ]
           else
             text ""
-        , div [ style [ ( "display", "table-cell" ), ( "width", "100%" ), ( "vertical-align", "top" ) ] ]
-            [ text post.content ]
+        , div 
+            [ style 
+                [ ( "display", "table-cell" )
+                , ( "width", "100%" )
+                , ( "vertical-align", "top" ) 
+                ] 
+            ]
+            [ text post.content 
+            ]
         ]

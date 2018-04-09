@@ -5,20 +5,20 @@ import FileReader
 import Html exposing (Html, a, button, div, h1, img, input, li, text, ul)
 import Html.Attributes exposing (accept, href, multiple, src, style, target, type_, value)
 import Html.Events exposing (onClick, onInput)
-import Models exposing (Model, Thread)
+import Models exposing (Model, Thread, Route(..))
 import Msgs exposing (Msg(..))
 import Routing exposing (postsPath)
 import Views.Shared.Navbar exposing (view)
+import Views.Shared.OnLinkClick exposing (onLinkClick)
 
 
 view : Model -> Html Msg
 view model =
-    if model.board.threads == [] then
+    if model.route /= ThreadsRoute model.board.id then
         div [] [ text "Please wait..." ]
     else
         div []
-            [ Views.Shared.Navbar.view model
-            , h1 [] [ text ("Threads in board " ++ model.board.name) ]
+            [ h1 [] [ text ("Threads in board " ++ model.board.name) ]
             , div [] (displayThreads model.board.threads)
             , div []
                 [ text "New Thread: "
@@ -103,7 +103,9 @@ displayThreads threadList =
                         [ text t.post.content ]
                     ]
                 , a
-                    [ href (postsPath t.boardId t.id) ]
+                    [ href (postsPath t.boardId t.id)
+                    , onLinkClick (ChangeLocation (postsPath t.boardId t.id))
+                    ]
                     [ text "View Thread" ]
                 ]
         )

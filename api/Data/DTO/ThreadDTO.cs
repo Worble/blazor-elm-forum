@@ -13,10 +13,12 @@ namespace Data.DTO
         public ThreadDTO(Thread thread) : base(thread)
         {
             this.BoardId = thread.BoardId;
+            this.Archived = thread.Archived;
         }
 
         public virtual IEnumerable<PostDTO> Posts { get; set; }
         public virtual PostDTO Post { get; set; }
         public int BoardId { get; set; }
+        public bool Archived { get; set; }
     }
 }

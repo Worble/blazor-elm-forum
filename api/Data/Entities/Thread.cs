@@ -11,5 +11,6 @@ namespace Data.Entities
         public virtual ICollection<Post> Posts { get; set; }
         public virtual Board Board { get; set; }
         public int BoardId { get; set; }
+        public bool Archived { get; set; } = false;
     }
 }

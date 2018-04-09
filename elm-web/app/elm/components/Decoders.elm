@@ -29,6 +29,7 @@ decodeThread =
         |> required "boardId" int
         |> required "createdDate" decodeDate
         |> optional "editedDate" decodeDate (Date.fromTime 0)
+        |> required "archived" bool
 
 
 decodePost : Decode.Decoder Post
