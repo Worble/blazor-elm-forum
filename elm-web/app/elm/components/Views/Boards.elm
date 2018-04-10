@@ -1,32 +1,31 @@
 module Views.Boards exposing (view)
 
-import Html exposing (Html, a, div, h1, li, text, ul)
-import Html.Attributes exposing (href)
+import Element exposing (column, el, row, text, Element, link, layout)
+import Element.Attributes exposing (padding, spacing)
+import Html exposing (Html)
 import Models exposing (Board, Model)
 import Msgs exposing (Msg(..))
 import Routing exposing (threadsPath)
+import Styles exposing (Styles(..), stylesheet)
 import Views.Shared.OnLinkClick exposing (onLinkClick)
 
 
-view : Model -> Html Msg
+view : Model -> Element Styles variation Msg
 view model =
     if model.boards == [] then
-        div [] [ text "Please wait..." ]
+        el Styles.None [] (text "Please wait...")
     else
-        div []
-            [ h1 [] [ text "Boards" ]
-            , ul []
-                (List.map displayBoards model.boards)
+        column None
+            []
+            [ el Styles.Title [] (text "Boards:")
+            , row None [ padding 10, spacing 7 ] (List.map displayBoards model.boards)
             ]
 
 
-displayBoards : Board -> Html Msg
+displayBoards : Board -> Element Styles variation Msg
 displayBoards board =
-    li []
-        [ a 
-            [ href (threadsPath board.id)
-            , onLinkClick (ChangeLocation (threadsPath board.id)) 
-            ] 
-            [ text board.name 
-            ] 
-        ]
+    el Styles.None
+        []
+        (link (threadsPath board.id) <|
+            el Styles.Link [ onLinkClick (ChangeLocation (threadsPath board.id)) ] (text board.name)
+        )

@@ -1,9 +1,13 @@
 module Views.Posts exposing (view)
 
 import FileReader
-import Html exposing (Html, a, br, button, div, h1, img, input, li, text, ul)
-import Html.Attributes exposing (accept, href, multiple, src, style, target, type_, value)
-import Html.Events exposing (onClick, onInput)
+import Html exposing (Html, input)
+import Html.Attributes exposing (accept, multiple, type_)
+import Element exposing (row, column, el, text, when, Element, image, newTab, link, textLayout, button)
+import Element.Attributes exposing (paddingXY, spacingXY, alignLeft, maxHeight, maxWidth, px, verticalCenter, spacing, padding, inlineStyle)
+import Element.Events exposing (onClick)
+import Element.Input as Input
+import Styles exposing (Styles(..), stylesheet)
 import Models exposing (Model, Post, Route(..))
 import Msgs exposing (Msg(..))
 import Routing exposing (threadsPath)
@@ -11,113 +15,71 @@ import Date.Extra exposing (toFormattedString)
 import Views.Shared.OnLinkClick exposing (onLinkClick)
 
 
-view : Model -> Html Msg
+view : Model -> Element Styles variation Msg
 view model =
     if model.route /= PostsRoute model.board.id model.board.thread.id then
-        div [] [ text "Please wait..." ]
+        el Styles.None [] (Element.text "Please wait...")
     else
-        div []
-            [ if model.board.thread.archived then
-                div
-                    [ style
-                        [ ( "background-color", "blanchedalmond" )
-                        , ( "min-height", "50px" )
-                        , ( "text-align", "center" )
-                        , ( "font-size", "24px" )
-                        ]
-                    ]
-                    [ text "Thread Archived: Posting is disabled" ]
-                else
-                    text ""
-            , h1 []
-                [ text ("Posts in thread " ++ toString model.board.thread.id)
-                ]
-            , div []
-                (List.map displayPosts model.board.thread.posts)
-            , div []
-                [ text "New Post: "
-                , input [ type_ "text ", onInput PostInput, value model.messageInput ]
-                    []
-                , button [ onClick SendPost ] [ text "Submit via Http" ]
-                , button [ onClick SendPostWebSocket ] [ text "Submit via WebSocket" ]
-                , div []
-                    [ input
-                        [ type_ "file"
-                        , FileReader.onFileChange UploadFile
-                        , multiple False
-                        , accept "image/*"
-                        ]
+        column Styles.None
+            []
+            [ el Styles.Title [] (Element.text ("Post in thread " ++ toString model.board.thread.id ++ ":"))
+            , column Styles.None [ paddingXY 0 15, spacingXY 0 15 ] (List.map displayPost model.board.thread.posts)
+            , column Styles.None
+                [ alignLeft ]
+                [ column Styles.None
+                    [ spacingXY 0 10]
+                    [ Input.text Styles.None
                         []
-                    ]
-                , if model.readFile /= "" then
-                    div []
-                        [ img
-                            [ src model.readFile
-                            , style
-                                [ ( "max-height", "200px" )
-                                , ( "max-width", "200px" )
+                        { onChange = PostInput
+                        , value = model.messageInput
+                        , label =
+                            Input.placeholder
+                                { label = Input.labelLeft (el None [ verticalCenter ] (text "New Post: "))
+                                , text = "Type here..."
+                                }
+                        , options = [ Input.textKey (toString model.textHack) ]
+                        }
+                    , row Styles.None [ spacingXY 10 0 ] 
+                        [ button Styles.None [ onClick SendPost, padding 10 ] (Element.text "Submit via Http")
+                        , button Styles.None [ onClick SendPostWebSocket, padding 10 ] (Element.text "Submit via Websocket")
+                        ]
+                    , el Styles.None [] 
+                        (Element.html
+                            (Html.input
+                                [ type_ "file"
+                                , FileReader.onFileChange UploadFile
+                                , multiple False
+                                , accept "image/*"
                                 ]
-                            ]
-                            []
-                        ]
-                  else
-                    text ""
-
-                --button [ onClick (SendMessage model.board.id model.board.thread.id) ] [ text "Submit" ]
-                ]
-            , br [] []
-            , a 
-                [ href (threadsPath model.board.id)
-                , onLinkClick (ChangeLocation (threadsPath model.board.id)) 
-                ] 
-                [ text "Back to threads" 
-                ]
-            ]
-
-
-displayPosts : Post -> Html Msg
-displayPosts post =
-    div
-        [ style
-            [ ( "padding", "10px" )
-            , ( "margin", "2px" )
-            , ( "word-wrap", "break-word" )
-            , ( "word-break", "break-all" )
-            , ( "background-color", "lightgrey" )
-            , ( "border", "1px solid black" )
-            ]
-        ]
-        [ div
-            [ style
-                [ ( "border-bottom", "solid black 1px" )
-                ]
-            ]
-            [ text ("No. #" ++ toString post.id ++ " made at " ++ toFormattedString "EEEE, MMMM d, y 'at' h:mm a" post.createdDate)
-            ]
-        , if post.imagePath /= "" && post.thumbnailPath /= "" then
-            div
-                [ style
-                    [ ( "display", "table-cell" )
+                                []
+                            )
+                        )
+                    , when (model.readFile /= "")
+                        (el Styles.None [] 
+                            ( image Styles.None
+                                [ maxHeight (px 200), maxWidth (px 200) ]
+                                { src = model.readFile, caption = "uploaded_image" }
+                            )
+                        )
                     ]
+                , link (threadsPath model.board.id) <|
+                    el Styles.Link [ onLinkClick (ChangeLocation (threadsPath model.board.id)) ] (Element.text "Back to threads") 
                 ]
-                [ a
-                    [ href post.image 
-                    , target "_blank"
-                    ]
-                    [ img
-                        [ src post.thumbnailPath ]
-                        []
-                    ]
-                ]
-          else
-            text ""
-        , div 
-            [ style 
-                [ ( "display", "table-cell" )
-                , ( "width", "100%" )
-                , ( "vertical-align", "top" ) 
-                ] 
             ]
-            [ text post.content 
+
+displayPost : Post -> Element Styles variation Msg
+displayPost post =
+    column Styles.Post
+        [ alignLeft, paddingXY 10 10 ]
+        [ el Styles.PostHeader []
+            (Element.text ("No. #" ++ toString post.id ++ " made at " ++ toFormattedString "EEEE, MMMM d, y 'at' h:mm a" post.createdDate))
+        , textLayout Styles.None [spacing 10, paddingXY 0 10]
+            [ when (post.imagePath /= "")
+                ( el Styles.None [ alignLeft] (newTab post.imagePath <|
+                    image Styles.None
+                        [ maxHeight (px 200), maxWidth (px 200) ]
+                        { src = post.thumbnailPath, caption = "thread_image" }
+                ))
+            , Element.text post.content
             ]
         ]

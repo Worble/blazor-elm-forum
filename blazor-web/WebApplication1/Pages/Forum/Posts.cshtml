@@ -50,6 +50,10 @@
 else
 {
     <BoardQuickSelect />
+    @if (store.ForumStore.Board.thread.archived)
+    {
+        <div>Thread archived: You can no longer post in this thread</div>
+    }
     <h1>Posts in thread @store.ForumStore.Board.thread.id</h1>
 
     @foreach (var item in store.ForumStore.Board.thread.posts)
@@ -69,7 +73,7 @@ else
     }
     <br />
     <div>
-        <span>New post: </span><input type="text" @bind(Content) class="form-control"/>
+        <span>New post: </span><input type="text" @bind(Content) class="form-control" />
         <span>Upload image: </span><input id="file-upload" type="file" accept="image/*" @onchange(a => ReadFile()) class="form-control" />
         <img id="image" alt="Embedded Image" src="" style="max-height:200px;max-width:200px;" />
         <input id="image-input" type="hidden" />

@@ -134,6 +134,7 @@ namespace WebApplication1.Store
         public IEnumerable<PostDTO> posts;
         public PostDTO post;
         public int boardId;
+        public bool archived;
     }
 
     public class PostDTO : BaseDTO

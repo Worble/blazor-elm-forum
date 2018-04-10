@@ -12,6 +12,7 @@ namespace Data.Repositories
     public class ThreadRepository : IThreadRepository
     {
         private readonly TestContext _context;
+        private const int MAXIMUM_ALLOWED_THREADS = 10;
 
         public ThreadRepository(TestContext context)
         {
@@ -51,7 +52,7 @@ namespace Data.Repositories
             var threadsToRemove = _context.Threads
                 .Where(e => e.BoardId == boardId && !e.Archived)
                 .OrderByDescending(e => e.EditedDate ?? e.CreatedDate)
-                .Skip(9);
+                .Skip(MAXIMUM_ALLOWED_THREADS - 1);
 
             foreach (var item in threadsToRemove)
             {

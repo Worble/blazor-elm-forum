@@ -17,6 +17,7 @@ model route =
     , file = Nothing
     , readFile = ""
     , error = ""
+    , textHack = 0
     }
 
 
@@ -48,6 +49,7 @@ type alias Model =
     , file : Maybe NativeFile
     , readFile : String
     , error : String
+    , textHack : Int
     }
 
 
