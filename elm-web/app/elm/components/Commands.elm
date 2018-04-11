@@ -1,7 +1,7 @@
 module Commands exposing (getBoards, getFileContents, performLocationChange, sendPost, sendPostWebSocket, sendThread)
 
 import Decoders exposing (decodeBoard)
-import Encoders exposing (postEncoder, threadEncoder)
+import Encoders exposing (postEncoder, threadEncoder, webSocketEncoder)
 import FileReader exposing (NativeFile)
 import Http
 import Json.Decode as Decode exposing (list, string)
@@ -18,7 +18,7 @@ api =
 
 
 sendPost : String -> String -> Int -> Int -> Cmd Msg
-sendPost data post boardId threadId =
+sendPost imageData post boardId threadId =
     let
         url =
             api ++ "boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts"
@@ -26,26 +26,26 @@ sendPost data post boardId threadId =
         request =
             Http.post
                 url
-                (Http.stringBody "application/json" <| Encode.encode 0 <| postEncoder data post threadId)
+                (Http.stringBody "application/json" <| Encode.encode 0 <| postEncoder imageData post threadId)
                 decodeBoard
     in
     Http.send GetPostsForThread request
 
 
-sendPostWebSocket : String -> String -> Int -> Int -> Cmd Msg
-sendPostWebSocket data post boardId threadId =
+sendPostWebSocket : String -> String -> String -> Int -> Int -> Cmd Msg
+sendPostWebSocket guid imageData post boardId threadId =
     let
         url =
             "ws://localhost:14190/api/boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts/ws"
 
         json =
-            Encode.encode 0 <| postEncoder data post threadId
+            Encode.encode 0 <| webSocketEncoder guid imageData post threadId
     in
     WebSocket.send url json
 
 
 sendThread : String -> String -> Int -> Cmd Msg
-sendThread data post boardId =
+sendThread imageData post boardId =
     let
         url =
             api ++ "boards/" ++ toString boardId ++ "/threads"
@@ -53,7 +53,7 @@ sendThread data post boardId =
         request =
             Http.post
                 url
-                (Http.stringBody "application/json" <| Encode.encode 0 <| threadEncoder data post boardId)
+                (Http.stringBody "application/json" <| Encode.encode 0 <| threadEncoder imageData post boardId)
                 decodeBoard
     in
     Http.send RedirectPostsForThread request

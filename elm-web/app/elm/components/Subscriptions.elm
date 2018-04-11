@@ -10,8 +10,7 @@ subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.batch
         [ if model.board.thread.id > 0 then
-            listen ("ws://localhost:14190/api/boards/" ++ toString model.board.id ++ "/threads/" ++ toString model.board.thread.id ++ "/posts/") Echo
-            --listen "ws://localhost:14190/api/test/postshub" Echo
+            listen ("ws://localhost:14190/api/boards/" ++ toString model.board.id ++ "/threads/" ++ toString model.board.thread.id ++ "/posts/") ReceiveWebSocketMessage
           else
             Sub.none
         , Window.resizes GetWindowSize

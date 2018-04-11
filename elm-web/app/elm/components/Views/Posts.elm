@@ -1,7 +1,7 @@
 module Views.Posts exposing (view)
 
-import Element exposing (Element, button, column, el, image, link, row, text, when)
-import Element.Attributes exposing (alignLeft, paddingXY, spacingXY, verticalCenter, padding, maxHeight, maxWidth, px)
+import Element exposing (Element, button, column, el, image, link, paragraph, row, text, when)
+import Element.Attributes exposing (alignLeft, center, maxHeight, maxWidth, padding, paddingXY, percent, px, spacingXY, verticalCenter, width)
 import Element.Events exposing (onClick)
 import Element.Input as Input
 import FileReader
@@ -23,9 +23,17 @@ view model =
         column Styles.None
             []
             [ el Styles.Title [] (text ("Post in thread " ++ toString model.board.thread.id ++ ":"))
+            , when model.board.thread.archived
+                (row Styles.Error
+                    [ width (percent 100), center, onClick RemoveError ]
+                    [ paragraph Styles.None
+                        [ padding 20 ]
+                        [ text "Thread is archived: posting is disabled" ]
+                    ]
+                )
             , column Styles.None [ paddingXY 0 15, spacingXY 0 15 ] (List.map postView model.board.thread.posts)
             , column Styles.None
-                [ ]
+                []
                 [ column Styles.None
                     [ spacingXY 0 10 ]
                     [ Input.multiline Styles.None
@@ -65,8 +73,10 @@ view model =
                             )
                         )
                     ]
-                , el Styles.None [ alignLeft ] 
+                , el Styles.None
+                    [ alignLeft ]
                     (link (threadsPath model.board.id) <|
-                        el Styles.Link [ onLinkClick (ChangeLocation (threadsPath model.board.id)) ] (text "Back to threads"))
+                        el Styles.Link [ onLinkClick (ChangeLocation (threadsPath model.board.id)) ] (text "Back to threads")
+                    )
                 ]
             ]

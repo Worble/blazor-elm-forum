@@ -27,6 +27,7 @@ namespace TestWebApplication
             _next = next;
         }
 
+        #region dictionary access methods
         private ConcurrentDictionary<int, ConcurrentDictionary<string, WebSocket>> WebSockets =>
             _websockets ?? (_websockets = new ConcurrentDictionary<int, ConcurrentDictionary<string, WebSocket>>());
 
@@ -58,6 +59,21 @@ namespace TestWebApplication
             return WebSockets.GetOrAdd(threadId, new ConcurrentDictionary<string, WebSocket>());
         }
 
+        public WebSocket GetSocketByGuid(int threadId, string id)
+        {
+            if (WebSockets.TryGetValue(threadId, out var threadSockets))
+            {
+                if (threadSockets.TryGetValue(id.ToString(), out var socket))
+                {
+                    return socket;
+                }
+            }
+
+            return null;
+        }
+
+        #endregion
+
         public async Task Invoke(HttpContext context, IHostingEnvironment env, IUnitOfWork work)
         {
             if (!context.WebSockets.IsWebSocketRequest || !context.Request.Path.HasValue)
@@ -80,6 +96,13 @@ namespace TestWebApplication
 
             AddWebsocketToThread(threadId, socketId, currentSocket);
 
+            var sendJwt = JsonConvert.SerializeObject(new WebSocketMessage(){ Guid = TokenHandler.GenerateJwt(socketId) }, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            });
+
+            await SendStringAsync(currentSocket, sendJwt, ct);
+
             while (true)
             {
                 if (ct.IsCancellationRequested)
@@ -98,40 +121,61 @@ namespace TestWebApplication
                     continue;
                 }
 
-                var post = JsonConvert.DeserializeObject<PostDTO>(response);
-                string data;
+                var webSocketResponse = JsonConvert.DeserializeObject<WebSocketMessage>(response);
                 try
                 {
-                    var board = PostHelper.CreatePost(work, env, context.Request, post);
+                    var board = PostHelper.CreatePost(work, env, context.Request, webSocketResponse.Post);
 
-                    data = JsonConvert.SerializeObject(board, new JsonSerializerSettings
+                    var data = JsonConvert.SerializeObject(board, new JsonSerializerSettings
                     {
                         ContractResolver = new CamelCasePropertyNamesContractResolver()
                     });
+
+                    foreach (var socket in GetAllSocketsForThread(threadId))
+                    {
+                        if (socket.Value.State != WebSocketState.Open)
+                        {
+                            continue;
+                        }
+
+                        await SendStringAsync(socket.Value, data, ct);
+                    }
                 }
                 catch (PostException e)
                 {
-                    data = JsonConvert.SerializeObject(new {message = e.Message}, new JsonSerializerSettings
-                    {
-                        ContractResolver = new CamelCasePropertyNamesContractResolver()
-                    });
-                }
-                catch (Exception)
-                {
-                    data = JsonConvert.SerializeObject(new { message = "An error occurred." }, new JsonSerializerSettings
-                    {
-                        ContractResolver = new CamelCasePropertyNamesContractResolver()
-                    });
-                }
+                    if (!TokenHandler.JwtValid(webSocketResponse.Guid, out var guid)) continue;
+                    var socket = GetSocketByGuid(threadId, guid);
+                    if (socket == null) continue;
+                    var error = JsonConvert.SerializeObject(new {message = e.Message},
+                        new JsonSerializerSettings
+                        {
+                            ContractResolver = new CamelCasePropertyNamesContractResolver()
+                        });
 
-                foreach (var socket in GetAllSocketsForThread(threadId))
-                {
-                    if (socket.Value.State != WebSocketState.Open)
+                    if (currentSocket.State != WebSocketState.Open)
                     {
                         continue;
                     }
 
-                    await SendStringAsync(socket.Value, data, ct);
+                    await SendStringAsync(socket, error, ct);
+                }
+                catch (Exception)
+                {
+                    if (!TokenHandler.JwtValid(webSocketResponse.Guid, out var guid)) continue;
+                    var socket = GetSocketByGuid(threadId, guid);
+                    if (socket == null) continue;
+                    var error = JsonConvert.SerializeObject(new {message = "An error occurred."},
+                        new JsonSerializerSettings
+                        {
+                            ContractResolver = new CamelCasePropertyNamesContractResolver()
+                        });
+
+                    if (currentSocket.State != WebSocketState.Open)
+                    {
+                        continue;
+                    }
+
+                    await SendStringAsync(socket, error, ct);
                 }
             }
 
@@ -141,6 +185,7 @@ namespace TestWebApplication
             currentSocket.Dispose();
         }
 
+        #region send/receive
         private static Task SendStringAsync(WebSocket socket, string data, CancellationToken ct = default(CancellationToken))
         {
             var buffer = Encoding.UTF8.GetBytes(data);
@@ -176,7 +221,12 @@ namespace TestWebApplication
                 }
             }
         }
+        #endregion
+    }
 
-        
+    public class WebSocketMessage
+    {
+        public string Guid { get; set; }
+        public PostDTO Post { get; set; }
     }
 }

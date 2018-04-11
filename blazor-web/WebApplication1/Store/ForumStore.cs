@@ -46,7 +46,7 @@ namespace WebApplication1.Store
                 result.thread = Board.thread;
             }
 
-            result.threads = result.threads.OrderByDescending(e => e.editedDate);
+            result.threads = result.threads.OrderByDescending(e => e.bumpDate);
             Board = result;
             NotifyStateChanged();
             return;
@@ -71,6 +71,8 @@ namespace WebApplication1.Store
             {
                 result.threads = Board.threads;
             }
+
+            result.thread.posts = result.thread.posts.OrderBy(e => e.createdDate);
             Board = result;
             NotifyStateChanged();
             return;
@@ -135,6 +137,7 @@ namespace WebApplication1.Store
         public PostDTO post;
         public int boardId;
         public bool archived;
+        public DateTime bumpDate;
     }
 
     public class PostDTO : BaseDTO

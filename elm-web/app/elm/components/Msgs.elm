@@ -17,8 +17,7 @@ type Msg
     | SendPost
     | SendThread
     | RedirectPostsForThread (Result Error Board)
-    | Echo String
-    | SendMessage Int Int
+    | ReceiveWebSocketMessage String
     | UploadFile (List NativeFile)
     | OnFileContent (Result FileReader.Error FileContentDataUrl)
     | SendPostWebSocket

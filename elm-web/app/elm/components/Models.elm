@@ -20,6 +20,7 @@ model route =
     , error = ""
     , textHack = 0
     , device = initialDevice
+    , socketGuid = ""
     }
 
 initialDevice : Element.Device
@@ -63,6 +64,7 @@ type alias Model =
     , error : String
     , textHack : Int
     , device : Device
+    , socketGuid : String
     }
 
 

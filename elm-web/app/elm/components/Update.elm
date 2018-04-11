@@ -3,14 +3,13 @@ module Update exposing (update)
 import Commands exposing (getFileContents, performLocationChange, sendPost, sendPostWebSocket, sendThread)
 import Date.Extra as Date exposing (compare)
 import Decoders exposing (decodeBoard, returnError)
+import Element
 import Http exposing (Error)
-import Json.Decode exposing (decodeString)
+import Json.Decode as Decode exposing (decodeString, field, string)
 import Models exposing (Board, Model, Post, Route(..), Thread, emptyBoard)
 import Msgs exposing (Msg(..))
 import Navigation exposing (newUrl)
 import Routing exposing (errorPath, parseLocation, postsPath)
-import WebSocket exposing (send)
-import Element
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -31,7 +30,8 @@ update msg model =
                     List.sortWith (\t1 t2 -> Date.compare t1.bumpDate t2.bumpDate) board.threads
                         |> List.reverse
 
-                oldBoard = model.board
+                oldBoard =
+                    model.board
 
                 newBoard =
                     if board.id == model.board.id then
@@ -46,16 +46,25 @@ update msg model =
 
         GetPostsForThread (Ok board) ->
             let
-                oldBoard = model.board
-                newThread = board.thread
+                sortedPosts =
+                    List.sortWith (\t1 t2 -> Date.compare t1.createdDate t2.createdDate) board.thread.posts
 
-                newBoard = 
+                oldBoard =
+                    model.board
+
+                newThread =
+                    board.thread
+
+                newThreadWithSortedPosts =
+                    { newThread | posts = sortedPosts }
+
+                newBoard =
                     if board.id == model.board.id then
-                        { oldBoard | thread = newThread }
+                        { oldBoard | thread = newThreadWithSortedPosts }
                     else
-                        board
+                        { board | thread = newThreadWithSortedPosts }
             in
-                ( { model | board = newBoard }, Cmd.none )
+            ( { model | board = newBoard }, Cmd.none )
 
         GetPostsForThread (Err e) ->
             httpError e model
@@ -74,13 +83,19 @@ update msg model =
             ( { model | messageInput = string }, Cmd.none )
 
         SendPost ->
-            ( { model | messageInput = "", readFile = "", file = Nothing, textHack = model.textHack + 1 }, sendPost model.readFile model.messageInput model.board.id model.board.thread.id )
+            ( { model | messageInput = "", readFile = "", file = Nothing, textHack = model.textHack + 1 }
+            , sendPost model.readFile model.messageInput model.board.id model.board.thread.id
+            )
 
         SendPostWebSocket ->
-            ( { model | messageInput = "", readFile = "", file = Nothing, textHack = model.textHack + 1  }, sendPostWebSocket model.readFile model.messageInput model.board.id model.board.thread.id )
+            ( { model | messageInput = "", readFile = "", file = Nothing, textHack = model.textHack + 1 }
+            , sendPostWebSocket model.socketGuid model.readFile model.messageInput model.board.id model.board.thread.id
+            )
 
         SendThread ->
-            ( { model | messageInput = "", readFile = "", file = Nothing, textHack = model.textHack + 1  }, sendThread model.readFile model.messageInput model.board.id )
+            ( { model | messageInput = "", readFile = "", file = Nothing, textHack = model.textHack + 1 }
+            , sendThread model.readFile model.messageInput model.board.id
+            )
 
         RedirectPostsForThread (Ok board) ->
             ( { model | board = board }, newUrl (postsPath board.id board.thread.id) )
@@ -88,25 +103,22 @@ update msg model =
         RedirectPostsForThread (Err e) ->
             httpError e model
 
-        Echo board ->
+        ReceiveWebSocketMessage jsonString ->
             let
                 newModel =
-                    case decodeString decodeBoard board of
+                    case decodeString decodeBoard jsonString of
                         Ok board ->
                             { model | board = board }
 
-                        Err e ->
-                            { model | error = returnError board }
+                        Err _ ->
+                            case decodeString (field "guid" string) jsonString of
+                                Ok guid ->
+                                    { model | socketGuid = guid }
+
+                                Err _ ->
+                                    { model | error = returnError jsonString }
             in
             ( newModel, Cmd.none )
-
-        SendMessage boardId threadId ->
-            ( { model | messageInput = "" }
-            , WebSocket.send
-                ("ws://localhost:14190/api/boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts/")
-                --"ws://localhost:14190/api/test/postshub"
-                model.messageInput
-            )
 
         UploadFile file ->
             case file of
@@ -129,10 +141,10 @@ update msg model =
 
         GetWindowSize size ->
             let
-                device = Element.classifyDevice size
+                device =
+                    Element.classifyDevice size
             in
-                ({model | device = device}, Cmd.none)
-
+            ( { model | device = device }, Cmd.none )
 
 
 httpError : Error -> Model -> ( Model, Cmd Msg )
