@@ -8,7 +8,8 @@ import Routing
 import Subscriptions exposing (subscriptions)
 import Update exposing (update)
 import View exposing (view)
-
+import Task
+import Window
 
 init : Location -> ( Model, Cmd Msg )
 init location =
@@ -16,7 +17,7 @@ init location =
         currentRoute =
             Routing.parseLocation location
     in
-    ( model currentRoute, Cmd.batch [ performLocationChange currentRoute, getBoards ] )
+    ( model currentRoute, Cmd.batch [ performLocationChange currentRoute, getBoards, Task.perform GetWindowSize Window.size ] )
 
 
 main : Program Never Model Msg

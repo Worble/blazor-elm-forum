@@ -6,11 +6,11 @@ import Html exposing (Html)
 import Models exposing (Board, Model)
 import Msgs exposing (Msg(..))
 import Routing exposing (threadsPath)
-import Styles exposing (Styles(..), stylesheet)
+import Styles exposing (Style(..), stylesheet)
 import Views.Shared.OnLinkClick exposing (onLinkClick)
 
 
-view : Model -> Element Styles variation Msg
+view : Model -> Element Style variation Msg
 view model =
     if model.boards == [] then
         el Styles.None [] (text "Please wait...")
@@ -22,7 +22,7 @@ view model =
             ]
 
 
-displayBoards : Board -> Element Styles variation Msg
+displayBoards : Board -> Element Style variation Msg
 displayBoards board =
     el Styles.None
         []

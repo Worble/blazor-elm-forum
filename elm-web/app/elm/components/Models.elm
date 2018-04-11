@@ -1,8 +1,9 @@
 module Models exposing (..)
 
 import Date exposing (Date)
+import Element exposing (Device)
 import FileReader exposing (NativeFile)
-
+import Element
 
 --INITIAL MODELS
 
@@ -18,8 +19,19 @@ model route =
     , readFile = ""
     , error = ""
     , textHack = 0
+    , device = initialDevice
     }
 
+initialDevice : Element.Device
+initialDevice = 
+    { width = 0
+    , height = 0
+    , phone = True
+    , tablet = False
+    , desktop = False
+    , bigDesktop = False
+    , portrait = False
+    }
 
 emptyBoard : Board
 emptyBoard =
@@ -50,6 +62,7 @@ type alias Model =
     , readFile : String
     , error : String
     , textHack : Int
+    , device : Device
     }
 
 

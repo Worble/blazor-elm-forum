@@ -10,6 +10,7 @@ import Msgs exposing (Msg(..))
 import Navigation exposing (newUrl)
 import Routing exposing (errorPath, parseLocation, postsPath)
 import WebSocket exposing (send)
+import Element
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -125,6 +126,13 @@ update msg model =
 
         RemoveError ->
             ( { model | error = "" }, Cmd.none )
+
+        GetWindowSize size ->
+            let
+                device = Element.classifyDevice size
+            in
+                ({model | device = device}, Cmd.none)
+
 
 
 httpError : Error -> Model -> ( Model, Cmd Msg )

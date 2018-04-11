@@ -4,6 +4,7 @@ import FileReader exposing (FileContentDataUrl, NativeFile)
 import Http exposing (Error)
 import Models exposing (Board, Post, Thread)
 import Navigation exposing (Location)
+import Window
 
 
 type Msg
@@ -23,3 +24,4 @@ type Msg
     | SendPostWebSocket
     | RemoveError
     | ChangeLocation String
+    | GetWindowSize Window.Size

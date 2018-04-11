@@ -1,4 +1,4 @@
-module Styles exposing (Styles(..), stylesheet)
+module Styles exposing (Style(..), stylesheet)
 
 import Color exposing (..)
 import Style exposing (..)
@@ -8,12 +8,15 @@ import Style.Font as Font
 import Style.Scale as Scale
 
 
-type Styles
+type Style
     = None
     | Title
     | Link
     | PostHeader
     | Post
+    | Error
+    | Body
+    | PostText
 
 
 scale : Int -> Float
@@ -21,7 +24,7 @@ scale =
     Scale.modular 16 1.618
 
 
-stylesheet : StyleSheet Styles variation
+stylesheet : StyleSheet Style variation
 stylesheet =
     Style.styleSheet
         [ style None []
@@ -42,6 +45,14 @@ stylesheet =
             ]
         , style Post
             [ Color.background Color.lightGray
-
+            , prop "word-wrap" "break-word"
+            , prop "word-break" "break-word"
+            ]
+        , style PostText
+            [ prop "white-space" "normal"
+            ]
+        , style Error
+            [ Color.background (Color.rgb 255 213 213) 
+            , Style.cursor "pointer"   
             ]
         ]
