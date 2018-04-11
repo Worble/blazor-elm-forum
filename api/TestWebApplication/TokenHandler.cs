@@ -11,7 +11,6 @@ namespace TestWebApplication
 {
     public class TokenHandler
     {
-        private const string SECRET_KEY = "FYJGfmU6qkGLeGAd1dmQaXqyAoqxmzqx"; //remove in prod!!
         public static string GenerateJwt(string id)
         {
             var claims = new[]
@@ -19,7 +18,8 @@ namespace TestWebApplication
                 new Claim(ClaimTypes.NameIdentifier, id)
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(SECRET_KEY));
+            var secret = Environment.GetEnvironmentVariable("SECRET_KEY");
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
@@ -34,6 +34,7 @@ namespace TestWebApplication
 
         public static bool JwtValid(string id, out string guid)
         {
+            var secret = Environment.GetEnvironmentVariable("SECRET_KEY");
             TokenValidationParameters validationParameters =
                 new TokenValidationParameters
                 {
@@ -44,7 +45,7 @@ namespace TestWebApplication
                     ValidIssuer = "yourdomain.com",
                     ValidAudience = "yourdomain.com",
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(SECRET_KEY))
+                        Encoding.UTF8.GetBytes(secret))
                 };
 
             SecurityToken validatedToken;
