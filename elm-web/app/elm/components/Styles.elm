@@ -49,7 +49,7 @@ stylesheet =
             , prop "word-break" "break-word"
             ]
         , style PostText
-            [ prop "white-space" "normal"
+            [ prop "white-space" "pre-line"
             ]
         , style Error
             [ Color.background (Color.rgb 255 213 213) 

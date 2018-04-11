@@ -1,7 +1,7 @@
 module Views.Shared.Post exposing (postView, threadView)
 
 import Date.Extra exposing (toFormattedString)
-import Element exposing (Element, column, el, image, link, newTab, paragraph, text, textLayout, when)
+import Element exposing (Element, column, el, image, link, newTab, paragraph, text, textLayout, when, paragraph)
 import Element.Attributes exposing (alignLeft, maxHeight, maxWidth, paddingXY, percent, px, spacing, width)
 import Models exposing (Post, Thread)
 import Msgs exposing (Msg(..))
@@ -31,7 +31,7 @@ threadView thread =
 displayPost : Post -> List (Element Style variation Msg)
 displayPost post =
     [ el Styles.PostHeader
-        []
+        [ width (percent 100)]
         (text ("No. #" ++ toString post.id ++ " made at " ++ toFormattedString "EEEE, MMMM d, y 'at' h:mm a" post.createdDate))
     , textLayout Styles.None
         [ spacing 10, paddingXY 0 10, width (percent 100) ]
@@ -44,7 +44,7 @@ displayPost post =
                         { src = post.thumbnailPath, caption = "thread_image" }
                 )
             )
-        , Element.paragraph Styles.None [] [ text post.content ]
+        , paragraph Styles.PostText [] [ text post.content ]
         ]
     ]
 

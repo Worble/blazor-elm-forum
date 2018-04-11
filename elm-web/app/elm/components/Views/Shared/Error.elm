@@ -1,19 +1,20 @@
 module Views.Shared.Error exposing (view)
 
-import Models exposing (Model)
-import Element exposing (Element, text, el, screen, row)
-import Element.Attributes exposing (padding, width, percent, center)
+import Element exposing (Element, el, paragraph, row, screen, text)
+import Element.Attributes exposing (center, padding, percent, width)
 import Element.Events exposing (onClick)
+import Models exposing (Model)
 import Msgs exposing (Msg(..))
 import Styles exposing (Style(..), stylesheet)
 
+
 view : Model -> Element Style variation Msg
 view model =
-    screen 
-        (row Styles.Error 
-            [ width (percent 100), center, onClick RemoveError ] 
-            [ el Styles.None 
-                [ padding 20 ] 
-                (text ("Error: " ++ model.error))
+    screen
+        (row Styles.Error
+            [ width (percent 100), center, onClick RemoveError ]
+            [ paragraph Styles.None
+                [ padding 20 ]
+                [text ("Error: " ++ model.error)]
             ]
         )

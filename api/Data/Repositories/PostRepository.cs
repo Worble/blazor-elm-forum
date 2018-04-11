@@ -14,6 +14,7 @@ namespace Data.Repositories
     public class PostRepository : IPostRepository
     {
         private readonly TestContext _context;
+        private const int BUMPLIMIT = 5;
 
         public PostRepository(TestContext context)
         {
@@ -46,12 +47,19 @@ namespace Data.Repositories
             };
             _context.Posts.Add(postToAdd);
 
-            var thread = _context.Threads.Find(post.ThreadId);
+            var thread = _context.Threads
+                .Include(e => e.Posts)
+                .FirstOrDefault(e => e.Id == post.ThreadId);
+
             thread.EditedDate = DateTime.Now;
+            if (thread.Posts.Count <= BUMPLIMIT)
+            {
+                thread.BumpDate = DateTime.Now;
+            }
             _context.Threads.Attach(thread);
             _context.Entry(thread).State = EntityState.Modified;
 
-            var test = _context.Boards
+            return _context.Boards
                 .Select(e => new BoardDTO(e)
                 {
                     Thread = e.Threads
@@ -63,7 +71,6 @@ namespace Data.Repositories
                 })
                 .FirstOrDefault(e => e.Thread != null);
 
-            return test;
         }
 
         public bool ImageUniqueToThread(PostDTO post)

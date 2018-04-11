@@ -40,7 +40,8 @@
         store.ForumStore.OnChange -= StateHasChanged;
     }
 }
-@if (store.ForumStore.Board == null || store.ForumStore.Board.threads == null || store.ForumStore.Board.id != int.Parse(BoardId))
+@if (store.ForumStore.Board == null 
+    || store.ForumStore.Board.id != int.Parse(BoardId))
 {
     <Loading/>
 }

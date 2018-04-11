@@ -1,7 +1,7 @@
 module Views.Posts exposing (view)
 
 import Element exposing (Element, button, column, el, image, link, row, text, when)
-import Element.Attributes exposing (alignLeft, paddingXY, spacingXY, verticalCenter,padding, maxHeight, maxWidth, px)
+import Element.Attributes exposing (alignLeft, paddingXY, spacingXY, verticalCenter, padding, maxHeight, maxWidth, px)
 import Element.Events exposing (onClick)
 import Element.Input as Input
 import FileReader
@@ -25,7 +25,7 @@ view model =
             [ el Styles.Title [] (text ("Post in thread " ++ toString model.board.thread.id ++ ":"))
             , column Styles.None [ paddingXY 0 15, spacingXY 0 15 ] (List.map postView model.board.thread.posts)
             , column Styles.None
-                [ alignLeft ]
+                [ ]
                 [ column Styles.None
                     [ spacingXY 0 10 ]
                     [ Input.multiline Styles.None
@@ -34,15 +34,15 @@ view model =
                         , value = model.messageInput
                         , label =
                             Input.placeholder
-                                { label = Input.labelLeft (el None [ verticalCenter ] (text "New Post: "))
+                                { label = Input.labelLeft (el None [] (text "New Post: "))
                                 , text = "Type here..."
                                 }
-                        , options = [ Input.textKey (toString model.textHack) ]
+                        , options = [ Input.textKey (toString model.textHack) ] --this is to ensure model and view don't go out of sync
                         }
                     , row Styles.None
                         [ spacingXY 10 0 ]
-                        [ button Styles.None [ onClick SendPost, padding 10 ] (text "Submit via Http")
-                        , button Styles.None [ onClick SendPostWebSocket, padding 10 ] (text "Submit via Websocket")
+                        [ button Styles.None [ onClick SendPost, paddingXY 12 10 ] (text "Submit via Http")
+                        , button Styles.None [ onClick SendPostWebSocket, paddingXY 12 10 ] (text "Submit via Websocket")
                         ]
                     , el Styles.None
                         []
@@ -65,7 +65,8 @@ view model =
                             )
                         )
                     ]
-                , link (threadsPath model.board.id) <|
-                    el Styles.Link [ onLinkClick (ChangeLocation (threadsPath model.board.id)) ] (text "Back to threads")
+                , el Styles.None [ alignLeft ] 
+                    (link (threadsPath model.board.id) <|
+                        el Styles.Link [ onLinkClick (ChangeLocation (threadsPath model.board.id)) ] (text "Back to threads"))
                 ]
             ]

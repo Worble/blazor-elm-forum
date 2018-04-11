@@ -49,6 +49,7 @@ namespace Data
                         File.ReadAllText("seed" + Path.DirectorySeparatorChar + "threads.json"));
                 foreach (var thread in threads)
                 {
+                    thread.BumpDate = DateTime.Now;
                     context.Threads.Add(thread);
                 }
                 context.SaveChanges();

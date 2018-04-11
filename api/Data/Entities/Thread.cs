@@ -12,5 +12,6 @@ namespace Data.Entities
         public virtual Board Board { get; set; }
         public int BoardId { get; set; }
         public bool Archived { get; set; } = false;
+        public DateTime BumpDate { get; set; }
     }
 }

@@ -38,6 +38,7 @@ namespace Data.Repositories
             var threadToAdd = new Thread()
             {
                 BoardId = thread.BoardId,
+                BumpDate = DateTime.Now
             };
 
             var entity = _context.Add(threadToAdd).Entity;
@@ -51,7 +52,7 @@ namespace Data.Repositories
         {
             var threadsToRemove = _context.Threads
                 .Where(e => e.BoardId == boardId && !e.Archived)
-                .OrderByDescending(e => e.EditedDate ?? e.CreatedDate)
+                .OrderByDescending(e => e.BumpDate)
                 .Skip(MAXIMUM_ALLOWED_THREADS - 1);
 
             foreach (var item in threadsToRemove)

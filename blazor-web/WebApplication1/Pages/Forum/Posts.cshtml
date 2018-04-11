@@ -43,7 +43,9 @@
         store.ForumStore.OnChange -= StateHasChanged;
     }
 }
-@if (store.ForumStore.Board == null || store.ForumStore.Board.thread == null || store.ForumStore.Board.thread.posts == null || store.ForumStore.Board.thread.id != int.Parse(ThreadId))
+@if (store.ForumStore.Board == null 
+    || store.ForumStore.Board.thread == null 
+    || store.ForumStore.Board.thread.id != int.Parse(ThreadId))
 {
     <Loading />
 }

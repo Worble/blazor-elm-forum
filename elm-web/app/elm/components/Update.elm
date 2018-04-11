@@ -28,7 +28,7 @@ update msg model =
         GetThreadsForBoard (Ok board) ->
             let
                 sortedThreads =
-                    List.sortWith (\t1 t2 -> Date.compare t1.editedDate t2.editedDate) board.threads
+                    List.sortWith (\t1 t2 -> Date.compare t1.bumpDate t2.bumpDate) board.threads
                         |> List.reverse
 
                 oldBoard = model.board

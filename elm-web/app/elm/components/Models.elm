@@ -40,7 +40,7 @@ emptyBoard =
 
 emptyThread : Thread
 emptyThread =
-    { posts = [], post = emptyPost, id = 0, boardId = 0, createdDate = Date.fromTime 0, editedDate = Date.fromTime 0, archived = False }
+    { posts = [], post = emptyPost, id = 0, boardId = 0, createdDate = Date.fromTime 0, editedDate = Date.fromTime 0, archived = False, bumpDate = Date.fromTime 0 }
 
 
 emptyPost : Post
@@ -85,6 +85,7 @@ type alias Thread =
     , createdDate : Date
     , editedDate : Date
     , archived : Bool
+    , bumpDate : Date
     }
 
 

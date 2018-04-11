@@ -30,6 +30,8 @@ decodeThread =
         |> required "createdDate" decodeDate
         |> optional "editedDate" decodeDate (Date.fromTime 0)
         |> required "archived" bool
+        |> required "bumpDate" decodeDate
+
 
 
 decodePost : Decode.Decoder Post
