@@ -24,7 +24,7 @@ namespace TestWebApplication
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<TestContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("TestContext"),
+                options.UseNpgsql(Environment.GetEnvironmentVariable("DATABASE")?? Environment.GetEnvironmentVariable("DATABASE", EnvironmentVariableTarget.User),
                     b => b.MigrationsAssembly("TestWebApplication"))
             );
             services.AddTransient<IUnitOfWork, UnitOfWork>();

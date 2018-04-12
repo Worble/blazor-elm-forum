@@ -14,7 +14,8 @@ import WebSocket exposing (send)
 
 api : String
 api =
-    "http://localhost:14190/api/"
+    "https://evening-shore-60768.herokuapp.com/api/"
+    --"http://localhost:14190/api/"
 
 
 sendPost : String -> String -> Int -> Int -> Cmd Msg
@@ -36,7 +37,8 @@ sendPostWebSocket : String -> String -> String -> Int -> Int -> Cmd Msg
 sendPostWebSocket guid imageData post boardId threadId =
     let
         url =
-            "ws://localhost:14190/api/boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts/ws"
+            "wss://evening-shore-60768.herokuapp.com/api/boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts/"
+            --"ws://localhost:14190/api/boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts/"
 
         json =
             Encode.encode 0 <| webSocketEncoder guid imageData post threadId

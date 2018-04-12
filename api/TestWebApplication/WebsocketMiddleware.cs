@@ -81,7 +81,6 @@ namespace TestWebApplication
                 await _next.Invoke(context);
                 return;
             }
-
             var split = context.Request.Path.Value.Split('/');
 
             if (split.Length < 5 || !int.TryParse(split[5], out var threadId))
@@ -124,6 +123,7 @@ namespace TestWebApplication
                 var webSocketResponse = JsonConvert.DeserializeObject<WebSocketMessage>(response);
                 try
                 {
+                    webSocketResponse.Post.ThreadId = threadId;
                     var board = PostHelper.CreatePost(work, env, context.Request, webSocketResponse.Post);
 
                     var data = JsonConvert.SerializeObject(board, new JsonSerializerSettings

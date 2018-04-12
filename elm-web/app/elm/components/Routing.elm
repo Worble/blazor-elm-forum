@@ -29,19 +29,19 @@ parseLocation location =
 
 errorPath : String
 errorPath =
-    "/404"
+    "/404/"
 
 
 boardsPath : String
 boardsPath =
-    "/boards"
+    "/boards/"
 
 
 threadsPath : Int -> String
 threadsPath boardId =
-    "/boards/" ++ toString boardId ++ "/threads"
+    "/boards/" ++ toString boardId ++ "/threads/"
 
 
 postsPath : Int -> Int -> String
 postsPath boardId threadId =
-    "/boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts"
+    "/boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts/"

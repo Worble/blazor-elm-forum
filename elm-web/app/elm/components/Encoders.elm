@@ -19,9 +19,10 @@ threadEncoder imageData message boardId =
         , ( "post", postEncoder imageData message 0 )
         ]
 
+
 webSocketEncoder : String -> String -> String -> Int -> Encode.Value
 webSocketEncoder guid imageData message threadId =
     Encode.object
         [ ( "guid", Encode.string guid )
-        , ( "post", postEncoder imageData message 0 )
+        , ( "post", postEncoder imageData message threadId )
         ]
