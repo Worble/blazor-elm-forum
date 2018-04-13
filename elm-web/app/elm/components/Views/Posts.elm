@@ -31,12 +31,12 @@ view model =
                         [ text "Thread is archived: posting is disabled" ]
                     ]
                 )
-            , column Styles.None [ paddingXY 0 15, spacingXY 0 15 ] (List.map postView model.board.thread.posts)
+            , column Styles.None [ paddingXY 0 15, spacingXY 0 15 ] (List.map (\n -> postView n model.board.id model.board.thread.id) model.board.thread.posts)
             , column Styles.None
                 []
                 [ column Styles.None
                     [ spacingXY 0 10 ]
-                    [ Input.multiline Styles.None
+                    [ Input.multiline Styles.TextInput
                         []
                         { onChange = PostInput
                         , value = model.messageInput

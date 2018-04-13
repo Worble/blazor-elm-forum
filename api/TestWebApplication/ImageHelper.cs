@@ -48,7 +48,7 @@ namespace TestWebApplication
             var thumbnail = image.Clone();
             thumbnail.Mutate(i => i.Resize(new ResizeOptions()
                 {
-                    Mode = ResizeMode.Max, Size = new Size() {Width = 100}
+                    Mode = ResizeMode.Max, Size = new Size() {Width = 100, Height = 100}
                 })
             );
 

@@ -31,7 +31,7 @@ namespace TestWebApplication
 
             services.AddCors(options =>
             {
-                options.AddPolicy("AllowSpecificOrigin",
+                options.AddPolicy("AllowAllOrigins",
                     builder =>
                         builder.AllowAnyOrigin()
                             .AllowAnyMethod()
@@ -42,7 +42,7 @@ namespace TestWebApplication
             services.AddMvc();
             services.Configure<MvcOptions>(options =>
             {
-                options.Filters.Add(new CorsAuthorizationFilterFactory("AllowSpecificOrigin"));
+                options.Filters.Add(new CorsAuthorizationFilterFactory("AllowAllOrigins"));
             });
 
         }

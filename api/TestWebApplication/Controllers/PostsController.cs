@@ -35,6 +35,12 @@ namespace TestWebApplication.Controllers
             return Json(_work.PostRepository.GetAllForThread(boardId, threadId));
         }
 
+        [HttpGet("{postId}")]
+        public IActionResult GetOneForThread(int boardId, int threadId, int postId)
+        {
+            return Json(_work.PostRepository.GetOneForThread(boardId, threadId, postId));
+        }
+
         [HttpPost]
         public IActionResult CreatePost(int threadId, [FromBody]PostDTO post)
         {

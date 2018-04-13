@@ -25,6 +25,12 @@ parseLocation location =
 
         Nothing ->
             NotFoundRoute
+            
+
+parseLocationHash : Location -> Maybe Int
+parseLocationHash location =
+    parseHash int location
+
 
 
 errorPath : String
@@ -45,3 +51,8 @@ threadsPath boardId =
 postsPath : Int -> Int -> String
 postsPath boardId threadId =
     "/boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts/"
+
+
+postPath : Int -> Int -> Int -> String
+postPath boardId threadId postId =
+    "/boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts/#" ++ toString postId

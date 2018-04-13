@@ -18,14 +18,15 @@ view model =
     if model.route /= ThreadsRoute model.board.id then
         el Styles.None [] (Element.text "Please wait...")
     else
-        column Styles.None []
+        column Styles.None
+            []
             [ el Styles.Title [] (Element.text ("Threads in board " ++ model.board.name ++ ":"))
-            , column Styles.None [ paddingXY 0 15, spacingXY 0 15 ] (List.map threadView model.board.threads)
+            , column Styles.None [ paddingXY 0 15, spacingXY 0 15 ] (List.map (\n -> threadView n model.board.id) model.board.threads)
             , column Styles.None
                 []
                 [ column Styles.None
                     [ spacingXY 0 10 ]
-                    [ Input.multiline Styles.None
+                    [ Input.multiline Styles.TextInput
                         []
                         { onChange = PostInput
                         , value = model.messageInput

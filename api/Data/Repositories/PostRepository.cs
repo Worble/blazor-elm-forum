@@ -87,5 +87,21 @@ namespace Data.Repositories
                 return false;
             }
         }
+
+        public BoardDTO GetOneForThread(int boardId, int threadId, int postId)
+        {
+            return _context.Boards
+                .Select(e => new BoardDTO(e)
+                {
+                    Thread = e.Threads
+                        .Select(y => new ThreadDTO(y)
+                        {
+                            Posts = y.Posts.Select(x => new PostDTO(x)),
+                            Post = y.Posts.Select(x => new PostDTO(x)).FirstOrDefault(x => x.Id == postId)
+                        })
+                        .FirstOrDefault(y => y.Id == threadId)
+                })
+                .FirstOrDefault(e => e.Id == boardId);
+        }
     }
 }

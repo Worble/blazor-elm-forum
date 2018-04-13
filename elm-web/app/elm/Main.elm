@@ -6,18 +6,22 @@ import Msgs exposing (Msg(..))
 import Navigation exposing (Location)
 import Routing
 import Subscriptions exposing (subscriptions)
+import Task
 import Update exposing (update)
 import View exposing (view)
-import Task
 import Window
+
 
 init : Location -> ( Model, Cmd Msg )
 init location =
     let
         currentRoute =
             Routing.parseLocation location
+
+        hash =
+            Routing.parseLocationHash location
     in
-    ( model currentRoute, Cmd.batch [ performLocationChange currentRoute, getBoards, Task.perform GetWindowSize Window.size ] )
+    ( model currentRoute, Cmd.batch [ performLocationChange currentRoute hash, getBoards, Task.perform GetWindowSize Window.size ] )
 
 
 main : Program Never Model Msg

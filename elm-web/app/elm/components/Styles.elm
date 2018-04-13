@@ -15,8 +15,8 @@ type Style
     | PostHeader
     | Post
     | Error
-    | Body
     | PostText
+    | TextInput
 
 
 scale : Int -> Float
@@ -52,7 +52,13 @@ stylesheet =
             [ prop "white-space" "pre-line"
             ]
         , style Error
-            [ Color.background (Color.rgb 255 213 213) 
-            , Style.cursor "pointer"   
+            [ Color.background (Color.rgb 255 213 213)
+            , Style.cursor "pointer"
+            ]
+        , style TextInput
+            [ Border.all 1
+            , Border.solid
+            , Color.border lightGray
+            , prop "resize" "vertical!important"
             ]
         ]

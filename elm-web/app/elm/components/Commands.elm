@@ -14,8 +14,8 @@ import WebSocket exposing (send)
 
 api : String
 api =
-    "https://evening-shore-60768.herokuapp.com/api/"
-    --"http://localhost:14190/api/"
+    --"https://evening-shore-60768.herokuapp.com/api/"
+    "http://localhost:14190/api/"
 
 
 sendPost : String -> String -> Int -> Int -> Cmd Msg
@@ -37,8 +37,8 @@ sendPostWebSocket : String -> String -> String -> Int -> Int -> Cmd Msg
 sendPostWebSocket guid imageData post boardId threadId =
     let
         url =
-            "wss://evening-shore-60768.herokuapp.com/api/boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts/"
-            --"ws://localhost:14190/api/boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts/"
+            --"wss://evening-shore-60768.herokuapp.com/api/boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts/"
+            "ws://localhost:14190/api/boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts/"
 
         json =
             Encode.encode 0 <| webSocketEncoder guid imageData post threadId
@@ -61,8 +61,8 @@ sendThread imageData post boardId =
     Http.send RedirectPostsForThread request
 
 
-performLocationChange : Route -> Cmd Msg
-performLocationChange route =
+performLocationChange : Route -> Maybe Int -> Cmd Msg
+performLocationChange route hashRoute =
     case route of
         Models.BoardsRoute ->
             getBoards
@@ -71,7 +71,12 @@ performLocationChange route =
             getThreads boardId
 
         Models.PostsRoute boardId threadId ->
-            getPosts boardId threadId
+            case hashRoute of
+                Just postId ->
+                    getPostsWithScroll boardId threadId postId
+
+                Nothing ->
+                    getPosts boardId threadId
 
         Models.NotFoundRoute ->
             Cmd.none
@@ -90,7 +95,7 @@ getThreads : a -> Cmd Msg
 getThreads boardId =
     let
         url =
-            api ++ "boards/" ++ toString boardId ++ "/threads"
+            api ++ "boards/" ++ toString boardId ++ "/threads/"
     in
     Http.send GetThreadsForBoard (Http.get url decodeBoard)
 
@@ -99,7 +104,16 @@ getPosts : a -> a -> Cmd Msg
 getPosts boardId threadId =
     let
         url =
-            api ++ "boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts"
+            api ++ "boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts/"
+    in
+    Http.send GetPostsForThread (Http.get url decodeBoard)
+
+
+getPostsWithScroll : a -> a -> a -> Cmd Msg
+getPostsWithScroll boardId threadId postId =
+    let
+        url =
+            api ++ "boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts/" ++ toString postId
     in
     Http.send GetPostsForThread (Http.get url decodeBoard)
 

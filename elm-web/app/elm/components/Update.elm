@@ -3,13 +3,16 @@ module Update exposing (update)
 import Commands exposing (getFileContents, performLocationChange, sendPost, sendPostWebSocket, sendThread)
 import Date.Extra as Date exposing (compare)
 import Decoders exposing (decodeBoard, returnError)
+import Dom.Scroll
 import Element
 import Http exposing (Error)
 import Json.Decode as Decode exposing (decodeString, field, string)
 import Models exposing (Board, Model, Post, Route(..), Thread, emptyBoard)
 import Msgs exposing (Msg(..))
 import Navigation exposing (newUrl)
-import Routing exposing (errorPath, parseLocation, postsPath)
+import Ports exposing (scrollIdIntoView)
+import Routing exposing (errorPath, parseLocation, parseLocationHash, postsPath)
+import Task
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -63,8 +66,19 @@ update msg model =
                         { oldBoard | thread = newThreadWithSortedPosts }
                     else
                         { board | thread = newThreadWithSortedPosts }
+
+                cmd =
+                    if board.thread.post.id == 0 then
+                        Cmd.none
+                    else
+                        scrollIdIntoView (toString board.thread.post.id)
+
+                dummy =
+                    Debug.log ":" cmd
+
+                --Task.attempt (always NoOp) <| Dom.Scroll.toY (toString board.thread.post.id)
             in
-            ( { model | board = newBoard }, Cmd.none )
+            ( { model | board = newBoard }, cmd )
 
         GetPostsForThread (Err e) ->
             httpError e model
@@ -73,8 +87,11 @@ update msg model =
             let
                 newRoute =
                     parseLocation location
+
+                hash =
+                    parseLocationHash location
             in
-            ( { model | route = newRoute, messageInput = "", readFile = "" }, performLocationChange newRoute )
+            ( { model | route = newRoute, messageInput = "", readFile = "", socketGuid = "" }, performLocationChange newRoute hash )
 
         ChangeLocation path ->
             ( model, newUrl path )
@@ -134,7 +151,7 @@ update msg model =
                     ( { model | readFile = String.dropRight 1 (String.dropLeft 1 (toString content)) }, Cmd.none )
 
                 Err err ->
-                    Debug.crash (toString err)
+                    ( { model | error = toString err }, Cmd.none )
 
         RemoveError ->
             ( { model | error = "" }, Cmd.none )
@@ -145,6 +162,16 @@ update msg model =
                     Element.classifyDevice size
             in
             ( { model | device = device }, Cmd.none )
+
+        Scroll ->
+            let
+                cmd =
+                    if model.board.thread.post.id == 0 then
+                        Cmd.none
+                    else
+                        scrollIdIntoView (toString model.board.thread.post.id)
+            in
+            ( model, cmd )
 
 
 httpError : Error -> Model -> ( Model, Cmd Msg )

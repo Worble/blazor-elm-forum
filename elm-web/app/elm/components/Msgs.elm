@@ -24,3 +24,4 @@ type Msg
     | RemoveError
     | ChangeLocation String
     | GetWindowSize Window.Size
+    | Scroll

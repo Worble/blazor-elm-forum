@@ -1,7 +1,7 @@
 module View exposing (view)
 
 import Element exposing (column, el, empty, layout, responsive, text, when)
-import Element.Attributes exposing (center, px, width)
+import Element.Attributes exposing (center, percent, px, width)
 import Html exposing (Html)
 import Models exposing (Board, Model)
 import Msgs exposing (Msg(..))
@@ -27,16 +27,17 @@ view model =
                     Models.BoardsRoute ->
                         Views.Boards.view model
 
-                    Models.ThreadsRoute threadId ->
+                    Models.ThreadsRoute boardId ->
                         Views.Threads.view model
 
-                    Models.PostsRoute threadId postId ->
+                    Models.PostsRoute boardId threadId ->
                         Views.Posts.view model
 
                     Models.NotFoundRoute ->
                         el Styles.None [] empty
                 ]
             )
+
 
 bodyPosition device =
     let
@@ -46,7 +47,7 @@ bodyPosition device =
         responsiveWidth =
             responsive (toFloat device.width) ( 400, 1800 ) ( 400, 1200 )
     in
-    if currentWidth > 399 then
+    if currentWidth > 405 then
         [ center, width (px responsiveWidth) ]
     else
-        [ width (px 400) ]
+        [ width (percent 100) ]
