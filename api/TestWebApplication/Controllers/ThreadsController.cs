@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TestWebApplication.Controllers
 {
-    [Route("api/boards/{boardId}/[controller]")]
+    [Route("api/boards/{boardName}")]
     public class ThreadsController : Controller
     {
         private readonly IUnitOfWork _work;
@@ -21,10 +21,16 @@ namespace TestWebApplication.Controllers
             _env = env;
         }
 
+        //[HttpGet]
+        //public IActionResult GetAllForBoard(int boardId)
+        //{
+        //    return Json(_work.ThreadRepository.GetAllForBoard(boardId));
+        //}
+
         [HttpGet]
-        public IActionResult GetAllForBoard(int boardId)
+        public IActionResult GetAllForBoard(string boardName)
         {
-            return Json(_work.ThreadRepository.GetAllForBoard(boardId));
+            return Json(_work.ThreadRepository.GetAllForBoard(boardName));
         }
 
         [HttpPost]

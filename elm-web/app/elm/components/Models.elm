@@ -21,6 +21,7 @@ model route =
     , textHack = 0
     , device = initialDevice
     , socketGuid = ""
+    , dummy = emptyBoard
     }
 
 initialDevice : Element.Device
@@ -41,7 +42,7 @@ emptyBoard =
 
 emptyThread : Thread
 emptyThread =
-    { posts = [], post = emptyPost, id = 0, boardId = 0, createdDate = Date.fromTime 0, editedDate = Date.fromTime 0, archived = False, bumpDate = Date.fromTime 0 }
+    { posts = [], post = emptyPost, id = 0, boardId = 0, createdDate = Date.fromTime 0, editedDate = Date.fromTime 0, archived = False, bumpDate = Date.fromTime 0, opPost = emptyPost }
 
 
 emptyPost : Post
@@ -65,6 +66,7 @@ type alias Model =
     , textHack : Int
     , device : Device
     , socketGuid : String
+    , dummy : Board
     }
 
 
@@ -88,6 +90,7 @@ type alias Thread =
     , editedDate : Date
     , archived : Bool
     , bumpDate : Date
+    , opPost : Post
     }
 
 
@@ -114,6 +117,6 @@ type alias PostId =
 
 type Route
     = BoardsRoute
-    | ThreadsRoute Int
-    | PostsRoute Int Int
+    | ThreadsRoute String
+    | PostsRoute String Int
     | NotFoundRoute

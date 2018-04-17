@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace TestWebApplication.Controllers
 {
-    [Route("api/boards/{boardId}/threads/{threadId}/[controller]")]
+    [Route("api/boards/{boardName}/{threadId}")]
     public class PostsController : Controller
     {
         private readonly IUnitOfWork _work;
@@ -30,15 +30,15 @@ namespace TestWebApplication.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAllForThread(int boardId, int threadId)
+        public IActionResult GetAllForThread(string boardName, int threadId)
         {
-            return Json(_work.PostRepository.GetAllForThread(boardId, threadId));
+            return Json(_work.PostRepository.GetAllForThread(boardName, threadId));
         }
 
         [HttpGet("{postId}")]
-        public IActionResult GetOneForThread(int boardId, int threadId, int postId)
+        public IActionResult GetOneForThread(string boardName, int threadId, int postId)
         {
-            return Json(_work.PostRepository.GetOneForThread(boardId, threadId, postId));
+            return Json(_work.PostRepository.GetOneForThread(boardName, threadId, postId));
         }
 
         [HttpPost]

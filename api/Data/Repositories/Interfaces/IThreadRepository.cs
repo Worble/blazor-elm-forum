@@ -8,7 +8,9 @@ namespace Data.Repositories.Interfaces
 {
     public interface IThreadRepository
     {
-        BoardDTO GetAllForBoard(int boardId);
+        //BoardDTO GetAllForBoard(int boardId);
+
+        BoardDTO GetAllForBoard(string boardId);
         Thread CreateThread(ThreadDTO thread);
         bool ThreadExists(int threadId);
     }

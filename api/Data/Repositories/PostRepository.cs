@@ -20,7 +20,22 @@ namespace Data.Repositories
         {
             _context = context;
         }
-        public BoardDTO GetAllForThread(int boardId, int threadId)
+        //public BoardDTO GetAllForThread(int boardId, int threadId)
+        //{
+        //    return _context.Boards
+        //        .Select(e => new BoardDTO(e)
+        //        {
+        //            Thread = e.Threads
+        //                .Select(y => new ThreadDTO(y)
+        //                {
+        //                    Posts = y.Posts.Select(x => new PostDTO(x))
+        //                })
+        //                .FirstOrDefault(y => y.Id == threadId)
+        //        })
+        //        .FirstOrDefault(e => e.Id == boardId);
+        //}
+
+        public BoardDTO GetAllForThread(string boardName, int postId)
         {
             return _context.Boards
                 .Select(e => new BoardDTO(e)
@@ -28,12 +43,15 @@ namespace Data.Repositories
                     Thread = e.Threads
                         .Select(y => new ThreadDTO(y)
                         {
-                            Posts = y.Posts.Select(x => new PostDTO(x))
+                            Posts = y.Posts.Select(x => new PostDTO(x)),
+                            OpPost = y.Posts.Select(x => new PostDTO(x)).FirstOrDefault(x => x.IsOp),
+                            Post = y.Posts.Select(x => new PostDTO(x)).FirstOrDefault(x => x.Id == postId)
                         })
-                        .FirstOrDefault(y => y.Id == threadId)
+                        .FirstOrDefault(y => y.Posts.Any(x => x.Id == postId))
                 })
-                .FirstOrDefault(e => e.Id == boardId);
+                .FirstOrDefault(e => e.ShorthandName == boardName);
         }
+
         public BoardDTO CreatePost(PostDTO post)
         {
             var postToAdd = new Post()
@@ -65,7 +83,8 @@ namespace Data.Repositories
                     Thread = e.Threads
                         .Select(y => new ThreadDTO(y)
                         {
-                            Posts = y.Posts.Select(x => new PostDTO(x))
+                            Posts = y.Posts.Select(x => new PostDTO(x)),
+                            OpPost = y.Posts.Select(x => new PostDTO(x)).FirstOrDefault(x => x.IsOp)
                         })
                         .FirstOrDefault(y => y.Id == post.ThreadId)
                 })
@@ -88,7 +107,7 @@ namespace Data.Repositories
             }
         }
 
-        public BoardDTO GetOneForThread(int boardId, int threadId, int postId)
+        public BoardDTO GetOneForThread(string boardName, int threadId, int postId)
         {
             return _context.Boards
                 .Select(e => new BoardDTO(e)
@@ -97,11 +116,13 @@ namespace Data.Repositories
                         .Select(y => new ThreadDTO(y)
                         {
                             Posts = y.Posts.Select(x => new PostDTO(x)),
-                            Post = y.Posts.Select(x => new PostDTO(x)).FirstOrDefault(x => x.Id == postId)
+                            Post = y.Posts.Select(x => new PostDTO(x)).FirstOrDefault(x => x.Id == postId),
+                            OpPost = y.Posts.Select(x => new PostDTO(x)).FirstOrDefault(x => x.IsOp)
+
                         })
-                        .FirstOrDefault(y => y.Id == threadId)
+                        .FirstOrDefault(y => y.Posts.Any(x => x.Id == threadId))
                 })
-                .FirstOrDefault(e => e.Id == boardId);
+                .FirstOrDefault(e => e.ShorthandName == boardName);
         }
     }
 }

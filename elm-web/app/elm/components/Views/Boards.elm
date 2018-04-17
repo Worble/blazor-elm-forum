@@ -1,8 +1,7 @@
 module Views.Boards exposing (view)
 
-import Element exposing (column, el, row, text, Element, link, layout)
+import Element exposing (Element, column, el, layout, link, row, text)
 import Element.Attributes exposing (padding, spacing)
-import Html exposing (Html)
 import Models exposing (Board, Model)
 import Msgs exposing (Msg(..))
 import Routing exposing (threadsPath)
@@ -26,6 +25,6 @@ displayBoards : Board -> Element Style variation Msg
 displayBoards board =
     el Styles.None
         []
-        (link (threadsPath board.id) <|
-            el Styles.Link [ onLinkClick (ChangeLocation (threadsPath board.id)) ] (text board.name)
+        (link (threadsPath board.shorthandName) <|
+            el Styles.Link [ onLinkClick (ChangeLocation (threadsPath board.shorthandName)) ] (text board.name)
         )

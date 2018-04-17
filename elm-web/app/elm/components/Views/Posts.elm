@@ -1,7 +1,7 @@
 module Views.Posts exposing (view)
 
 import Element exposing (Element, button, column, el, image, link, paragraph, row, text, when)
-import Element.Attributes exposing (alignLeft, center, maxHeight, maxWidth, padding, paddingXY, percent, px, spacingXY, verticalCenter, width)
+import Element.Attributes exposing (alignLeft, center, id, maxHeight, maxWidth, padding, paddingXY, percent, px, spacingXY, verticalCenter, width, height)
 import Element.Events exposing (onClick)
 import Element.Input as Input
 import FileReader
@@ -17,7 +17,7 @@ import Views.Shared.Post exposing (postView)
 
 view : Model -> Element Style variation Msg
 view model =
-    if model.route /= PostsRoute model.board.id model.board.thread.id then
+    if model.route /= PostsRoute model.board.shorthandName model.board.thread.opPost.id then
         el Styles.None [] (text "Please wait...")
     else
         column Styles.None
@@ -31,13 +31,13 @@ view model =
                         [ text "Thread is archived: posting is disabled" ]
                     ]
                 )
-            , column Styles.None [ paddingXY 0 15, spacingXY 0 15 ] (List.map (\n -> postView n model.board.id model.board.thread.id) model.board.thread.posts)
+            , column Styles.None [ paddingXY 0 15, spacingXY 0 15 ] (List.map (\n -> postView n model.board.shorthandName model.board.thread.opPost.id) model.board.thread.posts)
             , column Styles.None
                 []
                 [ column Styles.None
                     [ spacingXY 0 10 ]
                     [ Input.multiline Styles.TextInput
-                        []
+                        [ id "input", height (px 100) ]
                         { onChange = PostInput
                         , value = model.messageInput
                         , label =
@@ -75,8 +75,8 @@ view model =
                     ]
                 , el Styles.None
                     [ alignLeft ]
-                    (link (threadsPath model.board.id) <|
-                        el Styles.Link [ onLinkClick (ChangeLocation (threadsPath model.board.id)) ] (text "Back to threads")
+                    (link (threadsPath model.board.shorthandName) <|
+                        el Styles.Link [ onLinkClick (ChangeLocation (threadsPath model.board.shorthandName)) ] (text "Back to threads")
                     )
                 ]
             ]

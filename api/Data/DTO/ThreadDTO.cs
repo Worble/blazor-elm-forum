@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Data.Entities;
 using Newtonsoft.Json;
@@ -18,6 +19,7 @@ namespace Data.DTO
         }
 
         public virtual IEnumerable<PostDTO> Posts { get; set; }
+        public virtual PostDTO OpPost { get; set; }
         public virtual PostDTO Post { get; set; }
         public int BoardId { get; set; }
         public bool Archived { get; set; }

@@ -3,7 +3,7 @@ module Update exposing (update)
 import Commands exposing (getFileContents, performLocationChange, sendPost, sendPostWebSocket, sendThread)
 import Date.Extra as Date exposing (compare)
 import Decoders exposing (decodeBoard, returnError)
-import Dom.Scroll
+import Dom
 import Element
 import Http exposing (Error)
 import Json.Decode as Decode exposing (decodeString, field, string)
@@ -11,7 +11,7 @@ import Models exposing (Board, Model, Post, Route(..), Thread, emptyBoard)
 import Msgs exposing (Msg(..))
 import Navigation exposing (newUrl)
 import Ports exposing (scrollIdIntoView)
-import Routing exposing (errorPath, parseLocation, parseLocationHash, postsPath)
+import Routing exposing (errorPath, parseLocation, parseLocationHash, postPath, postsPath)
 import Task
 
 
@@ -49,38 +49,34 @@ update msg model =
 
         GetPostsForThread (Ok board) ->
             let
-                sortedPosts =
-                    List.sortWith (\t1 t2 -> Date.compare t1.createdDate t2.createdDate) board.thread.posts
-
-                oldBoard =
-                    model.board
-
-                newThread =
-                    board.thread
-
-                newThreadWithSortedPosts =
-                    { newThread | posts = sortedPosts }
-
                 newBoard =
-                    if board.id == model.board.id then
-                        { oldBoard | thread = newThreadWithSortedPosts }
+                    sortBoard board model.board
+
+                cmd =
+                    if model.route /= PostsRoute newBoard.shorthandName newBoard.thread.opPost.id then
+                        newUrl (postPath newBoard.shorthandName newBoard.thread.opPost.id newBoard.thread.post.id)
                     else
-                        { board | thread = newThreadWithSortedPosts }
+                        Cmd.none
+            in
+            ( { model | board = newBoard }, cmd )
+
+        GetPostsForThread (Err e) ->
+            httpError e model
+
+        GetPostsForThreadScroll (Ok board) ->
+            let
+                newBoard =
+                    sortBoard board model.board
 
                 cmd =
                     if board.thread.post.id == 0 then
                         Cmd.none
                     else
                         scrollIdIntoView (toString board.thread.post.id)
-
-                dummy =
-                    Debug.log ":" cmd
-
-                --Task.attempt (always NoOp) <| Dom.Scroll.toY (toString board.thread.post.id)
             in
             ( { model | board = newBoard }, cmd )
 
-        GetPostsForThread (Err e) ->
+        GetPostsForThreadScroll (Err e) ->
             httpError e model
 
         OnLocationChange location ->
@@ -99,6 +95,9 @@ update msg model =
         PostInput string ->
             ( { model | messageInput = string }, Cmd.none )
 
+        PostInputAppend string ->
+            ( { model | messageInput = model.messageInput ++ string }, Task.attempt (always NoOp) (Dom.focus "input") )
+
         SendPost ->
             ( { model | messageInput = "", readFile = "", file = Nothing, textHack = model.textHack + 1 }
             , sendPost model.readFile model.messageInput model.board.id model.board.thread.id
@@ -115,7 +114,7 @@ update msg model =
             )
 
         RedirectPostsForThread (Ok board) ->
-            ( { model | board = board }, newUrl (postsPath board.id board.thread.id) )
+            ( { model | board = board }, newUrl (postsPath board.shorthandName board.thread.post.id) )
 
         RedirectPostsForThread (Err e) ->
             httpError e model
@@ -163,15 +162,11 @@ update msg model =
             in
             ( { model | device = device }, Cmd.none )
 
-        Scroll ->
-            let
-                cmd =
-                    if model.board.thread.post.id == 0 then
-                        Cmd.none
-                    else
-                        scrollIdIntoView (toString model.board.thread.post.id)
-            in
-            ( model, cmd )
+        Dummy (Ok board) ->
+            ( { model | dummy = board }, Cmd.none )
+
+        Dummy (Err e) ->
+            httpError e model
 
 
 httpError : Error -> Model -> ( Model, Cmd Msg )
@@ -186,3 +181,21 @@ httpError e model =
                     toString e
     in
     ( { model | error = error }, Cmd.none )
+
+
+sortBoard : Board -> Board -> Board
+sortBoard board modelBoard =
+    let
+        sortedPosts =
+            List.sortWith (\t1 t2 -> Date.compare t1.createdDate t2.createdDate) board.thread.posts
+
+        newThread =
+            board.thread
+
+        newThreadWithSortedPosts =
+            { newThread | posts = sortedPosts }
+    in
+    if board.id == modelBoard.id then
+        { modelBoard | thread = newThreadWithSortedPosts }
+    else
+        { board | thread = newThreadWithSortedPosts }

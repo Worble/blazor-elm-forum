@@ -17,6 +17,7 @@ type Style
     | Error
     | PostText
     | TextInput
+    | PostLink
 
 
 scale : Int -> Float
@@ -35,6 +36,15 @@ stylesheet =
         , style Link
             [ Font.size (scale 1)
             , Color.text Color.darkBlue
+            , Style.cursor "pointer"
+            , hover
+                [ Font.underline
+                ]
+            ]
+        , style PostLink
+            [ Font.size (scale 1)
+            , Color.text Color.red
+            , Style.cursor "pointer"
             , hover
                 [ Font.underline
                 ]

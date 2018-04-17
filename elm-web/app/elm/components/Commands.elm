@@ -91,31 +91,31 @@ getBoards =
     Http.send GetBoards (Http.get url (list decodeBoard))
 
 
-getThreads : a -> Cmd Msg
-getThreads boardId =
+getThreads : String -> Cmd Msg
+getThreads boardName =
     let
         url =
-            api ++ "boards/" ++ toString boardId ++ "/threads/"
+            api ++ "boards/" ++ boardName ++ "/"
     in
     Http.send GetThreadsForBoard (Http.get url decodeBoard)
 
 
-getPosts : a -> a -> Cmd Msg
-getPosts boardId threadId =
+getPosts : String -> Int -> Cmd Msg
+getPosts boardName threadId =
     let
         url =
-            api ++ "boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts/"
+            api ++ "boards/" ++ boardName ++ "/" ++ toString threadId
     in
     Http.send GetPostsForThread (Http.get url decodeBoard)
 
 
-getPostsWithScroll : a -> a -> a -> Cmd Msg
+getPostsWithScroll : String -> Int -> Int -> Cmd Msg
 getPostsWithScroll boardId threadId postId =
     let
         url =
-            api ++ "boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts/" ++ toString postId
+            api ++ "boards/" ++ boardId ++ "/" ++ toString threadId ++ "/" ++ toString postId
     in
-    Http.send GetPostsForThread (Http.get url decodeBoard)
+    Http.send GetPostsForThreadScroll (Http.get url decodeBoard)
 
 
 getFileContents : NativeFile -> Cmd Msg

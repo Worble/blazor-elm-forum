@@ -9,11 +9,8 @@ matchers : Parser (Route -> a) a
 matchers =
     oneOf
         [ map BoardsRoute top
-        , map ThreadsRoute (s "boards" </> int)
-        , map ThreadsRoute (s "boards" </> int </> s "threads")
-        , map BoardsRoute (s "boards")
-        , map PostsRoute (s "boards" </> int </> s "threads" </> int)
-        , map PostsRoute (s "boards" </> int </> s "threads" </> int </> s "posts")
+        , map ThreadsRoute (string)
+        , map PostsRoute (string </> int)
         ]
 
 
@@ -25,12 +22,11 @@ parseLocation location =
 
         Nothing ->
             NotFoundRoute
-            
+
 
 parseLocationHash : Location -> Maybe Int
 parseLocationHash location =
     parseHash int location
-
 
 
 errorPath : String
@@ -40,19 +36,19 @@ errorPath =
 
 boardsPath : String
 boardsPath =
-    "/boards/"
+    "/"
 
 
-threadsPath : Int -> String
-threadsPath boardId =
-    "/boards/" ++ toString boardId ++ "/threads/"
+threadsPath : String -> String
+threadsPath boardName =
+    "/" ++ boardName ++ "/"
 
 
-postsPath : Int -> Int -> String
-postsPath boardId threadId =
-    "/boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts/"
+postsPath : String -> Int -> String
+postsPath boardName threadId =
+    "/" ++ boardName ++ "/" ++ toString threadId ++ "/"
 
 
-postPath : Int -> Int -> Int -> String
-postPath boardId threadId postId =
-    "/boards/" ++ toString boardId ++ "/threads/" ++ toString threadId ++ "/posts/#" ++ toString postId
+postPath : String -> Int -> Int -> String
+postPath boardName threadId postId =
+    "/" ++ boardName ++ "/" ++ toString threadId ++ "#" ++ toString postId

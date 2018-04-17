@@ -12,8 +12,10 @@ type Msg
     | GetBoards (Result Error (List Board))
     | GetThreadsForBoard (Result Error Board)
     | GetPostsForThread (Result Error Board)
+    | GetPostsForThreadScroll (Result Error Board)
     | OnLocationChange Location
     | PostInput String
+    | PostInputAppend String
     | SendPost
     | SendThread
     | RedirectPostsForThread (Result Error Board)
@@ -24,4 +26,4 @@ type Msg
     | RemoveError
     | ChangeLocation String
     | GetWindowSize Window.Size
-    | Scroll
+    | Dummy (Result Error Board)

@@ -18,6 +18,6 @@ displayBoards : Board -> Element Style variation Msg
 displayBoards board =
     row None
         []
-        [ link (threadsPath board.id) <| el Styles.Link [ onLinkClick (ChangeLocation (threadsPath board.id)) ] (text board.name)
+        [ link (threadsPath board.shorthandName) <| el Styles.Link [ onLinkClick (ChangeLocation (threadsPath board.shorthandName)) ] (text board.name)
         , el Styles.None [] (text " | ")
         ]

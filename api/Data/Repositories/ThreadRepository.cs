@@ -18,7 +18,22 @@ namespace Data.Repositories
         {
             _context = context;
         }
-        public BoardDTO GetAllForBoard(int boardId)
+        //public BoardDTO GetAllForBoard(int boardId)
+        //{
+        //    return _context.Boards
+        //        .Select(e => new BoardDTO(e)
+        //        {
+        //            Threads = e.Threads
+        //                .Where(y => !y.Archived)
+        //                .Select(y => new ThreadDTO(y)
+        //                {
+        //                    Post = new PostDTO(y.Posts.FirstOrDefault(p => p.IsOp))
+        //                })
+        //        })
+        //        .FirstOrDefault(e => e.Id == boardId);
+        //}
+
+        public BoardDTO GetAllForBoard(string boardName)
         {
             return _context.Boards
                 .Select(e => new BoardDTO(e)
@@ -27,10 +42,10 @@ namespace Data.Repositories
                         .Where(y => !y.Archived)
                         .Select(y => new ThreadDTO(y)
                         {
-                            Post = new PostDTO(y.Posts.FirstOrDefault(p => p.IsOp))
+                            OpPost = y.Posts.Select(x => new PostDTO(x)).FirstOrDefault(x => x.IsOp)
                         })
                 })
-                .FirstOrDefault(e => e.Id == boardId);
+                .FirstOrDefault(e => e.ShorthandName == boardName);
         }
 
         public Thread CreateThread(ThreadDTO thread)

@@ -1,7 +1,7 @@
 module Views.Threads exposing (view)
 
 import Element exposing (Element, button, column, el, image, layout, link, newTab, row, text, textLayout, when)
-import Element.Attributes exposing (alignLeft, maxHeight, maxWidth, padding, paddingXY, px, spacingXY, verticalCenter)
+import Element.Attributes exposing (alignLeft, id, maxHeight, maxWidth, padding, paddingXY, px, spacingXY, verticalCenter)
 import Element.Events exposing (onClick)
 import Element.Input as Input
 import FileReader
@@ -15,19 +15,19 @@ import Views.Shared.Post exposing (threadView)
 
 view : Model -> Element Style variation Msg
 view model =
-    if model.route /= ThreadsRoute model.board.id then
+    if model.route /= ThreadsRoute model.board.shorthandName then
         el Styles.None [] (Element.text "Please wait...")
     else
         column Styles.None
             []
             [ el Styles.Title [] (Element.text ("Threads in board " ++ model.board.name ++ ":"))
-            , column Styles.None [ paddingXY 0 15, spacingXY 0 15 ] (List.map (\n -> threadView n model.board.id) model.board.threads)
+            , column Styles.None [ paddingXY 0 15, spacingXY 0 15 ] (List.map (\n -> threadView n model.board.shorthandName) model.board.threads)
             , column Styles.None
                 []
                 [ column Styles.None
                     [ spacingXY 0 10 ]
                     [ Input.multiline Styles.TextInput
-                        []
+                        [ id "input" ]
                         { onChange = PostInput
                         , value = model.messageInput
                         , label =
